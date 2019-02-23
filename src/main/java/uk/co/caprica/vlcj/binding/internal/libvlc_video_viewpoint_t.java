@@ -33,7 +33,7 @@ public class libvlc_video_viewpoint_t extends Structure {
     /**
      *
      */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("f_yaw", "f_pitch", "f_roll", "f_field_of_view", "f_zoom"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("f_yaw", "f_pitch", "f_roll", "f_field_of_view"));
 
     public static class ByValue extends libvlc_video_viewpoint_t implements Structure.ByValue {}
 
