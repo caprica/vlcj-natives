@@ -42,7 +42,7 @@ public final class NativeUri {
      * <p>
      * What this means in practical terms is that if an MRL is specified that contains a "scheme" like "http", or "file"
      * then that MRL will <em>not</em> be encoded by this method, even if it contains Unicode characters. This situation
-     * if it arises, is considered a client application vaildation failure.
+     * if it arises, is considered a client application validation failure.
      *
      * @param uri URI
      * @return the original URI if no encoding is required, or a percent-encoded ASCII file URI
@@ -63,6 +63,16 @@ public final class NativeUri {
             }
         }
         return result;
+    }
+
+    /**
+     * Encode a local file path to a valid URI, properly escaping any Unicode characters wit "percent" encoding.
+     *
+     * @param filename filename to encode as a URI
+     * @return URI
+     */
+    public static String encodeFileUri(String filename) {
+        return toLocalFileUri(filename);
     }
 
     /**
