@@ -34,5 +34,6 @@ public interface libvlc_audio_set_volume_cb extends Callback {
      * @param volume linear volume (1 = nominal, 0 = mute)
      * @param mute muted flag
      */
-    void setVolume(Pointer data, float volume, boolean mute);
+    void setVolume(Pointer data, float volume, int mute);
+
 }
