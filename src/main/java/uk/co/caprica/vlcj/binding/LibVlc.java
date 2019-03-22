@@ -162,14 +162,6 @@ public interface LibVlc extends Library {
     int libvlc_add_intf(libvlc_instance_t p_instance, String name);
 
     /**
-     * Waits until an interface causes the instance to exit. You should start at least one interface
-     * first, using libvlc_add_intf().
-     *
-     * @param p_instance the instance
-     */
-    void libvlc_wait(libvlc_instance_t p_instance);
-
-    /**
      * Sets the application name. LibVLC passes this as the user agent string when a protocol
      * requires it.
      *
