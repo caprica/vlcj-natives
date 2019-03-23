@@ -21,6 +21,8 @@ package uk.co.caprica.vlcj.binding;
 
 import com.sun.jna.Pointer;
 
+import static uk.co.caprica.vlcj.binding.LibVlc.libvlc_free;
+
 /**
  * Encapsulation of access to native strings.
  * <p>
@@ -31,7 +33,7 @@ import com.sun.jna.Pointer;
  * can be used.
  * <p>
  * Generally, Any native API that returns "char*" <em>must</em> be freed, so in such cases the native return type
- * mapping must be {@link Pointer} and {@link #copyAndFreeNativeString(LibVlc, Pointer)} must be used.
+ * mapping must be {@link Pointer} and {@link #copyAndFreeNativeString(Pointer)} must be used.
  * <p>
  * Where a native string is contained in a {@link com.sun.jna.Structure} those strings should <em>not</em> be freed if
  * the structure itself is subsequently freed (usually by a companion release native method), so in these cases
@@ -52,15 +54,14 @@ public final class NativeString {
      * <p>
      * Use this method if the native string type is "char*", i.e. lacking the "const" modifier.
      *
-     * @param libvlc native library instance
      * @param pointer pointer to native string, may be <code>null</code>
      * @return string, or <code>null</code> if the pointer was <code>null</code>
      */
-    public static final String copyAndFreeNativeString(LibVlc libvlc, Pointer pointer) {
+    public static final String copyAndFreeNativeString(Pointer pointer) {
         if(pointer != null) {
             // Pointer.getString copies native memory to a Java String
             String result = pointer.getString(0);
-            libvlc.libvlc_free(pointer);
+            libvlc_free(pointer);
             return result;
         }
         else {

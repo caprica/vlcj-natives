@@ -19,6 +19,8 @@
 
 package uk.co.caprica.vlcj.binding;
 
+import com.sun.jna.Native;
+import com.sun.jna.StringArray;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_flush_cb;
@@ -64,7 +66,6 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
 import uk.co.caprica.vlcj.binding.support.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.size_t;
 
-import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -74,40 +75,31 @@ import com.sun.jna.ptr.PointerByReference;
  * <p>
  * This is <strong>not a complete</strong> interface to libvlc, although most functions are present.
  * <p>
- * This interface specifies the exposed methods only, the types and structures are all factored out
- * separately in the "internal" sub-package.
+ * This interface specifies the exposed methods only, the types and structures are all factored out separately in the
+ * "internal" sub-package.
  * <p>
- * This code and that in the internal sub-package is structured out of necessity to interoperate
- * with the libvlc native library. This code was originally derived (but has now been completely
- * re-written) from the original JVLC source code, the copyright of which belongs to the VideoLAN
- * team, which was distributed under GPL version 2 or later.
- * <p>
- * This binding is for version 1.1 and later of vlc. Earlier versions of vlc are radically different
- * and will not work with these bindings.
- * <p>
- * Some functions are only available <em>after</em> version 1.1.0 of libvlc.
- * <p>
- * Some functions are only available <em>after</em> version 2.0.0 of libvlc.
- * <p>
- * Some functions are only available <em>after</em> version 2.1.0 of libvlc.
- * <p>
- * Some functions are only available <em>after</em> version 2.2.0 of libvlc.
- * <p>
- * Some functions are only available <em>after</em> version 3.0.0 of libvlc.
+ * This code and that in the internal sub-package is structured out of necessity to interoperate with the libvlc native
+ * library. This code was originally derived (but has now been completely re-written) from the original JVLC source
+ * code, the copyright of which belongs to the VideoLAN team, which was distributed under GPL version 2 or later.
  * <p>
  * This system property may be useful for debugging:
  * <pre>
  * -Djna.dump_memory=true
  * </pre>
- * In the native header file, generally "char*" types must be freed, but "const char*" need (must)
- * not.
+ * In the native header file, generally "char*" types must be freed, but "const char*" need (must) not.
  * <p>
- * This interface is essentially a translation of the LibVLC header files to Java, with changes for
- * JNA/Java types. The documentation in that VLC header file is reproduced here for convenience,
- * with the appropriate Javadoc documentation convention changes, the copyright of which (mostly)
- * belongs to the VLC authors.
+ * This interface is essentially a translation of the LibVLC header files to Java, with changes for JNA/Java types. The
+ * documentation in that VLC header file is reproduced here for convenience, with the appropriate Javadoc documentation
+ * convention changes, the copyright of which (mostly) belongs to the VLC authors.
  */
-public interface LibVlc extends Library {
+public final class LibVlc {
+
+    static {
+        Native.register(RuntimeUtil.getLibVlcLibraryName());
+    }
+
+    private LibVlc() {
+    }
 
     // === libvlc.h =============================================================
 
@@ -119,14 +111,14 @@ public interface LibVlc extends Library {
      *
      * @return error message, or <code>NULL</code>
      */
-    String libvlc_errmsg();
+    public static native String libvlc_errmsg();
 
     /**
      * Clears the LibVLC error status for the current thread. This is optional. By default, the
      * error status is automatically overridden when a new error occurs, and destroyed when the
      * thread exits.
      */
-    void libvlc_clearerr();
+    public static native void libvlc_clearerr();
 
     /**
      * Create and initialize a libvlc instance.
@@ -135,14 +127,14 @@ public interface LibVlc extends Library {
      * @param argv command-line-type arguments
      * @return the libvlc instance or NULL in case of error
      */
-    libvlc_instance_t libvlc_new(int argc, String[] argv);
+    public static native libvlc_instance_t libvlc_new(int argc, StringArray argv);
 
     /**
      * Decrement the reference count of a libvlc instance, and destroy it if it reaches zero.
      *
      * @param p_instance the instance to destroy
      */
-    void libvlc_release(libvlc_instance_t p_instance);
+    public static native void libvlc_release(libvlc_instance_t p_instance);
 
     /**
      * Increments the reference count of a libvlc instance. The initial reference count is 1 after
@@ -150,7 +142,7 @@ public interface LibVlc extends Library {
      *
      * @param p_instance the instance to reference
      */
-    void libvlc_retain(libvlc_instance_t p_instance);
+    public static native void libvlc_retain(libvlc_instance_t p_instance);
 
     /**
      * Try to start a user interface for the libvlc instance.
@@ -159,7 +151,7 @@ public interface LibVlc extends Library {
      * @param name interface name, or NULL for default
      * @return 0 on success, -1 on error.
      */
-    int libvlc_add_intf(libvlc_instance_t p_instance, String name);
+    public static native int libvlc_add_intf(libvlc_instance_t p_instance, String name);
 
     /**
      * Sets the application name. LibVLC passes this as the user agent string when a protocol
@@ -170,7 +162,7 @@ public interface LibVlc extends Library {
      * @param http HTTP User Agent, e.g. "FooBar/1.2.3 Python/2.6.0"
      * @since LibVLC 1.1.1
      */
-    void libvlc_set_user_agent(libvlc_instance_t p_instance, String name, String http);
+    public static native void libvlc_set_user_agent(libvlc_instance_t p_instance, String name, String http);
 
     /**
      * Sets some meta-informations about the application.
@@ -183,28 +175,28 @@ public interface LibVlc extends Library {
      * @param icon application icon name, e.g. "foobar"
      * @since LibVLC 2.1.0
      */
-    void libvlc_set_app_id(libvlc_instance_t p_instance, String id, String version, String icon);
+    public static native void libvlc_set_app_id(libvlc_instance_t p_instance, String id, String version, String icon);
 
     /**
      * Retrieve libvlc version. Example: "1.1.0-git The Luggage"
      *
      * @return a string containing the libvlc version
      */
-    String libvlc_get_version();
+    public static native String libvlc_get_version();
 
     /**
      * Retrieve libvlc compiler version. Example: "gcc version 4.2.3 (Ubuntu 4.2.3-2ubuntu6)"
      *
      * @return a string containing the libvlc compiler version
      */
-    String libvlc_get_compiler();
+    public static native String libvlc_get_compiler();
 
     /**
      * Retrieve libvlc changeset. Example: "aa9bce0bc4"
      *
      * @return a string containing the libvlc changeset
      */
-    String libvlc_get_changeset();
+    public static native String libvlc_get_changeset();
 
     /**
      * Frees an heap allocation returned by a LibVLC function. If you know you're using the same
@@ -213,7 +205,7 @@ public interface LibVlc extends Library {
      *
      * @param ptr the pointer
      */
-    void libvlc_free(Pointer ptr);
+    public static native void libvlc_free(Pointer ptr);
 
     /**
      * Register for an event notification.
@@ -226,7 +218,7 @@ public interface LibVlc extends Library {
      * @param user_data user provided data to carry with the event
      * @return 0 on success, ENOMEM on error
      */
-    int libvlc_event_attach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer user_data);
+    public static native int libvlc_event_attach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer user_data);
 
     /**
      * Unregister an event notification.
@@ -236,7 +228,7 @@ public interface LibVlc extends Library {
      * @param f_callback the function to call when i_event_type occurs
      * @param p_user_data user provided data to carry with the event
      */
-    void libvlc_event_detach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer p_user_data);
+    public static native void libvlc_event_detach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer p_user_data);
 
     /**
      * Gets debugging informations about a log message: the name of the VLC module
@@ -256,7 +248,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 2.1.0 or later
      */
-    void libvlc_log_get_context(libvlc_log_t ctx, PointerByReference module, PointerByReference file, IntByReference line);
+    public static native void libvlc_log_get_context(libvlc_log_t ctx, PointerByReference module, PointerByReference file, IntByReference line);
 
     /**
      * Gets VLC object informations about a log message: the type name of the VLC
@@ -282,7 +274,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 2.1.0 or later
      */
-    void libvlc_log_get_object(libvlc_log_t ctx, PointerByReference name, PointerByReference header, IntByReference id);
+    public static native void libvlc_log_get_object(libvlc_log_t ctx, PointerByReference name, PointerByReference header, IntByReference id);
 
     /**
      * Unsets the logging callback for a LibVLC instance. This is rarely needed:
@@ -295,7 +287,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 2.1.0 or later
      */
-    void libvlc_log_unset(libvlc_instance_t p_instance);
+    public static native void libvlc_log_unset(libvlc_instance_t p_instance);
 
     /**
      * Sets the logging callback for a LibVLC instance.
@@ -314,14 +306,14 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 2.1.0 or later
      */
-    void libvlc_log_set(libvlc_instance_t p_instance, libvlc_log_cb cb, Pointer data);
+    public static native void libvlc_log_set(libvlc_instance_t p_instance, libvlc_log_cb cb, Pointer data);
 
     /**
      * Release a list of module descriptions.
      *
      * @param p_list the list to be released
      */
-    void libvlc_module_description_list_release(Pointer p_list);
+    public static native void libvlc_module_description_list_release(Pointer p_list);
 
     /**
      * Returns a list of audio filters that are available.
@@ -332,7 +324,7 @@ public interface LibVlc extends Library {
      * @see libvlc_module_description_t
      * @see #libvlc_module_description_list_release(Pointer)
      */
-    libvlc_module_description_t libvlc_audio_filter_list_get(libvlc_instance_t p_instance);
+    public static native libvlc_module_description_t libvlc_audio_filter_list_get(libvlc_instance_t p_instance);
 
     /**
      * Returns a list of video filters that are available.
@@ -343,7 +335,7 @@ public interface LibVlc extends Library {
      * @see libvlc_module_description_t
      * @see #libvlc_module_description_list_release(Pointer)
      */
-    libvlc_module_description_t libvlc_video_filter_list_get(libvlc_instance_t p_instance);
+    public static native libvlc_module_description_t libvlc_video_filter_list_get(libvlc_instance_t p_instance);
 
     /**
      * Return the current time as defined by LibVLC. The unit is the microsecond. Time increases
@@ -353,7 +345,7 @@ public interface LibVlc extends Library {
      *
      * @return clock value
      */
-    long libvlc_clock();
+    public static native long libvlc_clock();
 
     // === libvlc.h =============================================================
 
@@ -367,7 +359,7 @@ public interface LibVlc extends Library {
      * @param psz_mrl the MRL to read
      * @return the newly created media or NULL on error
      */
-    libvlc_media_t libvlc_media_new_location(libvlc_instance_t p_instance, String psz_mrl);
+    public static native libvlc_media_t libvlc_media_new_location(libvlc_instance_t p_instance, String psz_mrl);
 
     /**
      * Create a media with a certain file path.
@@ -377,7 +369,7 @@ public interface LibVlc extends Library {
      * @param path local filesystem path
      * @return the newly created media or NULL on error
      */
-    libvlc_media_t libvlc_media_new_path(libvlc_instance_t p_instance, String path);
+    public static native libvlc_media_t libvlc_media_new_path(libvlc_instance_t p_instance, String path);
 
     /**
      * Create a media with custom callbacks to read the data from.
@@ -404,7 +396,7 @@ public interface LibVlc extends Library {
      * @param opaque data pointer for the open callback
      * @return the newly created media or NULL on error
      */
-    libvlc_media_t libvlc_media_new_callbacks(libvlc_instance_t instance, libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
+    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_instance_t instance, libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
 
     /**
      * Create a media as an empty node with a given name.
@@ -414,7 +406,7 @@ public interface LibVlc extends Library {
      * @param psz_name the name of the node
      * @return the new empty media or NULL on error
      */
-    libvlc_media_t libvlc_media_new_as_node(libvlc_instance_t p_instance, String psz_name);
+    public static native libvlc_media_t libvlc_media_new_as_node(libvlc_instance_t p_instance, String psz_name);
 
     /**
      * Add an option to the media. This option will be used to determine how the media_player will
@@ -424,7 +416,7 @@ public interface LibVlc extends Library {
      * @param p_md the media descriptor
      * @param ppsz_options the options (as a string)
      */
-    void libvlc_media_add_option(libvlc_media_t p_md, String ppsz_options);
+    public static native void libvlc_media_add_option(libvlc_media_t p_md, String ppsz_options);
 
     /**
      * Add an option to the media with configurable flags. This option will be used to determine how
@@ -436,7 +428,7 @@ public interface LibVlc extends Library {
      * @param ppsz_options the options (as a string)
      * @param i_flags the flags for this option
      */
-    void libvlc_media_add_option_flag(libvlc_media_t p_md, String ppsz_options, int i_flags);
+    public static native void libvlc_media_add_option_flag(libvlc_media_t p_md, String ppsz_options, int i_flags);
 
     /**
      * Retain a reference to a media descriptor object (libvlc_media_t). Use libvlc_media_release()
@@ -444,7 +436,7 @@ public interface LibVlc extends Library {
      *
      * @param p_md the media descriptor
      */
-    void libvlc_media_retain(libvlc_media_t p_md);
+    public static native void libvlc_media_retain(libvlc_media_t p_md);
 
     /**
      * Decrement the reference count of a media descriptor object. If the reference count is 0, then
@@ -454,7 +446,7 @@ public interface LibVlc extends Library {
      *
      * @param p_md the media descriptor
      */
-    void libvlc_media_release(libvlc_media_t p_md);
+    public static native void libvlc_media_release(libvlc_media_t p_md);
 
     /**
      * Get the media resource locator (mrl) from a media descriptor object
@@ -462,7 +454,7 @@ public interface LibVlc extends Library {
      * @param p_md a media descriptor object
      * @return string with mrl of media descriptor object
      */
-    Pointer libvlc_media_get_mrl(libvlc_media_t p_md);
+    public static native Pointer libvlc_media_get_mrl(libvlc_media_t p_md);
 
     /**
      * Duplicate a media descriptor object.
@@ -470,7 +462,7 @@ public interface LibVlc extends Library {
      * @param p_md a media descriptor object.
      * @return duplicated media descriptor
      */
-    libvlc_media_t libvlc_media_duplicate(libvlc_media_t p_md);
+    public static native libvlc_media_t libvlc_media_duplicate(libvlc_media_t p_md);
 
     /**
      * Read the meta of the media. If the media has not yet been parsed this will return NULL. This
@@ -485,7 +477,7 @@ public interface LibVlc extends Library {
      * @param e_meta the meta to read
      * @return the media's meta
      */
-    Pointer libvlc_media_get_meta(libvlc_media_t p_md, int e_meta);
+    public static native Pointer libvlc_media_get_meta(libvlc_media_t p_md, int e_meta);
 
     /**
      * Set the meta of the media (this function will not save the meta, call libvlc_media_save_meta
@@ -495,7 +487,7 @@ public interface LibVlc extends Library {
      * @param e_meta the meta to write
      * @param psz_value the media's meta
      */
-    void libvlc_media_set_meta(libvlc_media_t p_md, int e_meta, String psz_value);
+    public static native void libvlc_media_set_meta(libvlc_media_t p_md, int e_meta, String psz_value);
 
     /**
      * Save the meta previously set
@@ -503,7 +495,7 @@ public interface LibVlc extends Library {
      * @param p_md the media desriptor
      * @return true if the write operation was successfull
      */
-    int libvlc_media_save_meta(libvlc_media_t p_md);
+    public static native int libvlc_media_save_meta(libvlc_media_t p_md);
 
     /**
      * Get current state of media descriptor object. Possible media states are defined in
@@ -513,7 +505,7 @@ public interface LibVlc extends Library {
      * @param p_meta_desc a media descriptor object
      * @return state of media descriptor object
      */
-    int libvlc_media_get_state(libvlc_media_t p_meta_desc);
+    public static native int libvlc_media_get_state(libvlc_media_t p_meta_desc);
 
     /**
      * get the current statistics about the media
@@ -523,7 +515,7 @@ public interface LibVlc extends Library {
      *            allocated by the caller)
      * @return true if the statistics are available, false otherwise
      */
-    int libvlc_media_get_stats(libvlc_media_t p_md, libvlc_media_stats_t p_stats);
+    public static native int libvlc_media_get_stats(libvlc_media_t p_md, libvlc_media_stats_t p_stats);
 
     /**
      * Get subitems of media descriptor object. This will increment the reference count of supplied
@@ -533,7 +525,7 @@ public interface LibVlc extends Library {
      * @return list of media descriptor subitems or NULL This method uses libvlc_media_list_t,
      *         however, media_list usage is optional and this is here for convenience
      */
-    libvlc_media_list_t libvlc_media_subitems(libvlc_media_t p_md);
+    public static native libvlc_media_list_t libvlc_media_subitems(libvlc_media_t p_md);
 
     /**
      * Get event manager from media descriptor object. NOTE: this function doesn't increment
@@ -542,7 +534,7 @@ public interface LibVlc extends Library {
      * @param p_md a media descriptor object
      * @return event manager object
      */
-    libvlc_event_manager_t libvlc_media_event_manager(libvlc_media_t p_md);
+    public static native libvlc_event_manager_t libvlc_media_event_manager(libvlc_media_t p_md);
 
     /**
      * Get duration (in ms) of media descriptor object item.
@@ -550,7 +542,7 @@ public interface LibVlc extends Library {
      * @param p_md media descriptor object
      * @return duration of media item or -1 on error
      */
-    long libvlc_media_get_duration(libvlc_media_t p_md);
+    public static native long libvlc_media_get_duration(libvlc_media_t p_md);
 
     /**
      * Parse a media.
@@ -566,7 +558,7 @@ public interface LibVlc extends Library {
      * @see #libvlc_media_get_meta(libvlc_media_t, int)
      * @param media media descriptor object
      */
-    void libvlc_media_parse_async(libvlc_media_t media);
+    public static native void libvlc_media_parse_async(libvlc_media_t media);
 
     /**
      * Parse the media asynchronously with options.
@@ -599,7 +591,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_parse_with_options(libvlc_media_t p_md, int parse_flag, int timeout);
+    public static native int libvlc_media_parse_with_options(libvlc_media_t p_md, int parse_flag, int timeout);
 
     /**
      * Stop the parsing of the media
@@ -611,9 +603,9 @@ public interface LibVlc extends Library {
      *
      * @param p_md media descriptor object
      *
-     * @Since version LibVLC 3.0.0 or later
+     * @since version LibVLC 3.0.0 or later
      */
-    void libvlc_media_parse_stop(libvlc_media_t p_md);
+    public static native void libvlc_media_parse_stop(libvlc_media_t p_md);
 
     /**
      * Get Parsed status for media descriptor object.
@@ -623,7 +615,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_get_parsed_status(libvlc_media_t p_md);
+    public static native int libvlc_media_get_parsed_status(libvlc_media_t p_md);
 
     /**
      * Sets media descriptor's user_data. user_data is specialized data accessed by the host
@@ -633,7 +625,7 @@ public interface LibVlc extends Library {
      * @param p_md media descriptor object
      * @param p_new_user_data pointer to user data
      */
-    void libvlc_media_set_user_data(libvlc_media_t p_md, Pointer p_new_user_data);
+    public static native void libvlc_media_set_user_data(libvlc_media_t p_md, Pointer p_new_user_data);
 
     /**
      * Get media descriptor's user_data. user_data is specialized data accessed by the host
@@ -643,7 +635,7 @@ public interface LibVlc extends Library {
      * @param p_md media descriptor object
      * @return user-data pointer
      */
-    Pointer libvlc_media_get_user_data(libvlc_media_t p_md);
+    public static native Pointer libvlc_media_get_user_data(libvlc_media_t p_md);
 
     /**
      * Get media descriptor's elementary streams description
@@ -661,7 +653,7 @@ public interface LibVlc extends Library {
      *
      * @return the number of Elementary Streams (zero on error)
      */
-    int libvlc_media_tracks_get(libvlc_media_t p_md, PointerByReference tracks);
+    public static native int libvlc_media_tracks_get(libvlc_media_t p_md, PointerByReference tracks);
 
     /**
      * Release media descriptor's elementary streams description array
@@ -671,7 +663,7 @@ public interface LibVlc extends Library {
      * @param p_tracks tracks info array to release
      * @param i_count number of elements in the array
      */
-    void libvlc_media_tracks_release(Pointer p_tracks, int i_count);
+    public static native void libvlc_media_tracks_release(Pointer p_tracks, int i_count);
 
     /**
      * Get the media type of the media descriptor object.
@@ -681,7 +673,7 @@ public interface LibVlc extends Library {
      * @param p_md media descriptor object
      * @return media type
      */
-    int libvlc_media_get_type(libvlc_media_t p_md);
+    public static native int libvlc_media_get_type(libvlc_media_t p_md);
 
     /**
      * Start an asynchronous thumbnail generation
@@ -703,7 +695,9 @@ public interface LibVlc extends Library {
      *
      * @see libvlc_picture_t
      */
-    libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_media_t md, long time, int speed, int width, int height, int picture_type, long timeout);
+    public static /*native*/ libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_media_t md, long time, int speed, int width, int height, int picture_type, long timeout) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Start an asynchronous thumbnail generation
@@ -725,17 +719,24 @@ public interface LibVlc extends Library {
      *
      * @see libvlc_picture_t
      */
-    libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_media_t md, float pos, int speed, int width, int height, int picture_type, long timeout);
+    public static /*native*/ libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_media_t md, float pos, int speed, int width, int height, int picture_type, long timeout) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @brief libvlc_media_thumbnail_cancel cancels a thumbnailing request
+     * Cancels a thumbnailing request
+     * <p>
+     * Cancelling the request will still cause libvlc_MediaThumbnailGenerated event
+     * to be emitted, with a NULL libvlc_picture_t.
+     * <p>
+     * If the request is cancelled after its completion, the behavior is undefined.
+     *
      * @param p_req An opaque thumbnail request object.
      *
-     * Cancelling the request will still cause libvlc_MediaThumbnailGenerated event
-     * to be emited, with a NULL libvlc_picture_t
-     * If the request is cancelled after its completion, the behavior is undefined.
      */
-    void libvlc_media_thumbnail_cancel(libvlc_media_thumbnail_request_t p_req);
+    public static /*native*/ void libvlc_media_thumbnail_cancel(libvlc_media_thumbnail_request_t p_req) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Get codec description from media elementary stream.
@@ -747,15 +748,15 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    String libvlc_media_get_codec_description(int i_type, int i_codec);
+    public static native String libvlc_media_get_codec_description(int i_type, int i_codec);
 
     /**
      * Add a slave to the current media.
-     *
+     * <p>
      * A slave is an external input source that may contains an additional subtitle
      * track (like a .srt) or an additional audio track (like a .ac3).
-     *
-     * \note This function must be called before the media is parsed (via
+     * <p>
+     * This function must be called before the media is parsed (via
      * libvlc_media_parse_with_options()) or before the media is played (via
      * libvlc_media_player_play())
      *
@@ -767,7 +768,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    int libvlc_media_slaves_add(libvlc_media_t p_md, int i_type, int i_priority, String psz_uri);
+    public static native int libvlc_media_slaves_add(libvlc_media_t p_md, int i_type, int i_priority, String psz_uri);
 
     /**
      * Clear all slaves previously added by libvlc_media_slaves_add() or
@@ -777,7 +778,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    void libvlc_media_slaves_clear(libvlc_media_t p_md);
+    public static native void libvlc_media_slaves_clear(libvlc_media_t p_md);
 
     /**
      * Get a media descriptor's slave list
@@ -792,7 +793,7 @@ public interface LibVlc extends Library {
      * @return the number of slaves (zero on error)
      * @since LibVLC 3.0.0 and later.
      */
-    int libvlc_media_slaves_get(libvlc_media_t p_md, PointerByReference ppp_slaves);
+    public static native int libvlc_media_slaves_get(libvlc_media_t p_md, PointerByReference ppp_slaves);
 
     /**
      * Release a media descriptor's slave list
@@ -802,7 +803,7 @@ public interface LibVlc extends Library {
      * @param pp_slaves slave array to release
      * @param i_count number of elements in the array
      */
-    void libvlc_media_slaves_release(Pointer pp_slaves, int i_count);
+    public static native void libvlc_media_slaves_release(Pointer pp_slaves, int i_count);
 
     // === libvlc_media.h =======================================================
 
@@ -814,7 +815,7 @@ public interface LibVlc extends Library {
      * @param p_libvlc_instance the libvlc instance in which the Media Player should be created.
      * @return a new media player object, or NULL on error.
      */
-    libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance);
+    public static native libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance);
 
     /**
      * Create a Media Player object from a Media
@@ -822,7 +823,7 @@ public interface LibVlc extends Library {
      * @param p_md the media. Afterwards the p_md can be safely destroyed.
      * @return a new media player object, or NULL on error.
      */
-    libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_media_t p_md);
+    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_media_t p_md);
 
     /**
      * Release a media_player after use Decrement the reference count of a media player object. If
@@ -831,7 +832,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mi the Media Player to free
      */
-    void libvlc_media_player_release(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_release(libvlc_media_player_t p_mi);
 
     /**
      * Retain a reference to a media player object. Use libvlc_media_player_release() to decrement
@@ -839,7 +840,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mi media player object
      */
-    void libvlc_media_player_retain(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_retain(libvlc_media_player_t p_mi);
 
     /**
      * Set the media that will be used by the media_player. If any, previous md will be released.
@@ -847,7 +848,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param p_md the Media. Afterwards the p_md can be safely destroyed.
      */
-    void libvlc_media_player_set_media(libvlc_media_player_t p_mi, libvlc_media_t p_md);
+    public static native void libvlc_media_player_set_media(libvlc_media_player_t p_mi, libvlc_media_t p_md);
 
     /**
      * Get the media used by the media_player.
@@ -857,7 +858,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the media associated with p_mi, or NULL if no media is associated
      */
-    libvlc_media_t libvlc_media_player_get_media(libvlc_media_player_t p_mi);
+    public static native libvlc_media_t libvlc_media_player_get_media(libvlc_media_player_t p_mi);
 
     /**
      * Get the Event Manager from which the media player send event.
@@ -865,7 +866,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the event manager associated with p_mi
      */
-    libvlc_event_manager_t libvlc_media_player_event_manager(libvlc_media_player_t p_mi);
+    public static native libvlc_event_manager_t libvlc_media_player_event_manager(libvlc_media_player_t p_mi);
 
     /**
      * is_playing
@@ -873,7 +874,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return 1 if the media player is playing, 0 otherwise
      */
-    int libvlc_media_player_is_playing(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_is_playing(libvlc_media_player_t p_mi);
 
     /**
      * Play
@@ -881,7 +882,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return 0 if playback started (and was already started), or -1 on error.
      */
-    int libvlc_media_player_play(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_play(libvlc_media_player_t p_mi);
 
     /**
      * Pause or resume (no effect if there is no media)
@@ -890,21 +891,21 @@ public interface LibVlc extends Library {
      * @param do_pause play/resume if zero, pause if non-zero
      * @since LibVLC 1.1.1
      */
-    void libvlc_media_player_set_pause(libvlc_media_player_t mp, int do_pause);
+    public static native void libvlc_media_player_set_pause(libvlc_media_player_t mp, int do_pause);
 
     /**
      * Toggle pause (no effect if there is no media)
      *
      * @param p_mi the Media Player
      */
-    void libvlc_media_player_pause(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_pause(libvlc_media_player_t p_mi);
 
     /**
      * Stop (no effect if there is no media)
      *
      * @param p_mi the Media Player
      */
-    void libvlc_media_player_stop(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_stop(libvlc_media_player_t p_mi);
 
     /**
      * Set a renderer to the media player
@@ -920,7 +921,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_player_set_renderer(libvlc_media_player_t p_mi, libvlc_renderer_item_t p_item);
+    public static native int libvlc_media_player_set_renderer(libvlc_media_player_t p_mi, libvlc_renderer_item_t p_item);
 
     /**
      * Set callbacks and private data to render decoded video to a custom area in memory.
@@ -935,7 +936,7 @@ public interface LibVlc extends Library {
      * @param opaque private pointer for the three callbacks (as first parameter)
      * @since LibVLC 1.1.1
      */
-    void libvlc_video_set_callbacks(libvlc_media_player_t mp, libvlc_lock_callback_t lock, libvlc_unlock_callback_t unlock, libvlc_display_callback_t display, Pointer opaque);
+    public static native void libvlc_video_set_callbacks(libvlc_media_player_t mp, libvlc_lock_callback_t lock, libvlc_unlock_callback_t unlock, libvlc_display_callback_t display, Pointer opaque);
 
     /**
      * Set decoded video chroma and dimensions.
@@ -953,7 +954,7 @@ public interface LibVlc extends Library {
      * bug: All pixel planes are expected to have the same pitch. To use the YCbCr color space with
      *      chrominance subsampling, consider using libvlc_video_set_format_callback() instead.
      */
-    void libvlc_video_set_format(libvlc_media_player_t mp, String chroma, int width, int height, int pitch);
+    public static native void libvlc_video_set_format(libvlc_media_player_t mp, String chroma, int width, int height, int pitch);
 
     /**
      * Set decoded video chroma and dimensions. This only works in combination with
@@ -964,7 +965,7 @@ public interface LibVlc extends Library {
      * @param cleanup callback to release any allocated resources (or NULL)
      * @since LibVLC 2.0.0 or later
      */
-    void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_cleanup_cb cleanup);
+    public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_cleanup_cb cleanup);
 
     /**
      * Set the NSView handler where the media player should render its video output. Use the vout
@@ -989,7 +990,7 @@ public interface LibVlc extends Library {
      * @param drawable the drawable that is either an NSView or an object following the
      *            VLCOpenGLVideoViewEmbedding protocol.
      */
-    void libvlc_media_player_set_nsobject(libvlc_media_player_t p_mi, long drawable);
+    public static native void libvlc_media_player_set_nsobject(libvlc_media_player_t p_mi, long drawable);
 
     /**
      * Get the NSView handler previously set with libvlc_media_player_set_nsobject().
@@ -997,7 +998,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the NSView handler or 0 if none where set
      */
-    Pointer libvlc_media_player_get_nsobject(libvlc_media_player_t p_mi);
+    public static native Pointer libvlc_media_player_get_nsobject(libvlc_media_player_t p_mi);
 
     /**
      * Set an X Window System drawable where the media player should render its video output. If
@@ -1009,7 +1010,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param drawable the ID of the X window
      */
-    void libvlc_media_player_set_xwindow(libvlc_media_player_t p_mi, int drawable);
+    public static native void libvlc_media_player_set_xwindow(libvlc_media_player_t p_mi, int drawable);
 
     /**
      * Get the X Window System window identifier previously set with
@@ -1019,7 +1020,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return an X window ID, or 0 if none where set.
      */
-    int libvlc_media_player_get_xwindow(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_xwindow(libvlc_media_player_t p_mi);
 
     /**
      * Set a Win32/Win64 API window handle (HWND) where the media player should render its video
@@ -1028,7 +1029,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param drawable windows handle of the drawable
      */
-    void libvlc_media_player_set_hwnd(libvlc_media_player_t p_mi, Pointer drawable);
+    public static native void libvlc_media_player_set_hwnd(libvlc_media_player_t p_mi, Pointer drawable);
 
     /**
      * Get the Windows API window handle (HWND) previously set with libvlc_media_player_set_hwnd().
@@ -1037,7 +1038,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return a window handle or NULL if there are none.
      */
-    Pointer libvlc_media_player_get_hwnd(libvlc_media_player_t p_mi);
+    public static native Pointer libvlc_media_player_get_hwnd(libvlc_media_player_t p_mi);
 
     /**
      * Set callbacks and private data for decoded audio.
@@ -1054,7 +1055,7 @@ public interface LibVlc extends Library {
      * @param opaque private pointer for the audio callbacks (as first parameter)
      * @since LibVLC 2.0.0 or later
      */
-    void libvlc_audio_set_callbacks(libvlc_media_player_t mp, libvlc_audio_play_cb play, libvlc_audio_pause_cb pause, libvlc_audio_resume_cb resume, libvlc_audio_flush_cb flush, libvlc_audio_drain_cb drain, Pointer opaque);
+    public static native void libvlc_audio_set_callbacks(libvlc_media_player_t mp, libvlc_audio_play_cb play, libvlc_audio_pause_cb pause, libvlc_audio_resume_cb resume, libvlc_audio_flush_cb flush, libvlc_audio_drain_cb drain, Pointer opaque);
 
     /**
      * Set callbacks and private data for decoded audio. Use libvlc_audio_set_format() or
@@ -1064,7 +1065,7 @@ public interface LibVlc extends Library {
      * @param set_volume callback to apply audio volume, or NULL to apply volume in software
      * @since LibVLC 2.0.0 or later
      */
-    void libvlc_audio_set_volume_callback(libvlc_media_player_t mp, libvlc_audio_set_volume_cb set_volume);
+    public static native void libvlc_audio_set_volume_callback(libvlc_media_player_t mp, libvlc_audio_set_volume_cb set_volume);
 
     /**
      * Set decoded audio format. This only works in combination with libvlc_audio_set_callbacks().
@@ -1074,7 +1075,7 @@ public interface LibVlc extends Library {
      * @param cleanup callback to release any allocated resources (or NULL)
      * @since LibVLC 2.0.0 or later
      */
-    void libvlc_audio_set_format_callbacks(libvlc_media_player_t mp, libvlc_audio_setup_cb setup, libvlc_audio_cleanup_cb cleanup);
+    public static native void libvlc_audio_set_format_callbacks(libvlc_media_player_t mp, libvlc_audio_setup_cb setup, libvlc_audio_cleanup_cb cleanup);
 
     /**
      * Set decoded audio format. This only works in combination with libvlc_audio_set_callbacks(),
@@ -1086,9 +1087,9 @@ public interface LibVlc extends Library {
      * @param channels channels count
      * @since LibVLC 2.0.0 or later
      */
-    void libvlc_audio_set_format(libvlc_media_player_t mp, String format, int rate, int channels);
+    public static native void libvlc_audio_set_format(libvlc_media_player_t mp, String format, int rate, int channels);
 
-    /** \bug This might go away ... to be replaced by a broader system */
+    /** bug This might go away ... to be replaced by a broader system */
 
     /**
      * Get the current movie length (in ms).
@@ -1096,7 +1097,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the movie length (in ms), or -1 if there is no media.
      */
-    long libvlc_media_player_get_length(libvlc_media_player_t p_mi);
+    public static native long libvlc_media_player_get_length(libvlc_media_player_t p_mi);
 
     /**
      * Get the current movie time (in ms).
@@ -1104,7 +1105,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the movie time (in ms), or -1 if there is no media.
      */
-    long libvlc_media_player_get_time(libvlc_media_player_t p_mi);
+    public static native long libvlc_media_player_get_time(libvlc_media_player_t p_mi);
 
     /**
      * Set the movie time (in ms).
@@ -1116,7 +1117,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param i_time the movie time (in ms).
      */
-    void libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time);
+    public static native void libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time);
 
     /**
      * Get movie position.
@@ -1124,7 +1125,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return movie position, or -1. in case of error
      */
-    float libvlc_media_player_get_position(libvlc_media_player_t p_mi);
+    public static native float libvlc_media_player_get_position(libvlc_media_player_t p_mi);
 
     /**
      * Set movie position as percentage between 0.0 and 1.0.
@@ -1136,7 +1137,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param f_pos the position
      */
-    void libvlc_media_player_set_position(libvlc_media_player_t p_mi, float f_pos);
+    public static native void libvlc_media_player_set_position(libvlc_media_player_t p_mi, float f_pos);
 
     /**
      * Set movie chapter (if applicable).
@@ -1144,7 +1145,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param i_chapter chapter number to play
      */
-    void libvlc_media_player_set_chapter(libvlc_media_player_t p_mi, int i_chapter);
+    public static native void libvlc_media_player_set_chapter(libvlc_media_player_t p_mi, int i_chapter);
 
     /**
      * Get movie chapter.
@@ -1152,7 +1153,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return chapter number currently playing, or -1 if there is no media.
      */
-    int libvlc_media_player_get_chapter(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_chapter(libvlc_media_player_t p_mi);
 
     /**
      * Get movie chapter count
@@ -1160,7 +1161,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return number of chapters in movie, or -1.
      */
-    int libvlc_media_player_get_chapter_count(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_chapter_count(libvlc_media_player_t p_mi);
 
     /**
      * Is the player able to play
@@ -1168,7 +1169,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return boolean
      */
-    int libvlc_media_player_will_play(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_will_play(libvlc_media_player_t p_mi);
 
     /**
      * Get title chapter count
@@ -1177,7 +1178,7 @@ public interface LibVlc extends Library {
      * @param i_title title
      * @return number of chapters in title, or -1
      */
-    int libvlc_media_player_get_chapter_count_for_title(libvlc_media_player_t p_mi, int i_title);
+    public static native int libvlc_media_player_get_chapter_count_for_title(libvlc_media_player_t p_mi, int i_title);
 
     /**
      * Set movie title
@@ -1185,7 +1186,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @param i_title title number to play
      */
-    void libvlc_media_player_set_title(libvlc_media_player_t p_mi, int i_title);
+    public static native void libvlc_media_player_set_title(libvlc_media_player_t p_mi, int i_title);
 
     /**
      * Get movie title
@@ -1193,7 +1194,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return title number currently playing, or -1
      */
-    int libvlc_media_player_get_title(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_title(libvlc_media_player_t p_mi);
 
     /**
      * Get movie title count
@@ -1201,21 +1202,21 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return title number count, or -1
      */
-    int libvlc_media_player_get_title_count(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_title_count(libvlc_media_player_t p_mi);
 
     /**
      * Set previous chapter (if applicable)
      *
      * @param p_mi the Media Player
      */
-    void libvlc_media_player_previous_chapter(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_previous_chapter(libvlc_media_player_t p_mi);
 
     /**
      * Set next chapter (if applicable)
      *
      * @param p_mi the Media Player
      */
-    void libvlc_media_player_next_chapter(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_next_chapter(libvlc_media_player_t p_mi);
 
     /**
      * Get the requested movie play rate.
@@ -1225,7 +1226,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return movie play rate
      */
-    float libvlc_media_player_get_rate(libvlc_media_player_t p_mi);
+    public static native float libvlc_media_player_get_rate(libvlc_media_player_t p_mi);
 
     /**
      * Set movie play rate
@@ -1235,7 +1236,7 @@ public interface LibVlc extends Library {
      * @return -1 if an error was detected, 0 otherwise (but even then, it might not actually work
      *         depending on the underlying media protocol)
      */
-    int libvlc_media_player_set_rate(libvlc_media_player_t p_mi, float rate);
+    public static native int libvlc_media_player_set_rate(libvlc_media_player_t p_mi, float rate);
 
     /**
      * Get current movie state
@@ -1243,7 +1244,7 @@ public interface LibVlc extends Library {
      * @param p_mi the Media Player
      * @return the current state of the media player (playing, paused, ...) @see State
      */
-    int libvlc_media_player_get_state(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_state(libvlc_media_player_t p_mi);
 
     /**
      * How many video outputs does this media player have?
@@ -1251,7 +1252,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the number of video outputs
      */
-    int libvlc_media_player_has_vout(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_has_vout(libvlc_media_player_t p_mi);
 
     /**
      * Is this media player seekable?
@@ -1259,7 +1260,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return true if the media player can seek
      */
-    int libvlc_media_player_is_seekable(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_is_seekable(libvlc_media_player_t p_mi);
 
     /**
      * Can this media player be paused?
@@ -1267,7 +1268,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return true if the media player can pause
      */
-    int libvlc_media_player_can_pause(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_can_pause(libvlc_media_player_t p_mi);
 
     /**
      * Is the current program scrambled?
@@ -1276,14 +1277,14 @@ public interface LibVlc extends Library {
      * @return true if the current program is scrambled
      * @since libVLC 2.2.0
      */
-    int libvlc_media_player_program_scrambled(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_program_scrambled(libvlc_media_player_t p_mi);
 
     /**
      * Display the next frame (if supported)
      *
      * @param p_mi the media player
      */
-    void libvlc_media_player_next_frame(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_next_frame(libvlc_media_player_t p_mi);
 
     /**
      * Navigate through DVD Menu
@@ -1292,7 +1293,7 @@ public interface LibVlc extends Library {
      * @param navigate the Navigation mode
      * @since libVLC 2.0.0
      */
-    void libvlc_media_player_navigate(libvlc_media_player_t p_mi, int navigate);
+    public static native void libvlc_media_player_navigate(libvlc_media_player_t p_mi, int navigate);
 
     /**
      * Set if, and how, the video title will be shown when media is played.
@@ -1302,7 +1303,7 @@ public interface LibVlc extends Library {
      * @param timeout title display timeout in milliseconds (ignored if libvlc_position_disable)
      * @since libVLC 2.1.0 or later
      */
-    void libvlc_media_player_set_video_title_display(libvlc_media_player_t p_mi, int position, int timeout);
+    public static native void libvlc_media_player_set_video_title_display(libvlc_media_player_t p_mi, int position, int timeout);
 
     /**
      * Add a slave to the current media player.
@@ -1320,14 +1321,14 @@ public interface LibVlc extends Library {
      * @return 0 on success, -1 on error.
      * @since LibVLC 3.0.0 and later.
      */
-    int libvlc_media_player_add_slave(libvlc_media_player_t p_mi, int i_type, String psz_uri, int b_select);
+    public static native int libvlc_media_player_add_slave(libvlc_media_player_t p_mi, int i_type, String psz_uri, int b_select);
 
     /**
      * Release (free) libvlc_track_description_t
      *
      * @param p_track_description the structure to release
      */
-    void libvlc_track_description_list_release(Pointer p_track_description);
+    public static native void libvlc_track_description_list_release(Pointer p_track_description);
 
     /**
      * Toggle fullscreen status on non-embedded video outputs.
@@ -1336,7 +1337,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mi the media player
      */
-    void libvlc_toggle_fullscreen(libvlc_media_player_t p_mi);
+    public static native void libvlc_toggle_fullscreen(libvlc_media_player_t p_mi);
 
     /**
      * Enable or disable fullscreen.
@@ -1351,7 +1352,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param b_fullscreen boolean for fullscreen status
      */
-    void libvlc_set_fullscreen(libvlc_media_player_t p_mi, int b_fullscreen);
+    public static native void libvlc_set_fullscreen(libvlc_media_player_t p_mi, int b_fullscreen);
 
     /**
      * Get current fullscreen status.
@@ -1359,7 +1360,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the fullscreen status (boolean)
      */
-    int libvlc_get_fullscreen(libvlc_media_player_t p_mi);
+    public static native int libvlc_get_fullscreen(libvlc_media_player_t p_mi);
 
     /**
      * Enable or disable key press events handling, according to the LibVLC hotkeys configuration.
@@ -1376,7 +1377,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param on true to handle key press events, false to ignore them.
      */
-    void libvlc_video_set_key_input(libvlc_media_player_t p_mi, int on);
+    public static native void libvlc_video_set_key_input(libvlc_media_player_t p_mi, int on);
 
     /**
      * Enable or disable mouse click events handling. By default, those events are handled. This is
@@ -1389,7 +1390,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param on true to handle mouse click events, false to ignore them.
      */
-    void libvlc_video_set_mouse_input(libvlc_media_player_t p_mi, int on);
+    public static native void libvlc_video_set_mouse_input(libvlc_media_player_t p_mi, int on);
 
     /**
      * Get the pixel dimensions of a video.
@@ -1400,7 +1401,7 @@ public interface LibVlc extends Library {
      * @param py pointer to get the pixel height [OUT]
      * @return 0 on success, -1 if the specified video does not exist
      */
-    int libvlc_video_get_size(libvlc_media_player_t p_mi, int num, IntByReference px, IntByReference py);
+    public static native int libvlc_video_get_size(libvlc_media_player_t p_mi, int num, IntByReference px, IntByReference py);
 
     /**
      * Get the mouse pointer coordinates over a video. Coordinates are expressed in terms of the
@@ -1422,7 +1423,7 @@ public interface LibVlc extends Library {
      * @param py pointer to get the ordinate [OUT]
      * @return 0 on success, -1 if the specified video does not exist
      */
-    int libvlc_video_get_cursor(libvlc_media_player_t p_mi, int num, Pointer px, Pointer py);
+    public static native int libvlc_video_get_cursor(libvlc_media_player_t p_mi, int num, Pointer px, Pointer py);
 
     /**
      * Get the current video scaling factor. See also libvlc_video_set_scale().
@@ -1431,7 +1432,7 @@ public interface LibVlc extends Library {
      * @return the currently configured zoom factor, or 0. if the video is set to fit to the output
      *         window/drawable automatically.
      */
-    float libvlc_video_get_scale(libvlc_media_player_t p_mi);
+    public static native float libvlc_video_get_scale(libvlc_media_player_t p_mi);
 
     /**
      * Set the video scaling factor. That is the ratio of the number of pixels on screen to the
@@ -1442,7 +1443,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param f_factor the scaling factor, or zero
      */
-    void libvlc_video_set_scale(libvlc_media_player_t p_mi, float f_factor);
+    public static native void libvlc_video_set_scale(libvlc_media_player_t p_mi, float f_factor);
 
     /**
      * Get current video aspect ratio.
@@ -1451,7 +1452,7 @@ public interface LibVlc extends Library {
      * @return the video aspect ratio or NULL if unspecified (the result must be released with
      *         free()).
      */
-    Pointer libvlc_video_get_aspect_ratio(libvlc_media_player_t p_mi);
+    public static native Pointer libvlc_video_get_aspect_ratio(libvlc_media_player_t p_mi);
 
     /**
      * Set new video aspect ratio.
@@ -1461,7 +1462,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param psz_aspect new video aspect-ratio or NULL to reset to default
      */
-    void libvlc_video_set_aspect_ratio(libvlc_media_player_t p_mi, String psz_aspect);
+    public static native void libvlc_video_set_aspect_ratio(libvlc_media_player_t p_mi, String psz_aspect);
 
     /**
      * Create a video viewpoint structure.
@@ -1469,7 +1470,7 @@ public interface LibVlc extends Library {
      * @return video viewpoint or NULL (the result must be released with free() or libvlc_free()).
      * @since LibVLC 3.0.0 and later
      */
-    libvlc_video_viewpoint_t libvlc_video_new_viewpoint();
+    public static native libvlc_video_viewpoint_t libvlc_video_new_viewpoint();
 
     /**
      * Update the video viewpoint information.
@@ -1485,7 +1486,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later
      */
-    int libvlc_video_update_viewpoint(libvlc_media_player_t p_mi, libvlc_video_viewpoint_t p_viewpoint, int b_absolute);
+    public static native int libvlc_video_update_viewpoint(libvlc_media_player_t p_mi, libvlc_video_viewpoint_t p_viewpoint, int b_absolute);
 
     /**
      * Get current video subtitle.
@@ -1493,7 +1494,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the video subtitle selected, or -1 if none
      */
-    int libvlc_video_get_spu(libvlc_media_player_t p_mi);
+    public static native int libvlc_video_get_spu(libvlc_media_player_t p_mi);
 
     /**
      * Get the number of available video subtitles.
@@ -1501,7 +1502,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the number of available video subtitles
      */
-    int libvlc_video_get_spu_count(libvlc_media_player_t p_mi);
+    public static native int libvlc_video_get_spu_count(libvlc_media_player_t p_mi);
 
     /**
      * Get the description of available video subtitles.
@@ -1509,7 +1510,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return list containing description of available video subtitles
      */
-    libvlc_track_description_t libvlc_video_get_spu_description(libvlc_media_player_t p_mi);
+    public static native libvlc_track_description_t libvlc_video_get_spu_description(libvlc_media_player_t p_mi);
 
     /**
      * Set new video subtitle.
@@ -1518,7 +1519,7 @@ public interface LibVlc extends Library {
      * @param i_spu new video subtitle to select
      * @return 0 on success, -1 if out of range
      */
-    int libvlc_video_set_spu(libvlc_media_player_t p_mi, int i_spu);
+    public static native int libvlc_video_set_spu(libvlc_media_player_t p_mi, int i_spu);
 
     /**
      * Get the current subtitle delay. Positive values means subtitles are being displayed later,
@@ -1528,7 +1529,7 @@ public interface LibVlc extends Library {
      * @return time (in microseconds) the display of subtitles is being delayed
      * @since LibVLC 2.0.0 or later
      */
-    long libvlc_video_get_spu_delay(libvlc_media_player_t p_mi);
+    public static native long libvlc_video_get_spu_delay(libvlc_media_player_t p_mi);
 
     /**
      * Set the subtitle delay. This affects the timing of when the subtitle will be displayed.
@@ -1542,7 +1543,7 @@ public interface LibVlc extends Library {
      * @return 0 on success, -1 on error
      * @since LibVLC 2.0.0 or later
      */
-    int libvlc_video_set_spu_delay(libvlc_media_player_t p_mi, long i_delay);
+    public static native int libvlc_video_set_spu_delay(libvlc_media_player_t p_mi, long i_delay);
 
     /**
      * Get the full description of available titles
@@ -1556,7 +1557,7 @@ public interface LibVlc extends Library {
      *
      * @return the number of titles (-1 on error)
      */
-    int libvlc_media_player_get_full_title_descriptions(libvlc_media_player_t p_mi, PointerByReference titles);
+    public static native int libvlc_media_player_get_full_title_descriptions(libvlc_media_player_t p_mi, PointerByReference titles);
 
     /**
      * Release title descriptions.
@@ -1566,7 +1567,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later
      */
-    void libvlc_title_descriptions_release(Pointer p_titles, int i_count);
+    public static native void libvlc_title_descriptions_release(Pointer p_titles, int i_count);
 
     /**
      * Get the full description of available chapters.
@@ -1581,7 +1582,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    int libvlc_media_player_get_full_chapter_descriptions(libvlc_media_player_t p_mi, int i_chapters_of_title, PointerByReference pp_chapters);
+    public static native int libvlc_media_player_get_full_chapter_descriptions(libvlc_media_player_t p_mi, int i_chapters_of_title, PointerByReference pp_chapters);
 
     /**
      * Release chapter descriptions.
@@ -1591,7 +1592,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later
      */
-    void libvlc_chapter_descriptions_release(Pointer p_chapters, int i_count);
+    public static native void libvlc_chapter_descriptions_release(Pointer p_chapters, int i_count);
 
     /**
      * Get current crop filter geometry.
@@ -1599,7 +1600,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the crop filter geometry or NULL if unset
      */
-    Pointer libvlc_video_get_crop_geometry(libvlc_media_player_t p_mi);
+    public static native Pointer libvlc_video_get_crop_geometry(libvlc_media_player_t p_mi);
 
     /**
      * Set new crop filter geometry.
@@ -1607,7 +1608,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @param psz_geometry new crop filter geometry (NULL to unset)
      */
-    void libvlc_video_set_crop_geometry(libvlc_media_player_t p_mi, String psz_geometry);
+    public static native void libvlc_video_set_crop_geometry(libvlc_media_player_t p_mi, String psz_geometry);
 
     /**
      * Get current teletext page requested or 0 if it's disabled.
@@ -1615,7 +1616,7 @@ public interface LibVlc extends Library {
      * @param p_mi the media player
      * @return the current teletext page requested.
      */
-    int libvlc_video_get_teletext(libvlc_media_player_t p_mi);
+    public static native int libvlc_video_get_teletext(libvlc_media_player_t p_mi);
 
     /**
      * Set new teletext page to retrieve.
@@ -1625,7 +1626,7 @@ public interface LibVlc extends Library {
      *               This value can be 0 to disable teletext or a number in the range 0 to 1000 to show the requested
      *               page or a TeletextKey. 100 is the default teletext page.
      */
-    void libvlc_video_set_teletext(libvlc_media_player_t p_mi, int i_page);
+    public static native void libvlc_video_set_teletext(libvlc_media_player_t p_mi, int i_page);
 
     /**
      * Get number of available video tracks.
@@ -1633,7 +1634,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the number of available video tracks (int)
      */
-    int libvlc_video_get_track_count(libvlc_media_player_t p_mi);
+    public static native int libvlc_video_get_track_count(libvlc_media_player_t p_mi);
 
     /**
      * Get the description of available video tracks.
@@ -1641,7 +1642,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return list with description of available video tracks, or NULL on error
      */
-    libvlc_track_description_t libvlc_video_get_track_description(libvlc_media_player_t p_mi);
+    public static native libvlc_track_description_t libvlc_video_get_track_description(libvlc_media_player_t p_mi);
 
     /**
      * Get current video track.
@@ -1649,7 +1650,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the video track ID (int) or -1 if no active input
      */
-    int libvlc_video_get_track(libvlc_media_player_t p_mi);
+    public static native int libvlc_video_get_track(libvlc_media_player_t p_mi);
 
     /**
      * Set video track.
@@ -1658,7 +1659,7 @@ public interface LibVlc extends Library {
      * @param i_track the track ID (i_id field from track description)
      * @return 0 on success, -1 if out of range
      */
-    int libvlc_video_set_track(libvlc_media_player_t p_mi, int i_track);
+    public static native int libvlc_video_set_track(libvlc_media_player_t p_mi, int i_track);
 
     /**
      * Take a snapshot of the current video window. If i_width AND i_height is 0, original size is
@@ -1671,7 +1672,7 @@ public interface LibVlc extends Library {
      * @param i_height the snapshot's height
      * @return 0 on success, -1 if the video was not found
      */
-    int libvlc_video_take_snapshot(libvlc_media_player_t p_mi, int num, String psz_filepath, int i_width, int i_height);
+    public static native int libvlc_video_take_snapshot(libvlc_media_player_t p_mi, int num, String psz_filepath, int i_width, int i_height);
 
     /**
      * Enable or disable deinterlace filter
@@ -1679,7 +1680,7 @@ public interface LibVlc extends Library {
      * @param p_mi libvlc media player
      * @param psz_mode type of deinterlace filter, NULL to disable
      */
-    void libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, String psz_mode);
+    public static native void libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, String psz_mode);
 
     /**
      * Get an integer marquee option value
@@ -1688,7 +1689,7 @@ public interface LibVlc extends Library {
      * @param option marq option to get @see libvlc_video_marquee_int_option_t
      * @return marquee option value
      */
-    int libvlc_video_get_marquee_int(libvlc_media_player_t p_mi, int option);
+    public static native int libvlc_video_get_marquee_int(libvlc_media_player_t p_mi, int option);
 
     /**
      * Get a string marquee option value
@@ -1697,7 +1698,7 @@ public interface LibVlc extends Library {
      * @param option marq option to get @see libvlc_video_marquee_string_option_t
      * @return marquee option value
      */
-    Pointer libvlc_video_get_marquee_string(libvlc_media_player_t p_mi, int option);
+    public static native Pointer libvlc_video_get_marquee_string(libvlc_media_player_t p_mi, int option);
 
     /**
      * Enable, disable or set an integer marquee option Setting libvlc_marquee_Enable has the side
@@ -1707,7 +1708,7 @@ public interface LibVlc extends Library {
      * @param option marq option to set @see libvlc_video_marquee_int_option_t
      * @param i_val marq option value
      */
-    void libvlc_video_set_marquee_int(libvlc_media_player_t p_mi, int option, int i_val);
+    public static native void libvlc_video_set_marquee_int(libvlc_media_player_t p_mi, int option, int i_val);
 
     /**
      * Set a marquee string option
@@ -1716,7 +1717,7 @@ public interface LibVlc extends Library {
      * @param option marq option to set @see libvlc_video_marquee_string_option_t
      * @param psz_text marq option value
      */
-    void libvlc_video_set_marquee_string(libvlc_media_player_t p_mi, int option, String psz_text);
+    public static native void libvlc_video_set_marquee_string(libvlc_media_player_t p_mi, int option, String psz_text);
 
     /**
      * Get integer logo option.
@@ -1725,7 +1726,7 @@ public interface LibVlc extends Library {
      * @param option logo option to get, values of libvlc_video_logo_option_t
      * @return logo option value
      */
-    int libvlc_video_get_logo_int(libvlc_media_player_t p_mi, int option);
+    public static native int libvlc_video_get_logo_int(libvlc_media_player_t p_mi, int option);
 
     /**
      * Set logo option as integer. Options that take a different type value are ignored. Passing
@@ -1736,7 +1737,7 @@ public interface LibVlc extends Library {
      * @param option logo option to set, values of libvlc_video_logo_option_t
      * @param value logo option value
      */
-    void libvlc_video_set_logo_int(libvlc_media_player_t p_mi, int option, int value);
+    public static native void libvlc_video_set_logo_int(libvlc_media_player_t p_mi, int option, int value);
 
     /**
      * Set logo option as string. Options that take a different type value are ignored.
@@ -1745,7 +1746,7 @@ public interface LibVlc extends Library {
      * @param option logo option to set, values of libvlc_video_logo_option_t
      * @param psz_value logo option value
      */
-    void libvlc_video_set_logo_string(libvlc_media_player_t p_mi, int option, String psz_value);
+    public static native void libvlc_video_set_logo_string(libvlc_media_player_t p_mi, int option, String psz_value);
 
     /**
      * Get integer adjust option.
@@ -1755,7 +1756,7 @@ public interface LibVlc extends Library {
      * @return value
      * @since LibVLC 1.1.1
      */
-    int libvlc_video_get_adjust_int(libvlc_media_player_t p_mi, int option);
+    public static native int libvlc_video_get_adjust_int(libvlc_media_player_t p_mi, int option);
 
     /**
      * Set adjust option as integer. Options that take a different type value are ignored. Passing
@@ -1767,7 +1768,7 @@ public interface LibVlc extends Library {
      * @param value adjust option value
      * @since LibVLC 1.1.1
      */
-    void libvlc_video_set_adjust_int(libvlc_media_player_t p_mi, int option, int value);
+    public static native void libvlc_video_set_adjust_int(libvlc_media_player_t p_mi, int option, int value);
 
     /**
      * Get float adjust option.
@@ -1777,7 +1778,7 @@ public interface LibVlc extends Library {
      * @return value
      * @since LibVLC 1.1.1
      */
-    float libvlc_video_get_adjust_float(libvlc_media_player_t p_mi, int option);
+    public static native float libvlc_video_get_adjust_float(libvlc_media_player_t p_mi, int option);
 
     /**
      * Set adjust option as float. Options that take a different type value are ignored.
@@ -1787,7 +1788,7 @@ public interface LibVlc extends Library {
      * @param value adjust option value
      * @since LibVLC 1.1.1
      */
-    void libvlc_video_set_adjust_float(libvlc_media_player_t p_mi, int option, float value);
+    public static native void libvlc_video_set_adjust_float(libvlc_media_player_t p_mi, int option, float value);
 
     /**
      * Gets the list of available audio outputs
@@ -1797,14 +1798,14 @@ public interface LibVlc extends Library {
      *         {@link #libvlc_audio_output_list_release(Pointer)}. In case of error,
      *         NULL is returned.
      */
-    libvlc_audio_output_t libvlc_audio_output_list_get(libvlc_instance_t p_instance);
+    public static native libvlc_audio_output_t libvlc_audio_output_list_get(libvlc_instance_t p_instance);
 
     /**
      * Frees the list of available audio outputs
      *
      * @param p_list list with audio outputs for release
      */
-    void libvlc_audio_output_list_release(Pointer p_list);
+    public static native void libvlc_audio_output_list_release(Pointer p_list);
 
     /**
      * Sets the audio output.
@@ -1816,7 +1817,7 @@ public interface LibVlc extends Library {
      * @param psz_name name of audio output, use psz_name of @see libvlc_audio_output_t
      * @return 0 if function succeded, -1 on error
      */
-    int libvlc_audio_output_set(libvlc_media_player_t p_mi, String psz_name);
+    public static native int libvlc_audio_output_set(libvlc_media_player_t p_mi, String psz_name);
 
     /**
      * Gets a list of potential audio output devices, see
@@ -1835,7 +1836,7 @@ public interface LibVlc extends Library {
      *         with {@link #libvlc_audio_output_device_list_release(Pointer)}.
      * @since LibVLC 2.2.0 or later.
      */
-    libvlc_audio_output_device_t libvlc_audio_output_device_enum(libvlc_media_player_t mp);
+    public static native libvlc_audio_output_device_t libvlc_audio_output_device_enum(libvlc_media_player_t mp);
 
     /**
      * Gets a list of audio output devices for a given audio output.
@@ -1857,7 +1858,7 @@ public interface LibVlc extends Library {
      * @return A NULL-terminated linked list of potential audio output devices. It must be freed it with libvlc_audio_output_device_list_release()
      * @since LibVLC 2.1.0 or later.
      */
-    libvlc_audio_output_device_t libvlc_audio_output_device_list_get( libvlc_instance_t p_instance, String psz_aout );
+    public static native libvlc_audio_output_device_t libvlc_audio_output_device_list_get( libvlc_instance_t p_instance, String psz_aout );
 
     /**
      * Frees a list of available audio output devices.
@@ -1865,7 +1866,7 @@ public interface LibVlc extends Library {
      * @param p_list list with audio outputs for release
      * @since LibVLC 2.1.0 or later.
      */
-    void libvlc_audio_output_device_list_release(Pointer p_list);
+    public static native void libvlc_audio_output_device_list_release(Pointer p_list);
 
     /**
      * Configures an explicit audio output device.
@@ -1875,7 +1876,7 @@ public interface LibVlc extends Library {
      * recommended usage.
      * <p>
      * A list of adequate potential device strings can be obtained with
-     * libvlc_audio_output_device_enum(). // FIXME
+     * libvlc_audio_output_device_enum().
      * <p>
      * However passing NULL is supported in LibVLC version 2.2.0 and later only;
      * in earlier versions, this function would have no effects when the module
@@ -1901,7 +1902,7 @@ public interface LibVlc extends Library {
      * @param psz_audio_output if NULL, current audio output module; if non-NULL, name of audio output module (@see libvlc_audio_output_t)
      * @param psz_device_id device identifier string
      */
-    void libvlc_audio_output_device_set(libvlc_media_player_t p_mi, String psz_audio_output, String psz_device_id);
+    public static native void libvlc_audio_output_device_set(libvlc_media_player_t p_mi, String psz_audio_output, String psz_device_id);
 
     /**
      * Get the current audio output device identifier.
@@ -1925,14 +1926,14 @@ public interface LibVlc extends Library {
      *         (the result must be released with free() or libvlc_free()).
      * @since LibVLC 3.0.0 or later.
      */
-    Pointer libvlc_audio_output_device_get(libvlc_media_player_t mp);
+    public static native Pointer libvlc_audio_output_device_get(libvlc_media_player_t mp);
 
     /**
      * Toggle mute status.
      *
      * @param p_mi media player
      */
-    void libvlc_audio_toggle_mute(libvlc_media_player_t p_mi);
+    public static native void libvlc_audio_toggle_mute(libvlc_media_player_t p_mi);
 
     /**
      * Get current mute status.
@@ -1940,7 +1941,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the mute status (boolean)
      */
-    int libvlc_audio_get_mute(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_mute(libvlc_media_player_t p_mi);
 
     /**
      * Set mute status.
@@ -1948,7 +1949,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @param status If status is true then mute, otherwise unmute
      */
-    void libvlc_audio_set_mute(libvlc_media_player_t p_mi, int status);
+    public static native void libvlc_audio_set_mute(libvlc_media_player_t p_mi, int status);
 
     /**
      * Get current software audio volume.
@@ -1956,7 +1957,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the software volume in percents (0 = mute, 100 = nominal / 0dB)
      */
-    int libvlc_audio_get_volume(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_volume(libvlc_media_player_t p_mi);
 
     /**
      * Set current software audio volume.
@@ -1965,7 +1966,7 @@ public interface LibVlc extends Library {
      * @param i_volume the volume in percents (0 = mute, 100 = 0dB)
      * @return 0 if the volume was set, -1 if it was out of range
      */
-    int libvlc_audio_set_volume(libvlc_media_player_t p_mi, int i_volume);
+    public static native int libvlc_audio_set_volume(libvlc_media_player_t p_mi, int i_volume);
 
     /**
      * Get number of available audio tracks.
@@ -1973,7 +1974,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the number of available audio tracks (int), or -1 if unavailable
      */
-    int libvlc_audio_get_track_count(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_track_count(libvlc_media_player_t p_mi);
 
     /**
      * Get the description of available audio tracks.
@@ -1981,7 +1982,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return list with description of available audio tracks, or NULL
      */
-    libvlc_track_description_t libvlc_audio_get_track_description(libvlc_media_player_t p_mi);
+    public static native libvlc_track_description_t libvlc_audio_get_track_description(libvlc_media_player_t p_mi);
 
     /**
      * Get current audio track.
@@ -1989,7 +1990,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the audio track ID or -1 if no active input.
      */
-    int libvlc_audio_get_track(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_track(libvlc_media_player_t p_mi);
 
     /**
      * Set current audio track.
@@ -1998,7 +1999,7 @@ public interface LibVlc extends Library {
      * @param i_track the track ID (i_id field from track description)
      * @return 0 on success, -1 on error
      */
-    int libvlc_audio_set_track(libvlc_media_player_t p_mi, int i_track);
+    public static native int libvlc_audio_set_track(libvlc_media_player_t p_mi, int i_track);
 
     /**
      * Get current audio channel.
@@ -2006,7 +2007,7 @@ public interface LibVlc extends Library {
      * @param p_mi media player
      * @return the audio channel @see AudioChannel
      */
-    int libvlc_audio_get_channel(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_channel(libvlc_media_player_t p_mi);
 
     /**
      * Set current audio channel.
@@ -2015,7 +2016,7 @@ public interface LibVlc extends Library {
      * @param channel the audio channel, @see AudioChannel
      * @return 0 on success, -1 on error
      */
-    int libvlc_audio_set_channel(libvlc_media_player_t p_mi, int channel);
+    public static native int libvlc_audio_set_channel(libvlc_media_player_t p_mi, int channel);
 
     /**
      * Get current audio delay.
@@ -2024,7 +2025,7 @@ public interface LibVlc extends Library {
      * @return amount audio is being delayed by, in microseconds
      * @since LibVLC 1.1.1
      */
-    long libvlc_audio_get_delay(libvlc_media_player_t p_mi);
+    public static native long libvlc_audio_get_delay(libvlc_media_player_t p_mi);
 
     /**
      * Set current audio delay. The delay is only active for the current media item and will be
@@ -2035,7 +2036,7 @@ public interface LibVlc extends Library {
      * @return 0 on success, -1 on error
      * @since LibVLC 1.1.1
      */
-    int libvlc_audio_set_delay(libvlc_media_player_t p_mi, long i_delay);
+    public static native int libvlc_audio_set_delay(libvlc_media_player_t p_mi, long i_delay);
 
     /**
      * Get the number of equalizer presets.
@@ -2043,7 +2044,7 @@ public interface LibVlc extends Library {
      * @return number of presets
      * @since LibVLC 2.2.0 or later
      */
-    int libvlc_audio_equalizer_get_preset_count();
+    public static native int libvlc_audio_equalizer_get_preset_count();
 
     /**
      * Get the name of a particular equalizer preset.
@@ -2055,7 +2056,7 @@ public interface LibVlc extends Library {
      * @return preset name, or NULL if there is no such preset
      * @since LibVLC 2.2.0 or later
      */
-    String libvlc_audio_equalizer_get_preset_name(int u_index);
+    public static native String libvlc_audio_equalizer_get_preset_name(int u_index);
 
     /**
      * Get the number of distinct frequency bands for an equalizer.
@@ -2063,7 +2064,7 @@ public interface LibVlc extends Library {
      * @return number of frequency bands
      * @since LibVLC 2.2.0 or later
      */
-    int libvlc_audio_equalizer_get_band_count();
+    public static native int libvlc_audio_equalizer_get_band_count();
 
     /**
      * Get a particular equalizer band frequency.
@@ -2075,7 +2076,7 @@ public interface LibVlc extends Library {
      * @return equalizer band frequency (Hz), or -1 if there is no such band
      * @since LibVLC 2.2.0 or later
      */
-    float libvlc_audio_equalizer_get_band_frequency(int u_index);
+    public static native float libvlc_audio_equalizer_get_band_frequency(int u_index);
 
     /**
      * Create a new default equalizer, with all frequency values zeroed.
@@ -2089,7 +2090,7 @@ public interface LibVlc extends Library {
      * @return opaque equalizer handle, or NULL on error
      * @since LibVLC 2.2.0 or later
      */
-    libvlc_equalizer_t libvlc_audio_equalizer_new();
+    public static native libvlc_equalizer_t libvlc_audio_equalizer_new();
 
     /**
      * Create a new equalizer, with initial frequency values copied from an existing
@@ -2105,7 +2106,7 @@ public interface LibVlc extends Library {
      * @return opaque equalizer handle, or NULL on error
      * @since LibVLC 2.2.0 or later
      */
-    libvlc_equalizer_t libvlc_audio_equalizer_new_from_preset(int u_index);
+    public static native libvlc_equalizer_t libvlc_audio_equalizer_new_from_preset(int u_index);
 
     /**
      * Release a previously created equalizer instance.
@@ -2118,7 +2119,7 @@ public interface LibVlc extends Library {
      * @param p_equalizer opaque equalizer handle, or NULL
      * @since LibVLC 2.2.0 or later
      */
-    void libvlc_audio_equalizer_release(libvlc_equalizer_t p_equalizer);
+    public static native void libvlc_audio_equalizer_release(libvlc_equalizer_t p_equalizer);
 
     /**
      * Set a new pre-amplification value for an equalizer.
@@ -2131,7 +2132,7 @@ public interface LibVlc extends Library {
      * @return zero on success, -1 on error
      * @since LibVLC 2.2.0 or later
      */
-    int libvlc_audio_equalizer_set_preamp(libvlc_equalizer_t p_equalizer, float f_preamp);
+    public static native int libvlc_audio_equalizer_set_preamp(libvlc_equalizer_t p_equalizer, float f_preamp);
 
     /**
      * Get the current pre-amplification value from an equalizer.
@@ -2140,7 +2141,7 @@ public interface LibVlc extends Library {
      * @return preamp value (Hz)
      * @since LibVLC 2.2.0 or later
      */
-    float libvlc_audio_equalizer_get_preamp(libvlc_equalizer_t p_equalizer);
+    public static native float libvlc_audio_equalizer_get_preamp(libvlc_equalizer_t p_equalizer);
 
     /**
      * Set a new amplification value for a particular equalizer frequency band.
@@ -2154,7 +2155,7 @@ public interface LibVlc extends Library {
      * @return zero on success, -1 on error
      * @since LibVLC 2.2.0 or later
      */
-    int libvlc_audio_equalizer_set_amp_at_index( libvlc_equalizer_t p_equalizer, float f_amp, int u_band);
+    public static native int libvlc_audio_equalizer_set_amp_at_index( libvlc_equalizer_t p_equalizer, float f_amp, int u_band);
 
     /**
      * Get the amplification value for a particular equalizer frequency band.
@@ -2164,7 +2165,7 @@ public interface LibVlc extends Library {
      * @return amplification value (Hz); zero if there is no such frequency band
      * @since LibVLC 2.2.0 or later
      */
-    float libvlc_audio_equalizer_get_amp_at_index(libvlc_equalizer_t p_equalizer, int u_band);
+    public static native float libvlc_audio_equalizer_get_amp_at_index(libvlc_equalizer_t p_equalizer, int u_band);
 
     /**
      * Apply new equalizer settings to a media player.
@@ -2195,7 +2196,7 @@ public interface LibVlc extends Library {
      * @return zero on success, -1 on error
      * @since LibVLC 2.2.0 or later
      */
-    int libvlc_media_player_set_equalizer(libvlc_media_player_t p_mi, libvlc_equalizer_t p_equalizer);
+    public static native int libvlc_media_player_set_equalizer(libvlc_media_player_t p_mi, libvlc_equalizer_t p_equalizer);
 
     /**
      * Gets the media role.
@@ -2204,7 +2205,7 @@ public interface LibVlc extends Library {
      * @return the media player role (MediaPlayerRole)
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_player_get_role(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_get_role(libvlc_media_player_t p_mi);
 
     /**
      * Sets the media role.
@@ -2214,7 +2215,7 @@ public interface LibVlc extends Library {
      * @return 0 on success, -1 on error
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_player_set_role(libvlc_media_player_t p_mi, int role);
+    public static native int libvlc_media_player_set_role(libvlc_media_player_t p_mi, int role);
 
     // === libvlc_media_player.h ================================================
 
@@ -2226,21 +2227,21 @@ public interface LibVlc extends Library {
      * @param p_instance libvlc instance
      * @return empty media list, or NULL on error
      */
-    libvlc_media_list_t libvlc_media_list_new(libvlc_instance_t p_instance);
+    public static native libvlc_media_list_t libvlc_media_list_new(libvlc_instance_t p_instance);
 
     /**
      * Release media list created with libvlc_media_list_new().
      *
      * @param p_ml a media list created with libvlc_media_list_new()
      */
-    void libvlc_media_list_release(libvlc_media_list_t p_ml);
+    public static native void libvlc_media_list_release(libvlc_media_list_t p_ml);
 
     /**
      * Retain reference to a media list
      *
      * @param p_ml a media list created with libvlc_media_list_new()
      */
-    void libvlc_media_list_retain(libvlc_media_list_t p_ml);
+    public static native void libvlc_media_list_retain(libvlc_media_list_t p_ml);
 
     /**
      * Associate media instance with this media list instance. If another media instance was present
@@ -2250,7 +2251,7 @@ public interface LibVlc extends Library {
      * @param p_ml a media list instance
      * @param p_md media instance to add
      */
-    void libvlc_media_list_set_media(libvlc_media_list_t p_ml, libvlc_media_t p_md);
+    public static native void libvlc_media_list_set_media(libvlc_media_list_t p_ml, libvlc_media_t p_md);
 
     /**
      * Get media instance from this media list instance. This action will increase the refcount on
@@ -2260,7 +2261,7 @@ public interface LibVlc extends Library {
      * @param p_ml a media list instance
      * @return media instance
      */
-    libvlc_media_t libvlc_media_list_media(libvlc_media_list_t p_ml);
+    public static native libvlc_media_t libvlc_media_list_media(libvlc_media_list_t p_ml);
 
     /**
      * Add media instance to media list The libvlc_media_list_lock should be held upon entering this
@@ -2270,7 +2271,7 @@ public interface LibVlc extends Library {
      * @param p_md a media instance
      * @return 0 on success, -1 if the media list is read-only
      */
-    int libvlc_media_list_add_media(libvlc_media_list_t p_ml, libvlc_media_t p_md);
+    public static native int libvlc_media_list_add_media(libvlc_media_list_t p_ml, libvlc_media_t p_md);
 
     /**
      * Insert media instance in media list on a position The libvlc_media_list_lock should be held
@@ -2281,7 +2282,7 @@ public interface LibVlc extends Library {
      * @param i_pos position in array where to insert
      * @return 0 on success, -1 if the media list si read-only
      */
-    int libvlc_media_list_insert_media(libvlc_media_list_t p_ml, libvlc_media_t p_md, int i_pos);
+    public static native int libvlc_media_list_insert_media(libvlc_media_list_t p_ml, libvlc_media_t p_md, int i_pos);
 
     /**
      * Remove media instance from media list on a position The libvlc_media_list_lock should be held
@@ -2291,7 +2292,7 @@ public interface LibVlc extends Library {
      * @param i_pos position in array where to insert
      * @return 0 on success, -1 if the list is read-only or the item was not found
      */
-    int libvlc_media_list_remove_index(libvlc_media_list_t p_ml, int i_pos);
+    public static native int libvlc_media_list_remove_index(libvlc_media_list_t p_ml, int i_pos);
 
     /**
      * Get count on media list items The libvlc_media_list_lock should be held upon entering this
@@ -2300,7 +2301,7 @@ public interface LibVlc extends Library {
      * @param p_ml a media list instance
      * @return number of items in media list
      */
-    int libvlc_media_list_count(libvlc_media_list_t p_ml);
+    public static native int libvlc_media_list_count(libvlc_media_list_t p_ml);
 
     /**
      * List media instance in media list at a position The libvlc_media_list_lock should be held
@@ -2311,7 +2312,7 @@ public interface LibVlc extends Library {
      * @return media instance at position i_pos, or NULL if not found. In case of success,
      *         libvlc_media_retain() is called to increase the refcount on the media.
      */
-    libvlc_media_t libvlc_media_list_item_at_index(libvlc_media_list_t p_ml, int i_pos);
+    public static native libvlc_media_t libvlc_media_list_item_at_index(libvlc_media_list_t p_ml, int i_pos);
 
     /**
      * Find index position of List media instance in media list. Warning: the function will return
@@ -2322,7 +2323,7 @@ public interface LibVlc extends Library {
      * @param p_md media list instance
      * @return position of media instance
      */
-    int libvlc_media_list_index_of_item(libvlc_media_list_t p_ml, libvlc_media_t p_md);
+    public static native int libvlc_media_list_index_of_item(libvlc_media_list_t p_ml, libvlc_media_t p_md);
 
     /**
      * This indicates if this media list is read-only from a user point of view
@@ -2332,14 +2333,14 @@ public interface LibVlc extends Library {
      *
      * FIXME I am pretty sure the documented return values are the wrong way around
      */
-    int libvlc_media_list_is_readonly(libvlc_media_list_t p_ml);
+    public static native int libvlc_media_list_is_readonly(libvlc_media_list_t p_ml);
 
     /**
      * Get lock on media list items
      *
      * @param p_ml a media list instance
      */
-    void libvlc_media_list_lock(libvlc_media_list_t p_ml);
+    public static native void libvlc_media_list_lock(libvlc_media_list_t p_ml);
 
     /**
      * Release lock on media list items The libvlc_media_list_lock should be held upon entering this
@@ -2347,7 +2348,7 @@ public interface LibVlc extends Library {
      *
      * @param p_ml a media list instance
      */
-    void libvlc_media_list_unlock(libvlc_media_list_t p_ml);
+    public static native void libvlc_media_list_unlock(libvlc_media_list_t p_ml);
 
     /**
      * Get libvlc_event_manager from this media list instance. The p_event_manager is immutable, so
@@ -2356,7 +2357,7 @@ public interface LibVlc extends Library {
      * @param p_ml a media list instance
      * @return libvlc_event_manager
      */
-    libvlc_event_manager_t libvlc_media_list_event_manager(libvlc_media_list_t p_ml);
+    public static native libvlc_event_manager_t libvlc_media_list_event_manager(libvlc_media_list_t p_ml);
 
     // === libvlc_media_list.h ==================================================
 
@@ -2368,7 +2369,7 @@ public interface LibVlc extends Library {
      * @param p_instance libvlc instance
      * @return media list player instance or NULL on error
      */
-    libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance);
+    public static native libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance);
 
     /**
      * Release a media_list_player after use.
@@ -2379,7 +2380,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mlp media list player instance
      */
-    void libvlc_media_list_player_release(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_release(libvlc_media_list_player_t p_mlp);
 
     /**
      * Retain a reference to a media player list object.
@@ -2388,7 +2389,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mlp media player list object
      */
-    void libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
 
     /**
      * Return the event manager of this media_list_player.
@@ -2396,7 +2397,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @return the event manager
      */
-    libvlc_event_manager_t libvlc_media_list_player_event_manager(libvlc_media_list_player_t p_mlp);
+    public static native libvlc_event_manager_t libvlc_media_list_player_event_manager(libvlc_media_list_player_t p_mlp);
 
     /**
      * Replace media player in media_list_player with this instance.
@@ -2404,7 +2405,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @param p_mi media player instance
      */
-    void libvlc_media_list_player_set_media_player(libvlc_media_list_player_t p_mlp, libvlc_media_player_t p_mi);
+    public static native void libvlc_media_list_player_set_media_player(libvlc_media_list_player_t p_mlp, libvlc_media_player_t p_mi);
 
     /**
      * Get media player of the media_list_player instance.
@@ -2415,7 +2416,7 @@ public interface LibVlc extends Library {
      * @return media player instance
      * @since LibVLC 3.0.0
      */
-    libvlc_media_player_t libvlc_media_list_player_get_media_player(libvlc_media_list_player_t p_mlp);
+    public static native libvlc_media_player_t libvlc_media_list_player_get_media_player(libvlc_media_list_player_t p_mlp);
 
     /**
      * Set the media list associated with the player
@@ -2423,21 +2424,21 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @param p_mlist list of media
      */
-    void libvlc_media_list_player_set_media_list(libvlc_media_list_player_t p_mlp, libvlc_media_list_t p_mlist);
+    public static native void libvlc_media_list_player_set_media_list(libvlc_media_list_player_t p_mlp, libvlc_media_list_t p_mlist);
 
     /**
      * Play media list
      *
      * @param p_mlp media list player instance
      */
-    void libvlc_media_list_player_play(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_play(libvlc_media_list_player_t p_mlp);
 
     /**
      * Pause media list
      *
      * @param p_mlp media list player instance
      */
-    void libvlc_media_list_player_pause(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_pause(libvlc_media_list_player_t p_mlp);
 
     /**
      * Pause or resume media list
@@ -2446,7 +2447,7 @@ public interface LibVlc extends Library {
      * @param do_pause play/resume if zero, pause if non-zero
      * @since LibVLC 3.0.0 or later
      */
-    void libvlc_media_list_player_set_pause(libvlc_media_list_player_t p_mlp, int do_pause);
+    public static native void libvlc_media_list_player_set_pause(libvlc_media_list_player_t p_mlp, int do_pause);
 
     /**
      * Is media list playing?
@@ -2454,7 +2455,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @return true for playing and false for not playing
      */
-    int libvlc_media_list_player_is_playing(libvlc_media_list_player_t p_mlp);
+    public static native int libvlc_media_list_player_is_playing(libvlc_media_list_player_t p_mlp);
 
     /**
      * Get current libvlc_state of media list player
@@ -2462,7 +2463,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @return State for media list player
      */
-    int libvlc_media_list_player_get_state(libvlc_media_list_player_t p_mlp);
+    public static native int libvlc_media_list_player_get_state(libvlc_media_list_player_t p_mlp);
 
     /**
      * Play media list item at position index
@@ -2471,7 +2472,7 @@ public interface LibVlc extends Library {
      * @param i_index index in media list to play
      * @return 0 upon success -1 if the item wasn't found
      */
-    int libvlc_media_list_player_play_item_at_index(libvlc_media_list_player_t p_mlp, int i_index);
+    public static native int libvlc_media_list_player_play_item_at_index(libvlc_media_list_player_t p_mlp, int i_index);
 
     /**
      * Play the given media item
@@ -2480,14 +2481,14 @@ public interface LibVlc extends Library {
      * @param p_md the media instance
      * @return 0 upon success, -1 if the media is not part of the media list
      */
-    int libvlc_media_list_player_play_item(libvlc_media_list_player_t p_mlp, libvlc_media_t p_md);
+    public static native int libvlc_media_list_player_play_item(libvlc_media_list_player_t p_mlp, libvlc_media_t p_md);
 
     /**
      * Stop playing media list
      *
      * @param p_mlp media list player instance
      */
-    void libvlc_media_list_player_stop(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_stop(libvlc_media_list_player_t p_mlp);
 
     /**
      * Play next item from media list
@@ -2495,7 +2496,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @return 0 upon success -1 if there is no next item
      */
-    int libvlc_media_list_player_next(libvlc_media_list_player_t p_mlp);
+    public static native int libvlc_media_list_player_next(libvlc_media_list_player_t p_mlp);
 
     /**
      * Play previous item from media list
@@ -2503,7 +2504,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @return 0 upon success -1 if there is no previous item
      */
-    int libvlc_media_list_player_previous(libvlc_media_list_player_t p_mlp);
+    public static native int libvlc_media_list_player_previous(libvlc_media_list_player_t p_mlp);
 
     /**
      * Sets the playback mode for the playlist
@@ -2511,7 +2512,7 @@ public interface LibVlc extends Library {
      * @param p_mlp media list player instance
      * @param e_mode playback mode specification
      */
-    void libvlc_media_list_player_set_playback_mode(libvlc_media_list_player_t p_mlp, int e_mode);
+    public static native void libvlc_media_list_player_set_playback_mode(libvlc_media_list_player_t p_mlp, int e_mode);
 
     // === libvlc_media_list_player.h ===========================================
 
@@ -2526,7 +2527,7 @@ public interface LibVlc extends Library {
      * @param p_cbs a pointer to callbacks, or NULL to unregister callbacks.
      * @param p_data opaque pointer for the callback
      */
-    void libvlc_dialog_set_callbacks(libvlc_instance_t p_instance, libvlc_dialog_cbs p_cbs, Pointer p_data);
+    public static native void libvlc_dialog_set_callbacks(libvlc_instance_t p_instance, libvlc_dialog_cbs p_cbs, Pointer p_data);
 
     /**
      * Associate an opaque pointer with the dialog id.
@@ -2536,7 +2537,7 @@ public interface LibVlc extends Library {
      * @param p_id id of the dialog
      * @param p_context opaque pointer associated with the dialog id
      */
-    void libvlc_dialog_set_context(libvlc_dialog_id p_id, Pointer p_context);
+    public static native void libvlc_dialog_set_context(libvlc_dialog_id p_id, Pointer p_context);
 
     /**
      * Return the opaque pointer associated with the dialog id.
@@ -2546,7 +2547,7 @@ public interface LibVlc extends Library {
      * @param p_id id of the dialog
      * @return opaque pointer associated with the dialog id
      */
-    Pointer libvlc_dialog_get_context(libvlc_dialog_id p_id);
+    public static native Pointer libvlc_dialog_get_context(libvlc_dialog_id p_id);
 
     /**
      * Post a login answer.
@@ -2563,7 +2564,7 @@ public interface LibVlc extends Library {
      * @param b_store if true, store the credentials
      * @return 0 on success, or -1 on error
      */
-    int libvlc_dialog_post_login(libvlc_dialog_id p_id, String psz_username, String psz_password, int b_store);
+    public static native int libvlc_dialog_post_login(libvlc_dialog_id p_id, String psz_username, String psz_password, int b_store);
 
     /**
      * Post a question answer.
@@ -2578,7 +2579,7 @@ public interface LibVlc extends Library {
      * @param i_action 1 for action1, 2 for action2
      * @return 0 on success, or -1 on error
      */
-    int libvlc_dialog_post_action(libvlc_dialog_id p_id, int i_action);
+    public static native int libvlc_dialog_post_action(libvlc_dialog_id p_id, int i_action);
 
     /**
      * Dismiss a dialog.
@@ -2592,7 +2593,7 @@ public interface LibVlc extends Library {
      * @param p_id id of the dialog
      * @return 0 on success, or -1 on error
      */
-    int libvlc_dialog_dismiss(libvlc_dialog_id p_id);
+    public static native int libvlc_dialog_dismiss(libvlc_dialog_id p_id);
 
     // === libvlc_dialog.h ======================================================
 
@@ -2619,7 +2620,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name);
 
     /**
      * Start media discovery.
@@ -2634,7 +2635,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_media_discoverer_start(libvlc_media_discoverer_t p_mdis);
+    public static native int libvlc_media_discoverer_start(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Stop media discovery.
@@ -2645,7 +2646,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    void libvlc_media_discoverer_stop(libvlc_media_discoverer_t p_mdis);
+    public static native void libvlc_media_discoverer_stop(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Release media discover object. If the reference count reaches 0, then the object will be
@@ -2653,7 +2654,7 @@ public interface LibVlc extends Library {
      *
      * @param p_mdis media service discover object
      */
-    void libvlc_media_discoverer_release(libvlc_media_discoverer_t p_mdis);
+    public static native void libvlc_media_discoverer_release(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Get media service discover media list.
@@ -2661,7 +2662,7 @@ public interface LibVlc extends Library {
      * @param p_mdis media service discover object
      * @return list of media items
      */
-    libvlc_media_list_t libvlc_media_discoverer_media_list(libvlc_media_discoverer_t p_mdis);
+    public static native libvlc_media_list_t libvlc_media_discoverer_media_list(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Query if media service discover object is running.
@@ -2669,7 +2670,7 @@ public interface LibVlc extends Library {
      * @param p_mdis media service discover object
      * @return true if running, false if not
      */
-    int libvlc_media_discoverer_is_running(libvlc_media_discoverer_t p_mdis);
+    public static native int libvlc_media_discoverer_is_running(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Get media discoverer services by category
@@ -2681,7 +2682,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    size_t libvlc_media_discoverer_list_get(libvlc_instance_t p_inst, int i_cat, PointerByReference ppp_services);
+    public static native size_t libvlc_media_discoverer_list_get(libvlc_instance_t p_inst, int i_cat, PointerByReference ppp_services);
 
     /**
      * Release an array of media discoverer services
@@ -2693,7 +2694,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later.
      */
-    void libvlc_media_discoverer_list_release(Pointer pp_services, size_t i_count);
+    public static native void libvlc_media_discoverer_list_release(Pointer pp_services, size_t i_count);
 
     // === libvlc_media_discoverer.h ============================================
 
@@ -2710,14 +2711,14 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    libvlc_renderer_item_t libvlc_renderer_item_hold(libvlc_renderer_item_t p_item);
+    public static native libvlc_renderer_item_t libvlc_renderer_item_hold(libvlc_renderer_item_t p_item);
 
     /**
      * Releases a renderer item, i.e. decrements its reference counter
      *
      * @since LibVLC 3.0.0 or later
      */
-    void libvlc_renderer_item_release(libvlc_renderer_item_t p_item);
+    public static native void libvlc_renderer_item_release(libvlc_renderer_item_t p_item);
 
     /**
      * Get the human readable name of a renderer item
@@ -2726,7 +2727,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    String libvlc_renderer_item_name(libvlc_renderer_item_t p_item);
+    public static native String libvlc_renderer_item_name(libvlc_renderer_item_t p_item);
 
     /**
      * Get the type (not translated) of a renderer item. For now, the type can only
@@ -2736,7 +2737,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    String libvlc_renderer_item_type(libvlc_renderer_item_t p_item);
+    public static native String libvlc_renderer_item_type(libvlc_renderer_item_t p_item);
 
     /**
      * Get the icon uri of a renderer item
@@ -2745,7 +2746,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    String libvlc_renderer_item_icon_uri(libvlc_renderer_item_t p_item);
+    public static native String libvlc_renderer_item_icon_uri(libvlc_renderer_item_t p_item);
 
     /**
      * Get the flags of a renderer item
@@ -2754,7 +2755,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_renderer_item_flags(libvlc_renderer_item_t p_item);
+    public static native int libvlc_renderer_item_flags(libvlc_renderer_item_t p_item);
 
     /**
      * Create a renderer discoverer object by name
@@ -2775,7 +2776,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
 
     /**
      * Release a renderer discoverer object
@@ -2784,7 +2785,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    void libvlc_renderer_discoverer_release(libvlc_renderer_discoverer_t p_rd);
+    public static native void libvlc_renderer_discoverer_release(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Start renderer discovery
@@ -2799,7 +2800,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    int libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t p_rd);
+    public static native int libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Stop renderer discovery.
@@ -2810,7 +2811,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    void libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t p_rd);
+    public static native void libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Get the event manager of the renderer discoverer
@@ -2829,7 +2830,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 or later
      */
-    libvlc_event_manager_t libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t p_rd);
+    public static native libvlc_event_manager_t libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Get media discoverer services
@@ -2845,7 +2846,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later
      */
-    size_t libvlc_renderer_discoverer_list_get(libvlc_instance_t p_inst, PointerByReference ppp_services);
+    public static native size_t libvlc_renderer_discoverer_list_get(libvlc_instance_t p_inst, PointerByReference ppp_services);
 
     /**
      * Release an array of media discoverer services
@@ -2857,7 +2858,7 @@ public interface LibVlc extends Library {
      *
      * @since LibVLC 3.0.0 and later
      */
-    void libvlc_renderer_discoverer_list_release(Pointer pp_services, size_t i_count);
+    public static native void libvlc_renderer_discoverer_list_release(Pointer pp_services, size_t i_count);
 
     // === libvlc_renderer_discoverer.h =========================================
 
@@ -2868,8 +2869,12 @@ public interface LibVlc extends Library {
      *
      * @see #libvlc_picture_release(libvlc_picture_t)
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    void libvlc_picture_retain(libvlc_picture_t pic);
+    public static /*native*/ void libvlc_picture_retain(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Decrement the reference count of this picture.
@@ -2878,8 +2883,12 @@ public interface LibVlc extends Library {
      *
      * @see #libvlc_picture_retain(libvlc_picture_t)
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    void libvlc_picture_release(libvlc_picture_t pic);
+    public static /*native*/ void libvlc_picture_release(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Saves this picture to a file. The image format is the same as the one
@@ -2888,8 +2897,12 @@ public interface LibVlc extends Library {
      * @param pic A picture object
      * @param path The path to the generated file
      * @return 0 in case of success, -1 otherwise
+     *
+     * @since libvlc 4.0 or later
      */
-    int libvlc_picture_save(libvlc_picture_t pic, String path);
+    public static /*native*/ int libvlc_picture_save(libvlc_picture_t pic, String path) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the image internal buffer, including potential padding.
@@ -2899,43 +2912,67 @@ public interface LibVlc extends Library {
      * @param pic A picture object
      * @param size A pointer to a size_t that will hold the size of the buffer [required]
      * @return A pointer to the internal buffer.
+     *
+     * @since libvlc 4.0 or later
      */
-    Pointer libvlc_picture_get_buffer(libvlc_picture_t pic, size_tByReference size);
+    public static /*native*/ Pointer libvlc_picture_get_buffer(libvlc_picture_t pic, size_tByReference size) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the picture type
      *
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    int libvlc_picture_type(libvlc_picture_t pic);
+    public static /*native*/ int libvlc_picture_type(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the image stride, ie. the number of bytes per line.
      * This can only be called on images of type libvlc_picture_Argb
      *
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    int libvlc_picture_get_stride(libvlc_picture_t pic);
+    public static /*native*/ int libvlc_picture_get_stride(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the width of the image in pixels
      *
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    int libvlc_picture_get_width(libvlc_picture_t pic);
+    public static /*native*/ int libvlc_picture_get_width(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the height of the image in pixels
      *
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    int libvlc_picture_get_height(libvlc_picture_t pic);
+    public static /*native*/ int libvlc_picture_get_height(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the time at which this picture was generated, in milliseconds
      * @param pic A picture object
+     *
+     * @since libvlc 4.0 or later
      */
-    long libvlc_picture_get_time(libvlc_picture_t pic);
+    public static /*native*/ long libvlc_picture_get_time(libvlc_picture_t pic) {
+        throw new UnsupportedOperationException();
+    }
 
     // === libvlc_picture.h =====================================================
 
