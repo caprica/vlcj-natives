@@ -62,6 +62,11 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_track_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_format_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_getProcAddress_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_makeCurrent_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_setup_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
 import uk.co.caprica.vlcj.binding.support.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.size_t;
@@ -968,6 +973,29 @@ public final class LibVlc {
     public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_cleanup_cb cleanup);
 
     /**
+     * Set callbacks and data to render decoded video to a custom texture
+     *
+     * \warning VLC will perform video rendering in its own thread and at its own rate,
+     * You need to provide your own synchronisation mechanism.
+     *
+     * OpenGL context need to be created before playing a media.
+     *
+     * @param mp the media player
+     * @param engine the GPU engine to use
+     * @param setup_cb callback called to initialize user data
+     * @param cleanup_cb callback called to clean up user data
+     * @param update_output_cb callback called to get the size of the video
+     * @param swap_cb callback called after rendering a video frame (cannot be NULL)
+     * @param makeCurrent_cb callback called to enter/leave the opengl context (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
+     * @param getProcAddress_cb opengl function loading callback (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
+     * @param opaque private pointer passed to callbacks
+     * @return 0 on success; -1 on error
+     *
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_video_set_output_callbacks(libvlc_media_player_t mp, int engine, libvlc_video_setup_cb setup_cb, libvlc_video_cleanup_cb cleanup_cb, libvlc_video_update_output_cb update_output_cb, libvlc_video_swap_cb swap_cb, libvlc_video_makeCurrent_cb makeCurrent_cb, libvlc_video_getProcAddress_cb getProcAddress_cb, Pointer opaque);
+
+    /**
      * Set the NSView handler where the media player should render its video output. Use the vout
      * called "macosx". The drawable is an NSObject that follow the VLCOpenGLVideoViewEmbedding
      * protocol:
@@ -1116,8 +1144,10 @@ public final class LibVlc {
      *
      * @param p_mi the Media Player
      * @param i_time the movie time (in ms).
+     * @param b_fast prefer fast seeking or precise seeking
+     * @return 0 on success, -1 on error
      */
-    public static native void libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time);
+    public static native int libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time, int b_fast);
 
     /**
      * Get movie position.
@@ -1136,8 +1166,10 @@ public final class LibVlc {
      *
      * @param p_mi the Media Player
      * @param f_pos the position
+     * @param b_fast prefer fast seeking or precise seeking
+     * @return 0 on success, -1 on error
      */
-    public static native void libvlc_media_player_set_position(libvlc_media_player_t p_mi, float f_pos);
+    public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, float f_pos, int b_fast);
 
     /**
      * Set movie chapter (if applicable).
