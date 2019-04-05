@@ -24,7 +24,7 @@
 
     <groupId>uk.co.caprica</groupId>
     <artifactId>vlcj-natives</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1-SNAPSHOT</version>
 
     <name>vlcj-natives</name>
     <description>Native bindings to LibVLC used by the vlcj project.</description>
