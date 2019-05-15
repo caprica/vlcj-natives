@@ -38,16 +38,27 @@ final public class OsxComponentId {
      * @return component id
      */
     public static long getOsxComponentId(Component component) {
-        long componentId;
         // Try the usual method first, this should still work on JDK 1.6
         try {
-            componentId = Native.getComponentID(component);
+            long componentId = Native.getComponentID(component);
             if (componentId != 0) {
                 return componentId;
             }
         }
         catch (Exception e) {
         }
+
+        // Try for Apple's JDK 1.6
+        try {
+            Method getPeer = Component.class.getMethod("getPeer");
+            Object peer = getPeer.invoke(component);
+            Method getViewPtr = peer.getClass().getMethod("getViewPtr");
+            return (Long) getViewPtr.invoke(peer);
+        }
+        catch (Exception e) {
+        }
+
+        // Window at least is heavyweight so this might work
         if (component instanceof Window) {
             Window window = (Window) component;
             try {
@@ -58,15 +69,13 @@ final public class OsxComponentId {
                 Method getContentView = platformWindow.getClass().getMethod("getContentView");
                 Object contentView = getContentView.invoke(platformWindow);
                 Method getAwtView = contentView.getClass().getMethod("getAWTView");
-                componentId = (Long) getAwtView.invoke(contentView);
+                return (Long) getAwtView.invoke(contentView);
             }
             catch (Exception e) {
-                throw new RuntimeException(e);
             }
-        } else {
-            componentId = 0;
         }
-        return componentId;
+
+        return 0L;
     }
 
     private OsxComponentId() {
