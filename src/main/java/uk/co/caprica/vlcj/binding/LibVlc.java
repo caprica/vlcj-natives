@@ -691,6 +691,7 @@ public final class LibVlc {
      * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
      * @param width The thumbnail width
      * @param height the thumbnail height
+     * @param crop non-zero if the thumbnail should be cropped
      * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
      * @param timeout A timeout value in ms, or 0 to disable timeout
      *
@@ -700,9 +701,7 @@ public final class LibVlc {
      *
      * @see libvlc_picture_t
      */
-    public static /*native*/ libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_media_t md, long time, int speed, int width, int height, int picture_type, long timeout) {
-        throw new UnsupportedOperationException();
-    }
+    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_media_t md, long time, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
      * Start an asynchronous thumbnail generation
@@ -716,6 +715,7 @@ public final class LibVlc {
      * @param width The thumbnail width
      * @param height the thumbnail height
      * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
+     * @param crop non-zero if the thumbnail should be cropped
      * @param timeout A timeout value in ms, or 0 to disable timeout
      *
      * @return A valid opaque request object, or NULL in case of failure.
@@ -724,9 +724,7 @@ public final class LibVlc {
      *
      * @see libvlc_picture_t
      */
-    public static /*native*/ libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_media_t md, float pos, int speed, int width, int height, int picture_type, long timeout) {
-        throw new UnsupportedOperationException();
-    }
+    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_media_t md, float pos, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
      * Cancels a thumbnailing request
