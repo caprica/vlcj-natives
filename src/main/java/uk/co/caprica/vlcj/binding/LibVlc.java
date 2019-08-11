@@ -1778,15 +1778,6 @@ public final class LibVlc {
     public static native int libvlc_video_get_marquee_int(libvlc_media_player_t p_mi, int option);
 
     /**
-     * Get a string marquee option value
-     *
-     * @param p_mi libvlc media player
-     * @param option marq option to get @see libvlc_video_marquee_string_option_t
-     * @return marquee option value
-     */
-    public static native Pointer libvlc_video_get_marquee_string(libvlc_media_player_t p_mi, int option);
-
-    /**
      * Enable, disable or set an integer marquee option Setting libvlc_marquee_Enable has the side
      * effect of enabling (arg !0) or disabling (arg 0) the marq filter.
      *
