@@ -204,15 +204,6 @@ public final class LibVlc {
     public static native String libvlc_get_changeset();
 
     /**
-     * Frees an heap allocation returned by a LibVLC function. If you know you're using the same
-     * underlying C run-time as the LibVLC implementation, then you can call ANSI C free() directly
-     * instead.
-     *
-     * @param ptr the pointer
-     */
-    public static native void libvlc_free(Pointer ptr);
-
-    /**
      * Register for an event notification.
      *
      * @param p_event_manager the event manager to which you want to attach to. Generally it is
@@ -686,6 +677,10 @@ public final class LibVlc {
      * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
      * is guaranteed to be emited.
      *
+     * The returned request object may be cancelled via {@link #libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t)}.
+     *
+     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
+     *
      * @param md media descriptor object
      * @param time The time at which the thumbnail should be generated
      * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
@@ -708,6 +703,10 @@ public final class LibVlc {
      *
      * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
      * is guaranteed to be emited.
+     *
+     * The returned request object may be cancelled via {@link #libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t)}.
+     *
+     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
      *
      * @param md media descriptor object
      * @param pos The position at which the thumbnail should be generated
@@ -736,10 +735,21 @@ public final class LibVlc {
      *
      * @param p_req An opaque thumbnail request object.
      *
+     * @since libvlc 4.0 or later
      */
-    public static /*native*/ void libvlc_media_thumbnail_cancel(libvlc_media_thumbnail_request_t p_req) {
-        throw new UnsupportedOperationException();
-    }
+    public static native void libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t p_req);
+
+    /**
+     * Destroy a thumbnail request.
+     *
+     * If the request has not completed or hasn't been cancelled yet, the behavior
+     * is undefined.
+     *
+     * @param p_req An opaque thumbnail request object.
+     *
+     * @since libvlc 4.0 or later
+     */
+    public static native void libvlc_media_thumbnail_request_destroy( libvlc_media_thumbnail_request_t p_req);
 
     /**
      * Get codec description from media elementary stream.
@@ -908,7 +918,7 @@ public final class LibVlc {
      *
      * @param p_mi the Media Player
      */
-    public static native void libvlc_media_player_stop(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_stop_async(libvlc_media_player_t p_mi);
 
     /**
      * Set a renderer to the media player
@@ -1489,7 +1499,7 @@ public final class LibVlc {
     /**
      * Create a video viewpoint structure.
      *
-     * @return video viewpoint or NULL (the result must be released with free() or libvlc_free()).
+     * @return video viewpoint or NULL (the result must be released with free()).
      * @since LibVLC 3.0.0 and later
      */
     public static native libvlc_video_viewpoint_t libvlc_video_new_viewpoint();
@@ -1990,7 +2000,7 @@ public final class LibVlc {
      * @param mp media player
      * @return the current audio output device identifier
      *         NULL if no device is selected or in case of error
-     *         (the result must be released with free() or libvlc_free()).
+     *         (the result must be released with free()).
      * @since LibVLC 3.0.0 or later.
      */
     public static native Pointer libvlc_audio_output_device_get(libvlc_media_player_t mp);
@@ -2555,7 +2565,7 @@ public final class LibVlc {
      *
      * @param p_mlp media list player instance
      */
-    public static native void libvlc_media_list_player_stop(libvlc_media_list_player_t p_mlp);
+    public static native void libvlc_media_list_player_stop_async(libvlc_media_list_player_t p_mlp);
 
     /**
      * Play next item from media list
@@ -2939,9 +2949,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ void libvlc_picture_retain(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native void libvlc_picture_retain(libvlc_picture_t pic);
 
     /**
      * Decrement the reference count of this picture.
@@ -2953,9 +2961,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ void libvlc_picture_release(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native void libvlc_picture_release(libvlc_picture_t pic);
 
     /**
      * Saves this picture to a file. The image format is the same as the one
@@ -2967,9 +2973,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ int libvlc_picture_save(libvlc_picture_t pic, String path) {
-        throw new UnsupportedOperationException();
-    }
+    public static native int libvlc_picture_save(libvlc_picture_t pic, String path);
 
     /**
      * Returns the image internal buffer, including potential padding.
@@ -2982,9 +2986,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ Pointer libvlc_picture_get_buffer(libvlc_picture_t pic, size_tByReference size) {
-        throw new UnsupportedOperationException();
-    }
+    public static native Pointer libvlc_picture_get_buffer(libvlc_picture_t pic, size_tByReference size);
 
     /**
      * Returns the picture type
@@ -2993,9 +2995,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ int libvlc_picture_type(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native int libvlc_picture_type(libvlc_picture_t pic);
 
     /**
      * Returns the image stride, ie. the number of bytes per line.
@@ -3005,9 +3005,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ int libvlc_picture_get_stride(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native int libvlc_picture_get_stride(libvlc_picture_t pic);
 
     /**
      * Returns the width of the image in pixels
@@ -3016,9 +3014,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ int libvlc_picture_get_width(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native int libvlc_picture_get_width(libvlc_picture_t pic);
 
     /**
      * Returns the height of the image in pixels
@@ -3027,9 +3023,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ int libvlc_picture_get_height(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native int libvlc_picture_get_height(libvlc_picture_t pic);
 
     /**
      * Returns the time at which this picture was generated, in milliseconds
@@ -3037,9 +3031,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static /*native*/ long libvlc_picture_get_time(libvlc_picture_t pic) {
-        throw new UnsupportedOperationException();
-    }
+    public static native long libvlc_picture_get_time(libvlc_picture_t pic);
 
     // === libvlc_picture.h =====================================================
 

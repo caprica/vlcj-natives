@@ -121,4 +121,11 @@ public interface LibC extends Library {
      * @return zero on success, non-zero on error
      */
     int _putenv(String envstring);
+
+    /**
+     * Free native memory.
+     *
+     * @param p pointer to memory to free
+     */
+    void free(Pointer p);
 }
