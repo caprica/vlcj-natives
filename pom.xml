@@ -75,7 +75,6 @@
     </scm>
 
     <properties>
-        <module.name>uk.co.caprica.vlcj.natives</module.name>
         <jna.version>5.5.0</jna.version>
     </properties>
 
@@ -147,9 +146,6 @@
                 <version>3.2.0</version>
                 <configuration>
                     <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
-                        </manifestEntries>
                         <manifest>
                             <addClasspath>true</addClasspath>
                         </manifest>
