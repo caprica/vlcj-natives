@@ -928,8 +928,11 @@ public final class LibVlc {
      * Stop (no effect if there is no media)
      *
      * @param p_mi the Media Player
+     * @return 0 if the player is being stopped; -1 otherwise
+     *
+     * @since LibVLC 4.0.0 or later
      */
-    public static native void libvlc_media_player_stop_async(libvlc_media_player_t p_mi);
+    public static native int libvlc_media_player_stop_async(libvlc_media_player_t p_mi);
 
     /**
      * Set a renderer to the media player
