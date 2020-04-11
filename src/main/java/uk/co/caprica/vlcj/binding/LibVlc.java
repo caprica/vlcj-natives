@@ -20,7 +20,10 @@
 package uk.co.caprica.vlcj.binding;
 
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_flush_cb;
@@ -37,8 +40,8 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_id;
 import uk.co.caprica.vlcj.binding.internal.libvlc_display_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_equalizer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_event_e;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_u;
 import uk.co.caprica.vlcj.binding.internal.libvlc_event_manager_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_event_u;
 import uk.co.caprica.vlcj.binding.internal.libvlc_instance_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_lock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_cb;
@@ -53,27 +56,26 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_item_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_track_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_video_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_format_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_frameMetadata_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_getProcAddress_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_makeCurrent_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_video_setup_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_cleanup_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_select_plane_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_set_resize_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
-import uk.co.caprica.vlcj.binding.support.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.size_t;
-
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
+import uk.co.caprica.vlcj.binding.support.size_tByReference;
 
 /**
  * JNA interface to the libvlc native library.
@@ -987,7 +989,7 @@ public final class LibVlc {
      * @param cleanup callback to release any allocated resources (or NULL)
      * @since LibVLC 2.0.0 or later
      */
-    public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_cleanup_cb cleanup);
+    public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_output_cleanup_cb cleanup);
 
     /**
      * Set callbacks and data to render decoded video to a custom texture
@@ -1001,16 +1003,31 @@ public final class LibVlc {
      * @param engine the GPU engine to use
      * @param setup_cb callback called to initialize user data
      * @param cleanup_cb callback called to clean up user data
+     * @param resize_cb callback to set the resize callback
      * @param update_output_cb callback called to get the size of the video
      * @param swap_cb callback called after rendering a video frame (cannot be NULL)
      * @param makeCurrent_cb callback called to enter/leave the opengl context (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
      * @param getProcAddress_cb opengl function loading callback (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
+     * @param metadata_cb callback to provide frame metadata (D3D11 only)
+     * @param select_plane_cb callback to select different D3D11 rendering targets
      * @param opaque private pointer passed to callbacks
      * @return 0 on success; -1 on error
      *
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_video_set_output_callbacks(libvlc_media_player_t mp, int engine, libvlc_video_setup_cb setup_cb, libvlc_video_cleanup_cb cleanup_cb, libvlc_video_update_output_cb update_output_cb, libvlc_video_swap_cb swap_cb, libvlc_video_makeCurrent_cb makeCurrent_cb, libvlc_video_getProcAddress_cb getProcAddress_cb, Pointer opaque);
+    public static native int libvlc_video_set_output_callbacks(
+        libvlc_media_player_t mp,
+        int engine,
+        libvlc_video_output_setup_cb setup_cb,
+        libvlc_video_output_cleanup_cb cleanup_cb,
+        libvlc_video_output_set_resize_cb resize_cb,
+        libvlc_video_update_output_cb update_output_cb,
+        libvlc_video_swap_cb swap_cb,
+        libvlc_video_makeCurrent_cb makeCurrent_cb,
+        libvlc_video_getProcAddress_cb getProcAddress_cb,
+        libvlc_video_frameMetadata_cb metadata_cb,
+        libvlc_video_output_select_plane_cb select_plane_cb,
+        Pointer opaque);
 
     /**
      * Set the NSView handler where the media player should render its video output. Use the vout

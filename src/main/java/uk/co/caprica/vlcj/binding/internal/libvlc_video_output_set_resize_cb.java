@@ -25,12 +25,7 @@ import com.sun.jna.Pointer;
 /**
  *
  */
-public interface libvlc_video_cleanup_cb extends Callback {
+public interface libvlc_video_output_set_resize_cb extends Callback {
 
-    /**
-     *
-     *
-     * @param opaque application-specific pointer
-     */
-    void cleanup(Pointer opaque);
+    Pointer setResizeCallback(Pointer opaque, Pointer report_size_change, Pointer report_opaque);
 }

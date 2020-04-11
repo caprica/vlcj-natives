@@ -19,27 +19,18 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
+import com.sun.jna.Union;
 
 /**
  *
  */
-public interface libvlc_video_update_output_cb extends Callback {
+public class libvlc_video_output_cfg_u extends Union {
 
-    /**
-     * Callback prototype called on video size changes.
-     * Update the rendering output setup.
-     *
-     * @param opaque private pointer set on the opaque parameter of @a libvlc_video_output_setup_cb() [IN]
-     * @param cfg configuration of the video that will be rendered [IN]
-     * @param output configuration describing with how the rendering is setup [OUT]
-     * @return
-     *
-     * Tone mapping, range and color conversion will be done depending on the values
-     * set in the output structure.
-     *
-     * @since LibVLC 4.0.0 or later
-     */
-    int updateOutput(Pointer opaque, libvlc_video_render_cfg_t cfg, libvlc_video_output_cfg_t output);
+    public static class ByValue extends libvlc_video_output_cfg_u implements Union.ByValue {}
+
+    public int dxgi_format;    /** the rendering DXGI_FORMAT for \ref libvlc_video_engine_d3d11*/
+    public int d3d9_format;    /** the rendering D3DFORMAT for \ref libvlc_video_engine_d3d9 */
+    public int opengl_format;  /** the rendering GLint GL_RGBA or GL_RGB for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2 */
+    public Pointer p_surface;  /** currently unused */
 }

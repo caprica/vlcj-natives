@@ -21,20 +21,12 @@ package uk.co.caprica.vlcj.binding.internal;
 
 import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
+import uk.co.caprica.vlcj.binding.support.size_t;
 
 /**
- *
+ * Only used by D3D.
  */
-public interface libvlc_video_setup_cb extends Callback {
+public interface libvlc_video_output_select_plane_cb extends Callback {
 
-    /**
-     * Callback prototype called to initialize user data.
-     *
-     * @param opaque private pointer passed to the @a libvlc_video_set_output_callbacks() [IN]
-     * @return true on success
-     *
-     * @since LibVLC 4.0.0 or later
-     */
-    int setup(Pointer opaque);
-
+    int selectPlane(Pointer opaque, size_t plane);
 }

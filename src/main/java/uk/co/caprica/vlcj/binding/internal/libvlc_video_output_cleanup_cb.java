@@ -25,21 +25,12 @@ import com.sun.jna.Pointer;
 /**
  *
  */
-public interface libvlc_video_update_output_cb extends Callback {
+public interface libvlc_video_output_cleanup_cb extends Callback {
 
     /**
-     * Callback prototype called on video size changes.
-     * Update the rendering output setup.
      *
-     * @param opaque private pointer set on the opaque parameter of @a libvlc_video_output_setup_cb() [IN]
-     * @param cfg configuration of the video that will be rendered [IN]
-     * @param output configuration describing with how the rendering is setup [OUT]
-     * @return
      *
-     * Tone mapping, range and color conversion will be done depending on the values
-     * set in the output structure.
-     *
-     * @since LibVLC 4.0.0 or later
+     * @param opaque application-specific pointer
      */
-    int updateOutput(Pointer opaque, libvlc_video_render_cfg_t cfg, libvlc_video_output_cfg_t output);
+    void cleanup(Pointer opaque);
 }
