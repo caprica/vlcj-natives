@@ -19,13 +19,13 @@
 
 package uk.co.caprica.vlcj.binding;
 
-import java.nio.ByteBuffer;
-
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
+
+import java.nio.ByteBuffer;
 
 /**
  * Minimal interface to the standard "C" library.

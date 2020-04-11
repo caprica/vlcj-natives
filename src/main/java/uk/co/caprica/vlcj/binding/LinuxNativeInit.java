@@ -19,8 +19,6 @@
 
 package uk.co.caprica.vlcj.binding;
 
-import uk.co.caprica.vlcj.binding.LibX11;
-
 import javax.swing.*;
 import java.awt.*;
 

@@ -21,7 +21,6 @@ package uk.co.caprica.vlcj.binding;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.sun.jna.Platform;
 
 /**
  * JNA interface to the Xlib native library.
