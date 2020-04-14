@@ -19,9 +19,6 @@
 
 package uk.co.caprica.vlcj.binding;
 
-import javax.swing.*;
-import java.awt.*;
-
 /**
  * Private helper class to ensure the native libraries are properly initialised on Linux.
  * <p>
@@ -34,27 +31,18 @@ import java.awt.*;
 public final class LinuxNativeInit {
 
     public static void init() {
-        initAWT();
         initX();
-    }
-
-    private static void initAWT() {
-        if (!GraphicsEnvironment.isHeadless()) {
-            try {
-                // To prevent crashes in some applications, we must seemingly make sure that Swing is initialised before
-                // force-loading libjawt - empirically both of these things are required
-                new JPanel();
-                System.loadLibrary("jawt");
-            }
-            catch (UnsatisfiedLinkError e) {
-            }
-        }
     }
 
     /**
      * With recent VLC/JDK it seems necessary to do this - it can however cause problems if using the JVM splash-screen
-     * options. Without this, VLC may complain to the console output and it is also possible that opening a JavaFX
-     * FileChooser will cause a fatal JVM crash.
+     * options.
+     * <p>
+     * Without this, VLC will likely complain to the console output and various VLC plugins will fail to load.
+     * <p>
+     * It is also likely that opening a JavaFX FileChooser will cause a fatal JVM crash.
+     * <p>
+     * If you're using JavaFX, you should specify -DVLCJ_INITX=no on your command-line.
      */
     private static void initX() {
         String initX = System.getProperty("VLCJ_INITX");
@@ -69,5 +57,4 @@ public final class LinuxNativeInit {
 
     private LinuxNativeInit() {
     }
-
 }
