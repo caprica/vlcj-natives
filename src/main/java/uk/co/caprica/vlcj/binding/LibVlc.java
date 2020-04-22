@@ -1607,6 +1607,25 @@ public final class LibVlc {
     public static native int libvlc_video_set_spu_delay(libvlc_media_player_t p_mi, long i_delay);
 
     /**
+     * Set the subtitle text scale.
+     * <p>
+     * The scale factor is expressed as a percentage of the default size, where
+     * 1.0 represents 100 percent.
+     * <p>
+     * A value of 0.5 would result in text half the normal size, and a value of 2.0
+     * would result in text twice the normal size.
+     * <p>
+     * The minimum acceptable value for the scale factor is 0.1.
+     * <p>
+     * The maximum is 5.0 (five times normal size).
+     *
+     * @param p_mi media player
+     * @param f_scale scale factor in the range [0.1;5.0] (default: 1.0)
+     * @return LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_video_set_spu_text_scale(libvlc_media_player_t p_mi, float f_scale);
+
+    /**
      * Get the full description of available titles
      *
      * @since LibVLC 3.0.0 and later.
