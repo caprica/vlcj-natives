@@ -1621,7 +1621,7 @@ public final class LibVlc {
      *
      * @param p_mi media player
      * @param f_scale scale factor in the range [0.1;5.0] (default: 1.0)
-     * @return LibVLC 4.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
     public static native void libvlc_video_set_spu_text_scale(libvlc_media_player_t p_mi, float f_scale);
 
