@@ -28,17 +28,22 @@ import java.util.List;
 /**
  *
  */
-public class media_player_title_changed extends Structure {
+public class media_player_title_selection_changed extends Structure {
 
     /**
      *
      */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("new_title"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("title", "index"));
 
     /**
      *
      */
-    public int new_title;
+    public libvlc_title_description_t.ByReference title;
+
+    /**
+     *
+     */
+    public int index;
 
     @Override
     protected List<String> getFieldOrder() {

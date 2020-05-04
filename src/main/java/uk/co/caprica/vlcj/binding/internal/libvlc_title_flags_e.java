@@ -19,28 +19,10 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Encapsulation of a title description.
+ * Bitmasks for title flags.
  */
-public class libvlc_title_description_t extends Structure {
-
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_duration", "psz_name", "i_flags"));
-
-    public static class ByReference extends libvlc_title_description_t implements Structure.ByReference {}
-
-    public long i_duration; // ms
-    public Pointer psz_name;
-    public int i_flags; // menu, interactive or plain content
-
-    @Override
-    protected List<String> getFieldOrder() {
-        return FIELD_ORDER;
-    }
+public interface libvlc_title_flags_e {
+    int libvlc_title_menu = 1;
+    int libvlc_title_interactive = 2;
 }
