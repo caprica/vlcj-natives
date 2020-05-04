@@ -42,7 +42,7 @@ public enum libvlc_navigate_mode_e {
         }
     }
 
-    public static libvlc_navigate_mode_e event(int intValue) {
+    public static libvlc_navigate_mode_e navigate_mode(int intValue) {
         return INT_MAP.get(intValue);
     }
 
