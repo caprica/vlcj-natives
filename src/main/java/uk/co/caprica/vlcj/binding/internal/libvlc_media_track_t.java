@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class libvlc_media_track_t extends Structure {
 
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_codec", "i_original_fourcc", "i_id", "i_type", "i_profile", "i_level", "u", "i_bitrate", "psz_language", "psz_description"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_codec", "i_original_fourcc", "i_id", "i_type", "i_profile", "i_level", "u", "i_bitrate", "psz_language", "psz_description", "psz_id", "id_stable", "psz_name", "selected"));
 
     public int i_codec;
     public int i_original_fourcc;
@@ -46,6 +46,11 @@ public class libvlc_media_track_t extends Structure {
     public int i_bitrate;
     public Pointer psz_language;
     public Pointer psz_description;
+
+    public Pointer psz_id;
+    public int id_stable;
+    public Pointer psz_name;
+    public int selected;
 
     @Override
     protected List<String> getFieldOrder() {
