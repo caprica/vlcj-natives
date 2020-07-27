@@ -19,6 +19,7 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
+import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class media_player_es_changed extends Structure {
     /**
      *
      */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_type", "i_id"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_type", "i_id", "psz_id"));
 
     /**
      *
@@ -44,6 +45,11 @@ public class media_player_es_changed extends Structure {
      *
      */
     public int i_id;
+
+    /**
+     *
+     */
+    public Pointer psz_id;
 
     @Override
     protected List<String> getFieldOrder() {
