@@ -65,9 +65,10 @@ public enum libvlc_event_e {
     libvlc_MediaPlayerUnmuted              (0x11a),
     libvlc_MediaPlayerAudioVolume          (0x11b),
     libvlc_MediaPlayerAudioDevice          (0x11c),
-    libvlc_MediaPlayerTitleListChanged     (0x11d),
-    libvlc_MediaPlayerTitleSelectionChanged(0x11e),
-    libvlc_MediaPlayerChapterChanged       (0x11f),
+    libvlc_MediaPlayerESUpdated            (0x11d),
+    libvlc_MediaPlayerTitleListChanged     (0x11e),
+    libvlc_MediaPlayerTitleSelectionChanged(0x11f),
+    libvlc_MediaPlayerChapterChanged       (0x120),
 
     libvlc_MediaListItemAdded              (0x200),
     libvlc_MediaListWillAddItem            (0x201),
