@@ -57,6 +57,8 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_tracklist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
@@ -348,7 +350,7 @@ public final class LibVlc {
      * Return the current time as defined by LibVLC. The unit is the microsecond. Time increases
      * monotonically (regardless of time zone changes and RTC adjustments). The origin is arbitrary
      * but consistent across the whole system (e.g. the system uptime, the time since the system was
-     * booted). \note On systems that support it, the POSIX monotonic clock is used.
+     * booted). Note: On systems that support it, the POSIX monotonic clock is used.
      *
      * @return clock value
      */
@@ -997,7 +999,7 @@ public final class LibVlc {
     /**
      * Set callbacks and data to render decoded video to a custom texture
      *
-     * \warning VLC will perform video rendering in its own thread and at its own rate,
+     * Warning: VLC will perform video rendering in its own thread and at its own rate,
      * You need to provide your own synchronisation mechanism.
      *
      * OpenGL context need to be created before playing a media.
@@ -1365,6 +1367,128 @@ public final class LibVlc {
      * @since libVLC 2.1.0 or later
      */
     public static native void libvlc_media_player_set_video_title_display(libvlc_media_player_t p_mi, int position, int timeout);
+
+    /**
+     * Get the track list for one type
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Note: You need to call libvlc_media_parse_with_options() or play the media
+     * at least once before calling this function.  Not doing this will result in
+     * an empty list.
+     *
+     * Note: This track list is a snapshot of the current tracks when this function
+     * is called. If a track is updated after this call, the user will need to call
+     * this function again to get the updated track.
+     *
+     *
+     * The track list can be used to get track informations and to select specific
+     * tracks.
+     *
+     * @param p_mi the media player
+     * @param type type of the track list to request
+     *
+     * @return a valid libvlc_media_tracklist_t or NULL in case of error, if there
+     * is no track for a category, the returned list will have a size of 0, delete
+     * with libvlc_media_tracklist_delete()
+     */
+    public static native libvlc_media_tracklist_t libvlc_media_player_get_tracklist(libvlc_media_player_t p_mi, int type);
+
+    /**
+     * Get the selected track for one type
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Warning: More than one tracks can be selected for one type. In that case,
+     * libvlc_media_player_get_tracklist() should be used.
+     *
+     * @param p_mi the media player
+     * @param type type of the selected track
+     *
+     * @return a valid track or NULL if there is no selected tracks for this type,
+     * release it with libvlc_media_track_release().
+     */
+    public static native libvlc_media_track_t libvlc_media_player_get_selected_track(libvlc_media_player_t p_mi, int type);
+
+    /**
+     * Get a track from a track id
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * This function can be used to get the last updated informations of a track.
+     *
+     * @param p_mi the media player
+     * @param psz_id valid string representing a track id (cf. psz_id from \ref
+     * libvlc_media_track_t)
+     *
+     * @return a valid track or NULL if there is currently no tracks identified by
+     * the string id, release it with libvlc_media_track_release().
+     */
+    public static native libvlc_media_track_t libvlc_media_player_get_track_from_id( libvlc_media_player_t p_mi, String psz_id);
+
+    /**
+     * Select a track or unselect all tracks for one type
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Note: Use libvlc_media_player_select_tracks() for multiple selection
+     *
+     * @param p_mi the media player
+     * @param type type of the selected track
+     * @param track track to select or NULL to unselect all tracks of for this type
+     */
+    public static native void libvlc_media_player_select_track(libvlc_media_player_t p_mi, int type, libvlc_media_track_t track);
+
+    /**
+     * Select multiple tracks for one type
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Note: The internal track list can change between the calls of
+     * libvlc_media_player_get_tracklist() and
+     * libvlc_media_player_set_tracks(). If a track selection change but the
+     * track is not present anymore, the player will just ignore it.
+     *
+     * Note: selecting multiple audio tracks is currently not supported.
+     *
+     * @param p_mi the media player
+     * @param type type of the selected track
+     * @param tracks pointer to the track array
+     * @param track_count number of tracks in the track array
+     */
+    public static native void libvlc_media_player_select_tracks(libvlc_media_player_t p_mi, int type, PointerByReference tracks, size_t track_count);
+
+    /**
+     * Select tracks by their string identifier
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * This function can be used pre-select a list of tracks before starting the
+     * player. It has only effect for the current media. It can also be used when
+     * the player is already started.
+     *
+     * 'str_ids' can contain more than one track id, delimited with ','. "" or any
+     * invalid track id will cause the player to unselect all tracks of that
+     * category. NULL will disable the preference for newer tracks without
+     * unselecting any current tracks.
+     *
+     * Example:
+     * - (libvlc_track_video, "video/1,video/2") will select these 2 video tracks.
+     * If there is only one video track with the id "video/0", no tracks will be
+     * selected.
+     * - (libvlc_track_type_t, "${slave_url_md5sum}/spu/0) will select one spu
+     * added by an input slave with the corresponding url.
+     *
+     * Note: The string identifier of a track can be found via psz_id from \ref
+     * libvlc_media_track_t
+     *
+     * Note: selecting multiple audio tracks is currently not supported.
+     *
+     * @param p_mi the media player
+     * @param type type to select
+     * @param psz_ids list of string identifier or NULL
+     */
+    public static native void libvlc_media_player_select_tracks_by_ids(libvlc_media_player_t p_mi, int type, String psz_ids);
 
     /**
      * Add a slave to the current media player.
@@ -3083,4 +3207,75 @@ public final class LibVlc {
 
     // === libvlc_picture.h =====================================================
 
+    // === libvlc_media_track.h =================================================
+
+    /**
+     * Get the number of tracks in a tracklist
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @param list valid tracklist
+     *
+     * @return number of tracks, or 0 if the list is empty
+     */
+    public static native size_t libvlc_media_tracklist_count(libvlc_media_tracklist_t list);
+
+    /**
+     * Get a track at a specific index
+     *
+     * Warning: The behaviour is undefined if the index is not valid.
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @param list valid tracklist
+     * @param index valid index in the range [0; count[
+     *
+     * @return a valid track (can't be NULL if libvlc_media_tracklist_count()
+     * returned a valid count)
+     */
+    public static native libvlc_media_track_t libvlc_media_tracklist_at( libvlc_media_tracklist_t list, size_t index);
+
+    /**
+     * Release a tracklist
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @see libvlc_media_get_tracklist
+     * @see libvlc_media_player_get_tracklist
+     *
+     * @param list valid tracklist
+     */
+    public static native void libvlc_media_tracklist_delete( libvlc_media_tracklist_t list);
+
+    /**
+     * Hold a single track reference
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * This function can be used to hold a track from a tracklist. In that case,
+     * the track can outlive its tracklist.
+     *
+     * @param track valid track
+     * @return the same track, need to be released with libvlc_media_track_release()
+     */
+    public static native libvlc_media_track_t libvlc_media_track_hold(libvlc_media_track_t track);
+
+    /**
+     * Release a single track
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Warning: Tracks from a tracklist are released alongside the list with
+     * libvlc_media_tracklist_delete().
+     *
+     * \note You only need to release tracks previously held with
+     * libvlc_media_track_hold() or returned by
+     * libvlc_media_player_get_selected_track() and
+     * libvlc_media_player_get_track_from_id()
+     *
+     * @param track valid track
+     */
+    public static native void libvlc_media_track_release(libvlc_media_track_t track);
+
+    // === libvlc_media_track.h =================================================
 }
