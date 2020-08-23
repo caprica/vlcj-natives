@@ -43,6 +43,7 @@ public class libvlc_media_stats_t extends Structure {
         "i_decoded_video",
         "i_decoded_audio",
         "i_displayed_pictures",
+        "i_late_pictures",
         "i_lost_pictures",
         "i_played_abuffers",
         "i_lost_abuffers",
@@ -67,6 +68,7 @@ public class libvlc_media_stats_t extends Structure {
 
     /* Video Output */
     public int         i_displayed_pictures;
+    public int         i_late_pictures;
     public int         i_lost_pictures;
 
     /* Audio output */
@@ -96,6 +98,7 @@ public class libvlc_media_stats_t extends Structure {
         sb.append("i_decoded_video=").append(i_decoded_video).append(',');
         sb.append("i_decoded_audio=").append(i_decoded_audio).append(',');
         sb.append("i_displayed_pictures=").append(i_displayed_pictures).append(',');
+        sb.append("i_late_pictures=").append(i_late_pictures).append(',');
         sb.append("i_lost_pictures=").append(i_lost_pictures).append(',');
         sb.append("i_played_abuffers=").append(i_played_abuffers).append(',');
         sb.append("i_lost_abuffers=").append(i_lost_abuffers).append(',');
