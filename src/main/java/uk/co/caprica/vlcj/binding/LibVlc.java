@@ -3233,7 +3233,7 @@ public final class LibVlc {
      * @return a valid track (can't be NULL if libvlc_media_tracklist_count()
      * returned a valid count)
      */
-    public static native libvlc_media_track_t libvlc_media_tracklist_at( libvlc_media_tracklist_t list, size_t index);
+    public static native libvlc_media_track_t libvlc_media_tracklist_at(libvlc_media_tracklist_t list, size_t index);
 
     /**
      * Release a tracklist
@@ -3245,7 +3245,7 @@ public final class LibVlc {
      *
      * @param list valid tracklist
      */
-    public static native void libvlc_media_tracklist_delete( libvlc_media_tracklist_t list);
+    public static native void libvlc_media_tracklist_delete(libvlc_media_tracklist_t list);
 
     /**
      * Hold a single track reference
