@@ -1456,7 +1456,7 @@ public final class LibVlc {
      * @param tracks pointer to the track array
      * @param track_count number of tracks in the track array
      */
-    public static native void libvlc_media_player_select_tracks(libvlc_media_player_t p_mi, int type, PointerByReference tracks, size_t track_count);
+    public static native void libvlc_media_player_select_tracks(libvlc_media_player_t p_mi, int type, Pointer tracks, size_t track_count);
 
     /**
      * Select tracks by their string identifier
