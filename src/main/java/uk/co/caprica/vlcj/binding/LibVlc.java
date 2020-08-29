@@ -665,6 +665,28 @@ public final class LibVlc {
     public static native int libvlc_media_tracks_get(libvlc_media_t p_md, PointerByReference tracks);
 
     /**
+     * Get the track list for one type
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * Note you need to call libvlc_media_parse_with_options() or play the media
+     * at least once before calling this function.  Not doing this will result in
+     * an empty list.
+     *
+     * @see #libvlc_media_parse_with_options
+     * @see #libvlc_media_tracklist_count
+     * @see #libvlc_media_tracklist_at
+     *
+     * @param p_md media descriptor object
+     * @param type type of the track list to request
+     *
+     * @return a valid libvlc_media_tracklist_t or NULL in case of error, if there
+     * is no track for a category, the returned list will have a size of 0, delete
+     * with libvlc_media_tracklist_delete()
+     */
+    public static native libvlc_media_tracklist_t libvlc_media_get_tracklist(libvlc_media_t p_md, int type);
+
+    /**
      * Release media descriptor's elementary streams description array
      *
      * @since LibVLC 2.1.0 and later.
