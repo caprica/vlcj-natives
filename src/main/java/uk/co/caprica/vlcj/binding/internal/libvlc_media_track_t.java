@@ -35,7 +35,7 @@ public class libvlc_media_track_t extends Structure {
 
     public int i_codec;
     public int i_original_fourcc;
-    public int i_id;
+    @Deprecated public int i_id; // use psz_id
     public int i_type;
 
     public int i_profile;

@@ -63,7 +63,6 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_item_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_track_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_format_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_frameMetadata_cb;
@@ -588,7 +587,6 @@ public final class LibVlc {
      *
      * @see libvlc_event_e#libvlc_MediaParsedChanged
      * @see #libvlc_media_get_meta(libvlc_media_t, int)
-     * @see #libvlc_media_tracks_get(libvlc_media_t, PointerByReference)
      *
      * @param p_md media descriptor object
      * @param parse_flag parse options
@@ -647,24 +645,6 @@ public final class LibVlc {
     public static native Pointer libvlc_media_get_user_data(libvlc_media_t p_md);
 
     /**
-     * Get media descriptor's elementary streams description
-     * <p>
-     * Note, you need to parse or play the media at least once before calling this function.
-     * <p>
-     * Not doing this will result in an empty array.
-     *
-     * @since LibVLC 2.1.0 and later.
-     *
-     * @param p_md media descriptor object
-     * @param tracks address to store an allocated array of Elementary Streams
-     *        descriptions (must be freed with libvlc_media_tracks_release
-     *        by the caller) [OUT]
-     *
-     * @return the number of Elementary Streams (zero on error)
-     */
-    public static native int libvlc_media_tracks_get(libvlc_media_t p_md, PointerByReference tracks);
-
-    /**
      * Get the track list for one type
      *
      * @since LibVLC 4.0.0 and later.
@@ -685,16 +665,6 @@ public final class LibVlc {
      * with libvlc_media_tracklist_delete()
      */
     public static native libvlc_media_tracklist_t libvlc_media_get_tracklist(libvlc_media_t p_md, int type);
-
-    /**
-     * Release media descriptor's elementary streams description array
-     *
-     * @since LibVLC 2.1.0 and later.
-     *
-     * @param p_tracks tracks info array to release
-     * @param i_count number of elements in the array
-     */
-    public static native void libvlc_media_tracks_release(Pointer p_tracks, int i_count);
 
     /**
      * Get the media type of the media descriptor object.
@@ -1531,13 +1501,6 @@ public final class LibVlc {
     public static native int libvlc_media_player_add_slave(libvlc_media_player_t p_mi, int i_type, String psz_uri, int b_select);
 
     /**
-     * Release (free) libvlc_track_description_t
-     *
-     * @param p_track_description the structure to release
-     */
-    public static native void libvlc_track_description_list_release(Pointer p_track_description);
-
-    /**
      * Toggle fullscreen status on non-embedded video outputs.
      * <p>
      * The same limitations applies to this function as to libvlc_set_fullscreen().
@@ -1694,39 +1657,6 @@ public final class LibVlc {
      * @since LibVLC 3.0.0 and later
      */
     public static native int libvlc_video_update_viewpoint(libvlc_media_player_t p_mi, libvlc_video_viewpoint_t p_viewpoint, int b_absolute);
-
-    /**
-     * Get current video subtitle.
-     *
-     * @param p_mi the media player
-     * @return the video subtitle selected, or -1 if none
-     */
-    public static native int libvlc_video_get_spu(libvlc_media_player_t p_mi);
-
-    /**
-     * Get the number of available video subtitles.
-     *
-     * @param p_mi the media player
-     * @return the number of available video subtitles
-     */
-    public static native int libvlc_video_get_spu_count(libvlc_media_player_t p_mi);
-
-    /**
-     * Get the description of available video subtitles.
-     *
-     * @param p_mi the media player
-     * @return list containing description of available video subtitles
-     */
-    public static native libvlc_track_description_t libvlc_video_get_spu_description(libvlc_media_player_t p_mi);
-
-    /**
-     * Set new video subtitle.
-     *
-     * @param p_mi the media player
-     * @param i_spu new video subtitle to select
-     * @return 0 on success, -1 if out of range
-     */
-    public static native int libvlc_video_set_spu(libvlc_media_player_t p_mi, int i_spu);
 
     /**
      * Get the current subtitle delay. Positive values means subtitles are being displayed later,
@@ -1907,39 +1837,6 @@ public final class LibVlc {
      *               page or a TeletextKey. 100 is the default teletext page.
      */
     public static native void libvlc_video_set_teletext(libvlc_media_player_t p_mi, int i_page);
-
-    /**
-     * Get number of available video tracks.
-     *
-     * @param p_mi media player
-     * @return the number of available video tracks (int)
-     */
-    public static native int libvlc_video_get_track_count(libvlc_media_player_t p_mi);
-
-    /**
-     * Get the description of available video tracks.
-     *
-     * @param p_mi media player
-     * @return list with description of available video tracks, or NULL on error
-     */
-    public static native libvlc_track_description_t libvlc_video_get_track_description(libvlc_media_player_t p_mi);
-
-    /**
-     * Get current video track.
-     *
-     * @param p_mi media player
-     * @return the video track ID (int) or -1 if no active input
-     */
-    public static native int libvlc_video_get_track(libvlc_media_player_t p_mi);
-
-    /**
-     * Set video track.
-     *
-     * @param p_mi media player
-     * @param i_track the track ID (i_id field from track description)
-     * @return 0 on success, -1 if out of range
-     */
-    public static native int libvlc_video_set_track(libvlc_media_player_t p_mi, int i_track);
 
     /**
      * Take a snapshot of the current video window. If i_width AND i_height is 0, original size is
@@ -2238,39 +2135,6 @@ public final class LibVlc {
      * @return 0 if the volume was set, -1 if it was out of range
      */
     public static native int libvlc_audio_set_volume(libvlc_media_player_t p_mi, int i_volume);
-
-    /**
-     * Get number of available audio tracks.
-     *
-     * @param p_mi media player
-     * @return the number of available audio tracks (int), or -1 if unavailable
-     */
-    public static native int libvlc_audio_get_track_count(libvlc_media_player_t p_mi);
-
-    /**
-     * Get the description of available audio tracks.
-     *
-     * @param p_mi media player
-     * @return list with description of available audio tracks, or NULL
-     */
-    public static native libvlc_track_description_t libvlc_audio_get_track_description(libvlc_media_player_t p_mi);
-
-    /**
-     * Get current audio track.
-     *
-     * @param p_mi media player
-     * @return the audio track ID or -1 if no active input.
-     */
-    public static native int libvlc_audio_get_track(libvlc_media_player_t p_mi);
-
-    /**
-     * Set current audio track.
-     *
-     * @param p_mi media player
-     * @param i_track the track ID (i_id field from track description)
-     * @return 0 on success, -1 on error
-     */
-    public static native int libvlc_audio_set_track(libvlc_media_player_t p_mi, int i_track);
 
     /**
      * Get current audio channel.
