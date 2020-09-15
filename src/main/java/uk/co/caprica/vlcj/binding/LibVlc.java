@@ -1419,7 +1419,9 @@ public final class LibVlc {
     public static native libvlc_media_track_t libvlc_media_player_get_track_from_id( libvlc_media_player_t p_mi, String psz_id);
 
     /**
-     * Select a track or unselect all tracks for one type
+     * Select a track.
+     *
+     * This will unselect the current track.
      *
      * @since LibVLC 4.0.0 and later.
      *
@@ -1430,6 +1432,16 @@ public final class LibVlc {
      * @param track track to select or NULL to unselect all tracks of for this type
      */
     public static native void libvlc_media_player_select_track(libvlc_media_player_t p_mi, int type, libvlc_media_track_t track);
+
+    /**
+     * Unselect all tracks for a given type.
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @param p_mi the media player
+     * @param type type to unselect
+     */
+    public static native void libvlc_media_player_unselect_track_type(libvlc_media_player_t p_mi, int type);
 
     /**
      * Select multiple tracks for one type
