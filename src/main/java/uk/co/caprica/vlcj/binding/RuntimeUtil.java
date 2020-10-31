@@ -74,9 +74,9 @@ public final class RuntimeUtil {
     }
 
     /**
+     * Get the "core" native library name.
      *
-     *
-     * @return
+     * @return library name
      */
     public static String getLibVlcCoreLibraryName() {
         return isWindows() ? "libvlccore" : "vlccore";

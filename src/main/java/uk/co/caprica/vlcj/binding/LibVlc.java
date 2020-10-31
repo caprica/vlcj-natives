@@ -2942,8 +2942,8 @@ public final class LibVlc {
      * callback if the libvlc user wants to use this item after. (for display or
      * for passing it to the mediaplayer for example).
      *
+     * @param p_item renderer item handle
      * @return the current item
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native libvlc_renderer_item_t libvlc_renderer_item_hold(libvlc_renderer_item_t p_item);
@@ -2951,6 +2951,7 @@ public final class LibVlc {
     /**
      * Releases a renderer item, i.e. decrements its reference counter
      *
+     * @param p_item renderer item handle
      * @since LibVLC 3.0.0 or later
      */
     public static native void libvlc_renderer_item_release(libvlc_renderer_item_t p_item);
@@ -2958,8 +2959,8 @@ public final class LibVlc {
     /**
      * Get the human readable name of a renderer item
      *
+     * @param p_item renderer item handle
      * @return the name of the item (can't be NULL, must *not* be freed)
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native String libvlc_renderer_item_name(libvlc_renderer_item_t p_item);
@@ -2968,8 +2969,8 @@ public final class LibVlc {
      * Get the type (not translated) of a renderer item. For now, the type can only
      * be "chromecast" ("upnp", "airplay" may come later).
      *
+     * @param p_item renderer item handle
      * @return the type of the item (can't be NULL, must *not* be freed)
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native String libvlc_renderer_item_type(libvlc_renderer_item_t p_item);
@@ -2977,8 +2978,8 @@ public final class LibVlc {
     /**
      * Get the icon uri of a renderer item
      *
+     * @param p_item renderer item handle
      * @return the uri of the item's icon (can be NULL, must *not* be freed)
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native String libvlc_renderer_item_icon_uri(libvlc_renderer_item_t p_item);
@@ -2986,8 +2987,8 @@ public final class LibVlc {
     /**
      * Get the flags of a renderer item
      *
+     * @param p_item renderer item handle
      * @return bitwise flag: capabilities of the renderer, see
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native int libvlc_renderer_item_flags(libvlc_renderer_item_t p_item);
@@ -3008,7 +3009,6 @@ public final class LibVlc {
      * @param psz_name service name; use libvlc_renderer_discoverer_list_get() to
      * get a list of the discoverer names available in this libVLC instance
      * @return media discover object or NULL in case of error
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
@@ -3017,7 +3017,6 @@ public final class LibVlc {
      * Release a renderer discoverer object
      *
      * @param p_rd renderer discoverer object
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native void libvlc_renderer_discoverer_release(libvlc_renderer_discoverer_t p_rd);
@@ -3032,7 +3031,6 @@ public final class LibVlc {
      *
      * @param p_rd renderer discoverer object
      * @return -1 in case of error, 0 otherwise
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native int libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t p_rd);
@@ -3043,7 +3041,6 @@ public final class LibVlc {
      * @see #libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t)
      *
      * @param p_rd renderer discoverer object
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native void libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t p_rd);
@@ -3061,8 +3058,8 @@ public final class LibVlc {
      * @see libvlc_event_u#renderer_discoverer_item_added
      * @see libvlc_event_u#renderer_discoverer_item_deleted
      *
+     * @param p_rd renderer discoverer handle
      * @return a valid event manager (can't fail)
-     *
      * @since LibVLC 3.0.0 or later
      */
     public static native libvlc_event_manager_t libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t p_rd);
@@ -3076,9 +3073,7 @@ public final class LibVlc {
      * @param ppp_services address to store an allocated array of renderer
      * discoverer services (must be freed with libvlc_renderer_list_release() by
      * the caller) [OUT]
-     *
      * @return the number of media discoverer services (0 on error)
-     *
      * @since LibVLC 3.0.0 and later
      */
     public static native size_t libvlc_renderer_discoverer_list_get(libvlc_instance_t p_inst, PointerByReference ppp_services);
@@ -3090,7 +3085,6 @@ public final class LibVlc {
      *
      * @param pp_services array to release
      * @param i_count number of elements in the array
-     *
      * @since LibVLC 3.0.0 and later
      */
     public static native void libvlc_renderer_discoverer_list_release(Pointer pp_services, size_t i_count);
@@ -3150,7 +3144,7 @@ public final class LibVlc {
      * Returns the picture type
      *
      * @param pic A picture object
-     *
+     * @return picture type
      * @since libvlc 4.0 or later
      */
     public static native int libvlc_picture_type(libvlc_picture_t pic);
@@ -3160,7 +3154,7 @@ public final class LibVlc {
      * This can only be called on images of type libvlc_picture_Argb
      *
      * @param pic A picture object
-     *
+     * @return stride
      * @since libvlc 4.0 or later
      */
     public static native int libvlc_picture_get_stride(libvlc_picture_t pic);
@@ -3169,7 +3163,7 @@ public final class LibVlc {
      * Returns the width of the image in pixels
      *
      * @param pic A picture object
-     *
+     * @return width
      * @since libvlc 4.0 or later
      */
     public static native int libvlc_picture_get_width(libvlc_picture_t pic);
@@ -3178,7 +3172,7 @@ public final class LibVlc {
      * Returns the height of the image in pixels
      *
      * @param pic A picture object
-     *
+     * @return height
      * @since libvlc 4.0 or later
      */
     public static native int libvlc_picture_get_height(libvlc_picture_t pic);
@@ -3186,7 +3180,7 @@ public final class LibVlc {
     /**
      * Returns the time at which this picture was generated, in milliseconds
      * @param pic A picture object
-     *
+     * @return timestamp
      * @since libvlc 4.0 or later
      */
     public static native long libvlc_picture_get_time(libvlc_picture_t pic);
