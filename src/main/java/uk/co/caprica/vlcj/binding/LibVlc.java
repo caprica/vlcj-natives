@@ -1549,7 +1549,6 @@ public final class LibVlc {
      * @param list valid programlist
      * @since LibVLC 4.0.0 and later.
      *
-     * @see #libvlc_media_get_programlist
      * @see #libvlc_media_player_get_programlist(libvlc_media_player_t)
      */
     public static native void libvlc_player_programlist_delete(libvlc_player_programlist_t list);
