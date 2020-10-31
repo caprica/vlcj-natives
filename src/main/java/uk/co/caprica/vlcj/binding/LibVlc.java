@@ -61,6 +61,8 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_tracklist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_player_program_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_player_programlist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_item_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
@@ -1511,6 +1513,93 @@ public final class LibVlc {
      * @since LibVLC 3.0.0 and later.
      */
     public static native int libvlc_media_player_add_slave(libvlc_media_player_t p_mi, int i_type, String psz_uri, int b_select);
+
+    /**
+     * Delete a program struct.
+     *
+     * @param program returned by libvlc_media_player_get_selected_program() or libvlc_media_player_get_program_from_id()
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native void libvlc_player_program_delete(libvlc_player_program_t program);
+
+    /**
+     * Get the number of programs in a programlist.
+     *
+     * @param list valid programlist
+     * @return number of programs, or 0 if the list is empty
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native size_t libvlc_player_programlist_count(libvlc_player_programlist_t list);
+
+    /**
+     * Get a program at a specific index
+     *
+     * Warning: the behaviour is undefined if the index is not valid.
+     *
+     * @param list valid programlist
+     * @param index valid index in the range [0; count[
+     * @return a valid program (can't be NULL if libvlc_player_programlist_count() returned a valid count)
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native libvlc_player_program_t libvlc_player_programlist_at(libvlc_player_programlist_t list, size_t index);
+
+    /**
+     * Release a programlist
+     *
+     * @param list valid programlist
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @see #libvlc_media_get_programlist
+     * @see #libvlc_media_player_get_programlist(libvlc_media_player_t)
+     */
+    public static native void libvlc_player_programlist_delete(libvlc_player_programlist_t list);
+
+     /**
+      * Select program with a given program id.
+      *
+      * Note program ids are sent via the libvlc_MediaPlayerProgramAdded event or
+      * can be fetched via libvlc_media_player_get_programlist().
+      *
+      * @param p_mi opaque media player handle
+      * @param program_id
+      * @since LibVLC 4.0.0 or later
+      */
+     public static native void libvlc_media_player_select_program_id(libvlc_media_player_t p_mi, int program_id);
+
+     /**
+      * Get the selected program.
+      *
+      * @param p_mi opaque media player handle
+      * @return a valid program struct or NULL if no programs are selected. The program need to be freed with libvlc_player_program_delete().
+      * @since LibVLC 4.0.0 or later
+      */
+     public static native libvlc_player_program_t libvlc_media_player_get_selected_program(libvlc_media_player_t p_mi);
+
+     /**
+      * Get a program struct from a program id
+      *
+      * @param p_mi opaque media player handle
+      * @param i_group_id program id
+      * @return a valid program struct or NULL if the group_id is not found. The program need to be freed with libvlc_player_program_delete().
+      * @since LibVLC 4.0.0 or later
+      */
+     public static native libvlc_player_program_t libvlc_media_player_get_program_from_id(libvlc_media_player_t p_mi, int i_group_id);
+
+     /**
+      * Get the program list
+      *
+      * Note this program list is a snapshot of the current programs when this
+      * function is called. If a program is updated after this call, the user will
+      * need to call this function again to get the updated program.
+      *
+      * The program list can be used to get program informations and to select
+      * specific programs.
+      *
+      * @param p_mi the media player
+      * @return a valid libvlc_media_programlist_t or NULL in case of error or empty list, delete with libvlc_media_programlist_delete()
+      * @since LibVLC 4.0.0 and later.
+      */
+    public static native libvlc_player_programlist_t libvlc_media_player_get_programlist(libvlc_media_player_t p_mi);
 
     /**
      * Toggle fullscreen status on non-embedded video outputs.
