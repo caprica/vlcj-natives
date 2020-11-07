@@ -1418,7 +1418,7 @@ public final class LibVlc {
      * @return a valid track or NULL if there is currently no tracks identified by
      * the string id, release it with libvlc_media_track_release().
      */
-    public static native libvlc_media_track_t libvlc_media_player_get_track_from_id( libvlc_media_player_t p_mi, String psz_id);
+    public static native libvlc_media_track_t libvlc_media_player_get_track_from_id(libvlc_media_player_t p_mi, String psz_id);
 
     /**
      * Select a track.
@@ -1430,10 +1430,9 @@ public final class LibVlc {
      * Note: Use libvlc_media_player_select_tracks() for multiple selection
      *
      * @param p_mi the media player
-     * @param type type of the selected track
      * @param track track to select or NULL to unselect all tracks of for this type
      */
-    public static native void libvlc_media_player_select_track(libvlc_media_player_t p_mi, int type, libvlc_media_track_t track);
+    public static native void libvlc_media_player_select_track(libvlc_media_player_t p_mi, libvlc_media_track_t track);
 
     /**
      * Unselect all tracks for a given type.
