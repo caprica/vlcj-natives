@@ -19,11 +19,31 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.PointerType;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  */
-public class libvlc_player_program_t extends PointerType {
+public class libvlc_player_program_t extends Structure {
 
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("i_group_id", "psz_name", "b_selected", "b_scrambled"));
+
+    // Id used for libvlc_media_player_select_program()
+    public int i_group_id;
+    // Program name, always valid
+    public Pointer psz_name;
+    // True if the program is selected
+    public int b_selected;
+    // True if the program is scrambled
+    public int b_scrambled;
+
+    @Override
+    protected List<String> getFieldOrder() {
+        return FIELD_ORDER;
+    }
 }
