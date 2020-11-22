@@ -60,6 +60,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_tracklist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_picture_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_program_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_programlist_t;
@@ -3183,6 +3184,32 @@ public final class LibVlc {
      * @since libvlc 4.0 or later
      */
     public static native long libvlc_picture_get_time(libvlc_picture_t pic);
+
+    /**
+     * Returns the number of pictures in the list
+     *
+     * @since libvlc 4.0 or later
+     */
+    public static native size_t libvlc_picture_list_count(libvlc_picture_list_t list);
+
+    /**
+     * Returns the picture at the provided index.
+     *
+     * If the index is out of bound, the result is undefined.
+     *
+     * @since libvlc 4.0 or later
+     */
+    public static native libvlc_picture_t libvlc_picture_list_at(libvlc_picture_list_t list, size_t index);
+
+    /**
+     * Destroys a picture list and releases the pictures it contains
+     *
+     * Calling this function with a NULL list is safe and will return immediately.
+     *
+     * @param list The list to destroy
+     * @since libvlc 4.0 or later
+     */
+    public static native void libvlc_picture_list_destroy(libvlc_picture_list_t list);
 
     // === libvlc_picture.h =====================================================
 
