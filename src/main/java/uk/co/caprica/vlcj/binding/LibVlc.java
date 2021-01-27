@@ -1783,6 +1783,17 @@ public final class LibVlc {
     public static native int libvlc_video_set_spu_delay(libvlc_media_player_t p_mi, long i_delay);
 
     /**
+      * Get the current subtitle text scale.
+      *
+      * The scale factor is expressed as a percentage of the default size, where
+      * 1.0 represents 100 percent.
+      *
+      * @param p_mi media player
+      * @version LibVLC 4.0.0 or later
+      */
+    public static native float libvlc_video_get_spu_text_scale(libvlc_media_player_t p_mi);
+
+    /**
      * Set the subtitle text scale.
      * <p>
      * The scale factor is expressed as a percentage of the default size, where
