@@ -31,7 +31,7 @@ public enum libvlc_event_e {
     libvlc_MediaSubItemAdded               (0x001),
     libvlc_MediaDurationChanged            (0x002),
     libvlc_MediaParsedChanged              (0x003),
-    libvlc_MediaFreed                      (0x004),
+    /*libvlc_MediaFreed                      (0x004),*/
     libvlc_MediaStateChanged               (0x005),
     libvlc_MediaSubItemTreeAdded           (0x006),
     libvlc_MediaThumbnailGenerated         (0x007),
