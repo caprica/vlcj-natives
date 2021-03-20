@@ -45,7 +45,6 @@ public class libvlc_event_u extends Union {
     public media_list_player_next_item_set        media_list_player_next_item_set;
     public media_player_snapshot_taken            media_player_snapshot_taken;
     public media_player_length_changed            media_player_length_changed;
-    public vlm_media_event                        vlm_media_event;
     public media_player_media_changed             media_player_media_changed;
     public media_player_scrambled_changed         media_player_scrambled_changed;
     public media_player_es_changed                media_player_es_changed;
