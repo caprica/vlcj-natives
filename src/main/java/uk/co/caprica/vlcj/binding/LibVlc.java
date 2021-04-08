@@ -513,10 +513,10 @@ public final class LibVlc {
      * libvlc_structures.c (libvlc_NothingSpecial=0, libvlc_Opening, libvlc_Buffering,
      * libvlc_Playing, libvlc_Paused, libvlc_Stopped, libvlc_Ended, libvlc_Error).
      *
-     * @param p_meta_desc a media descriptor object
+     * @param p_md a media descriptor object
      * @return state of media descriptor object
      */
-    public static native int libvlc_media_get_state(libvlc_media_t p_meta_desc);
+    public static native int libvlc_media_get_state(libvlc_media_t p_md);
 
     /**
      * get the current statistics about the media
@@ -1885,7 +1885,7 @@ public final class LibVlc {
      *
      * @see #libvlc_video_set_aspect_ratio(libvlc_media_player_t, String)
      */
-    public static native void libvlc_video_set_crop_ratio(libvlc_media_player_t mp, int  num, int den);
+    public static native void libvlc_video_set_crop_ratio(libvlc_media_player_t mp, int num, int den);
 
     /**
      * Set the video crop window.
@@ -2137,7 +2137,7 @@ public final class LibVlc {
      * @return A NULL-terminated linked list of potential audio output devices. It must be freed it with libvlc_audio_output_device_list_release()
      * @since LibVLC 2.1.0 or later.
      */
-    public static native libvlc_audio_output_device_t libvlc_audio_output_device_list_get( libvlc_instance_t p_instance, String psz_aout );
+    public static native libvlc_audio_output_device_t libvlc_audio_output_device_list_get(libvlc_instance_t p_instance, String psz_aout);
 
     /**
      * Frees a list of available audio output devices.
