@@ -1052,6 +1052,7 @@ public final class LibVlc {
      * @param drawable the drawable that is either an NSView or an object following the
      *            VLCOpenGLVideoViewEmbedding protocol.
      */
+    // FIXME should be a pointer not a long (makes no difference really)
     public static native void libvlc_media_player_set_nsobject(libvlc_media_player_t p_mi, long drawable);
 
     /**
