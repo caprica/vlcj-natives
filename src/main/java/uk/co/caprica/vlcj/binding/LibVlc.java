@@ -23,6 +23,7 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -554,6 +555,20 @@ public final class LibVlc {
      * @return duration of media item or -1 on error
      */
     public static native long libvlc_media_get_duration(libvlc_media_t p_md);
+
+    /**
+     * Get a 'stat' value of media descriptor object item.
+     *
+     * Note 'stat' values are currently only parsed by directory accesses. This means that only sub medias of a
+     * directory media, parsed with #libvlc_media_parse_with_options() can have valid 'stat' properties.
+     *
+     * @param p_md media descriptor object
+     * @param type a valid libvlc_media_stat_ define
+     * @param out field in which the value will be stored
+     * @return 1 on success, 0 if not found, -1 on error
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native int libvlc_media_get_stat(libvlc_media_t p_md, int type, LongByReference out);
 
     /**
      * Parse a media.
