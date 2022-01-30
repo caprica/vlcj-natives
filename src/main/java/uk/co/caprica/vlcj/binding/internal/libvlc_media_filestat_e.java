@@ -25,26 +25,26 @@ import java.util.Map;
 /**
  *
  */
-public enum libvlc_media_stat_type_e {
+public enum libvlc_media_filestat_e {
 
-    libvlc_media_stat_mtime(0),
-    libvlc_media_stat_size (1);
+    libvlc_media_filestat_mtime(0),
+    libvlc_media_filestat_size(1);
 
-    private static final Map<Integer, libvlc_media_stat_type_e> INT_MAP = new HashMap<Integer, libvlc_media_stat_type_e>();
+    private static final Map<Integer, libvlc_media_filestat_e> INT_MAP = new HashMap<Integer, libvlc_media_filestat_e>();
 
     static {
-        for (libvlc_media_stat_type_e value : libvlc_media_stat_type_e.values()) {
+        for (libvlc_media_filestat_e value : libvlc_media_filestat_e.values()) {
             INT_MAP.put(value.intValue, value);
         }
     }
 
-    public static libvlc_media_stat_type_e mediaStatType(int intValue) {
+    public static libvlc_media_filestat_e mediaStatType(int intValue) {
         return INT_MAP.get(intValue);
     }
 
     private final int intValue;
 
-    libvlc_media_stat_type_e(int intValue) {
+    libvlc_media_filestat_e(int intValue) {
         this.intValue = intValue;
     }
 

@@ -568,7 +568,7 @@ public final class LibVlc {
      * @return 1 on success, 0 if not found, -1 on error
      * @since LibVLC 4.0.0 and later.
      */
-    public static native int libvlc_media_get_stat(libvlc_media_t p_md, int type, LongByReference out);
+    public static native int libvlc_media_get_filestat(libvlc_media_t p_md, int type, LongByReference out);
 
     /**
      * Parse a media.
