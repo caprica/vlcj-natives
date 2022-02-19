@@ -2129,39 +2129,25 @@ public final class LibVlc {
 
     /**
      * Configures an explicit audio output device.
-     * <p>
-     * If the module parameter is NULL, audio output will be moved to the device
-     * specified by the device identifier string immediately. This is the
-     * recommended usage.
-     * <p>
+     *
      * A list of adequate potential device strings can be obtained with
      * libvlc_audio_output_device_enum().
-     * <p>
-     * However passing NULL is supported in LibVLC version 2.2.0 and later only;
-     * in earlier versions, this function would have no effects when the module
-     * parameter was NULL.
-     * <p>
-     * If the module parameter is not NULL, the device parameter of the
-     * corresponding audio output, if it exists, will be set to the specified
-     * string. Note that some audio output modules do not have such a parameter
-     * (notably MMDevice and PulseAudio).
-     * <p>
-     * A list of adequate potential device strings can be obtained with
-     * libvlc_audio_output_device_list_get().
-     * <p>
-     * <em>This function does not select the specified audio output plugin.
-     * libvlc_audio_output_set() is used for that purpose.</em>
-     * <p>
-     * <strong>The syntax for the device parameter depends on the audio output.</strong>
-     * <p>
+     *
+     * This function does not select the specified audio output plugin.
+     * libvlc_audio_output_set() is used for that purpose.
+     *
+     * The syntax for the device parameter depends on the audio output.
+     *
      * Some audio output modules require further parameters (e.g. a channels map
      * in the case of ALSA).
      *
      * @param p_mi media player
-     * @param psz_audio_output if NULL, current audio output module; if non-NULL, name of audio output module (@see libvlc_audio_output_t)
-     * @param psz_device_id device identifier string
+     * @param psz_device_id device identifier string (see libvlc_audio_output_device_t#psz_device)
+     * @return If the change of device was requested successfully, zero is returned
+     * (the actual change is asynchronous and not guaranteed to succeed).
+     * On error, a non-zero value is returned.
      */
-    public static native void libvlc_audio_output_device_set(libvlc_media_player_t p_mi, String psz_audio_output, String psz_device_id);
+    public static native void libvlc_audio_output_device_set(libvlc_media_player_t p_mi, String psz_device_id);
 
     /**
      * Get the current audio output device identifier.
