@@ -213,7 +213,7 @@
                     <footer>(C)2021 Caprica Software Limited</footer>
                     <show>public</show>
                     <quiet>true</quiet>
-                    <failOnError>true</failOnError>
+                    <failOnError>false</failOnError>
                     <source>${java.version}</source>
                 </configuration>
                 <executions>
