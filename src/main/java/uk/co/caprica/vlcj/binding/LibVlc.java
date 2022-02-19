@@ -477,13 +477,14 @@ public final class LibVlc {
     public static native libvlc_media_t libvlc_media_duplicate(libvlc_media_t p_md);
 
     /**
-     * Read the meta of the media. If the media has not yet been parsed this will return NULL. This
-     * methods automatically calls libvlc_media_parse_async(), so after calling it you may receive a
-     * libvlc_MediaMetaChanged event. If you prefer a synchronous version ensure that you call
-     * libvlc_media_parse() before get_meta().
+     * Read the meta of the media.
+     *
+     * Note, you need to call libvlc_media_parse_with_options() or play the media at least once before
+     * calling this function.
+     *
+     * If the media has not yet been parsed this will return NULL.
      *
      * @see #libvlc_media_parse_with_options(libvlc_media_t, int, int)
-     * @see #libvlc_media_parse_async(libvlc_media_t)
      * @see libvlc_event_e#libvlc_MediaMetaChanged
      * @param p_md the media descriptor
      * @param e_meta the meta to read
@@ -569,22 +570,6 @@ public final class LibVlc {
      * @since LibVLC 4.0.0 and later.
      */
     public static native int libvlc_media_get_filestat(libvlc_media_t p_md, int type, LongByReference out);
-
-    /**
-     * Parse a media.
-     *
-     * This fetches (local) art, meta data and tracks information.
-     *
-     * The method is the asynchronous of libvlc_media_parse(). To track when this is over you
-     * can listen to libvlc_MediaParsedChanged event. However if the media was already parsed
-     * you will not receive this event.
-     *
-     * @see #libvlc_media_parse_with_options(libvlc_media_t, int, int)
-     * @see libvlc_event_e#libvlc_MediaParsedChanged
-     * @see #libvlc_media_get_meta(libvlc_media_t, int)
-     * @param media media descriptor object
-     */
-    public static native void libvlc_media_parse_async(libvlc_media_t media);
 
     /**
      * Parse the media asynchronously with options.
