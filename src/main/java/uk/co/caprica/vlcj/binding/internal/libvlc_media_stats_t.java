@@ -46,10 +46,7 @@ public class libvlc_media_stats_t extends Structure {
         "i_late_pictures",
         "i_lost_pictures",
         "i_played_abuffers",
-        "i_lost_abuffers",
-        "i_sent_packets",
-        "i_sent_bytes",
-        "f_send_bitrate"
+        "i_lost_abuffers"
     ));
 
     /* Input */
@@ -75,11 +72,6 @@ public class libvlc_media_stats_t extends Structure {
     public int         i_played_abuffers;
     public int         i_lost_abuffers;
 
-    /* Stream output */
-    public int         i_sent_packets;
-    public int         i_sent_bytes;
-    public float       f_send_bitrate;
-
     @Override
     protected List<String> getFieldOrder() {
         return FIELD_ORDER;
@@ -101,10 +93,7 @@ public class libvlc_media_stats_t extends Structure {
         sb.append("i_late_pictures=").append(i_late_pictures).append(',');
         sb.append("i_lost_pictures=").append(i_lost_pictures).append(',');
         sb.append("i_played_abuffers=").append(i_played_abuffers).append(',');
-        sb.append("i_lost_abuffers=").append(i_lost_abuffers).append(',');
-        sb.append("i_sent_packets=").append(i_sent_packets).append(',');
-        sb.append("i_sent_bytes=").append(i_sent_bytes).append(',');
-        sb.append("f_send_bitrate=").append(f_send_bitrate).append(']');
+        sb.append("i_lost_abuffers=").append(i_lost_abuffers).append(']');
         return sb.toString();
     }
 }
