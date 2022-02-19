@@ -1982,9 +1982,10 @@ public final class LibVlc {
      * Enable or disable deinterlace filter
      *
      * @param p_mi libvlc media player
+     * @param deinterlace state -1: auto (default), 0: disabled, 1: enabled
      * @param psz_mode type of deinterlace filter, NULL to disable
      */
-    public static native void libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, String psz_mode);
+    public static native void libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, int deinterlace, String psz_mode);
 
     /**
      * Get an integer marquee option value
