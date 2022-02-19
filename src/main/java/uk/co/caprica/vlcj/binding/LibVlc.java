@@ -2134,28 +2134,6 @@ public final class LibVlc {
     public static native libvlc_audio_output_device_t libvlc_audio_output_device_enum(libvlc_media_player_t mp);
 
     /**
-     * Gets a list of audio output devices for a given audio output.
-     * <p>
-     * See {@link #libvlc_audio_output_device_set(libvlc_media_player_t, String, String)}.
-     * <p>
-     * Not all audio outputs support this. In particular, an empty (NULL)
-     * list of devices does <em>not</em> imply that the specified audio output does
-     * not work.
-     * <p>
-     * The list might not be exhaustive.
-     * <p>
-     * Some audio output devices in the list might not actually work in some
-     * circumstances. By default, it is recommended to not specify any explicit
-     * audio device.
-     *
-     * @param p_instance libvlc instance
-     * @param psz_aout audio output name (as returned by libvlc_audio_output_list_get())
-     * @return A NULL-terminated linked list of potential audio output devices. It must be freed it with libvlc_audio_output_device_list_release()
-     * @since LibVLC 2.1.0 or later.
-     */
-    public static native libvlc_audio_output_device_t libvlc_audio_output_device_list_get(libvlc_instance_t p_instance, String psz_aout);
-
-    /**
      * Frees a list of available audio output devices.
      *
      * @param p_list list with audio outputs for release
