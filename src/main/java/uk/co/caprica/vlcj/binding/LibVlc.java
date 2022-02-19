@@ -286,7 +286,7 @@ public final class LibVlc {
      *
      * @since LibVLC 2.1.0 or later
      */
-    public static native void libvlc_log_get_object(libvlc_log_t ctx, PointerByReference name, PointerByReference header, IntByReference id);
+    public static native void libvlc_log_get_object(libvlc_log_t ctx, PointerByReference name, PointerByReference header, LongByReference id);
 
     /**
      * Unsets the logging callback for a LibVLC instance. This is rarely needed:
