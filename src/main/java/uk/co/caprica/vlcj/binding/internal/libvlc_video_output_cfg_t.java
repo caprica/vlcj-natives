@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class libvlc_video_output_cfg_t extends Structure {
 
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("u", "full_range", "colorspace", "primaries", "transfer"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("u", "full_range", "colorspace", "primaries", "transfer", "orientation"));
 
     public static class ByReference extends libvlc_video_output_cfg_t implements Union.ByReference {}
 
@@ -41,6 +41,7 @@ public class libvlc_video_output_cfg_t extends Structure {
     public int colorspace;  /** video color space */
     public int primaries;   /** video color primaries */
     public int transfer;    /** video transfer function */
+    public int orientation;
 
     @Override
     protected List<String> getFieldOrder() {
