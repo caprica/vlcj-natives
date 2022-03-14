@@ -46,7 +46,7 @@ public enum libvlc_event_e {
     libvlc_MediaPlayerStopped              (0x106),
     libvlc_MediaPlayerForward              (0x107),
     libvlc_MediaPlayerBackward             (0x108),
-    libvlc_MediaPlayerEndReached           (0x109),
+    libvlc_MediaPlayerStopping             (0x109),
     libvlc_MediaPlayerEncounteredError     (0x10a),
     libvlc_MediaPlayerTimeChanged          (0x10b),
     libvlc_MediaPlayerPositionChanged      (0x10c),
