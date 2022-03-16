@@ -511,16 +511,6 @@ public final class LibVlc {
     public static native int libvlc_media_save_meta(libvlc_media_t p_md);
 
     /**
-     * Get current state of media descriptor object. Possible media states are defined in
-     * libvlc_structures.c (libvlc_NothingSpecial=0, libvlc_Opening, libvlc_Buffering,
-     * libvlc_Playing, libvlc_Paused, libvlc_Stopped, libvlc_Ended, libvlc_Error).
-     *
-     * @param p_md a media descriptor object
-     * @return state of media descriptor object
-     */
-    public static native int libvlc_media_get_state(libvlc_media_t p_md);
-
-    /**
      * get the current statistics about the media
      *
      * @param p_md media descriptor object
