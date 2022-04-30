@@ -29,7 +29,6 @@ public class libvlc_event_u extends Union {
     public media_subitem_added                    media_subitem_added;
     public media_duration_changed                 media_duration_changed;
     public media_parsed_changed                   media_parsed_changed;
-    public media_state_changed                    media_state_changed;
     public media_thumbnail_generated              media_thumbnail_generated;
     public media_player_buffering                 media_player_buffering;
     public media_player_position_changed          media_player_position_changed;
@@ -45,7 +44,6 @@ public class libvlc_event_u extends Union {
     public media_player_snapshot_taken            media_player_snapshot_taken;
     public media_player_length_changed            media_player_length_changed;
     public media_player_media_changed             media_player_media_changed;
-    public media_player_scrambled_changed         media_player_scrambled_changed;
     public media_player_es_changed                media_player_es_changed;
     public media_subitemtree_added                media_subitemtree_added;
     public media_attached_thumbnails_found        media_attached_thumbnails_found;
