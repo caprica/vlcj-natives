@@ -32,9 +32,7 @@ public class libvlc_dialog_cbs extends Structure {
     /**
      *
      */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("pf_display_error", "pf_display_login", "pf_display_question", "pf_display_progress", "pf_cancel", "pf_update_progress"));
-
-    public libvlc_dialog_display_error_cb pf_display_error;
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("pf_display_login", "pf_display_question", "pf_display_progress", "pf_cancel", "pf_update_progress"));
 
     public libvlc_dialog_display_login_cb pf_display_login;
 

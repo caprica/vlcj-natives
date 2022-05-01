@@ -37,6 +37,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_audio_set_volume_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_display_error_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_id;
 import uk.co.caprica.vlcj.binding.internal.libvlc_display_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_equalizer_t;
@@ -2730,6 +2731,17 @@ public final class LibVlc {
      * @param p_data opaque pointer for the callback
      */
     public static native void libvlc_dialog_set_callbacks(libvlc_instance_t p_instance, libvlc_dialog_cbs p_cbs, Pointer p_data);
+
+    /**
+     * Register callback in order to handle VLC error messages.
+     *
+     * @since LibVLC 4.0.0 and later.
+     *
+     * @param p_instance the instance
+     * @param p_cbs a pointer to callback, or NULL to unregister callback.
+     * @param p_data opaque pointer for the callback
+     */
+    public static native void libvlc_dialog_set_error_callback(libvlc_instance_t p_instance, libvlc_dialog_display_error_cb p_cbs, Pointer p_data);
 
     /**
      * Associate an opaque pointer with the dialog id.
