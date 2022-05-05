@@ -16,6 +16,24 @@
  *
  * Copyright 2009-2021 Caprica Software Limited.
  */
+/*
+ * This file is part of VLCJ.
+ *
+ * VLCJ is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * VLCJ is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2009-2021 Caprica Software Limited.
+ */
 
 package uk.co.caprica.vlcj.binding;
 
@@ -1781,7 +1799,7 @@ public final class LibVlc {
       * 1.0 represents 100 percent.
       *
       * @param p_mi media player
-      * @version LibVLC 4.0.0 or later
+      * @since LibVLC 4.0.0 or later
       */
     public static native float libvlc_video_get_spu_text_scale(libvlc_media_player_t p_mi);
 
@@ -2092,8 +2110,7 @@ public final class LibVlc {
     public static native int libvlc_audio_output_set(libvlc_media_player_t p_mi, String psz_name);
 
     /**
-     * Gets a list of potential audio output devices, see
-     * {@link #libvlc_audio_output_device_set(libvlc_media_player_t, String, String)}.
+     * Gets a list of potential audio output devices.
      * <p>
      * <em>Not all audio outputs support enumerating devices. The audio output may be functional
      * even if the list is empty (NULL).</em>
@@ -2134,9 +2151,6 @@ public final class LibVlc {
      *
      * @param p_mi media player
      * @param psz_device_id device identifier string (see libvlc_audio_output_device_t#psz_device)
-     * @return If the change of device was requested successfully, zero is returned
-     * (the actual change is asynchronous and not guaranteed to succeed).
-     * On error, a non-zero value is returned.
      */
     public static native void libvlc_audio_output_device_set(libvlc_media_player_t p_mi, String psz_device_id);
 
