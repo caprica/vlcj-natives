@@ -3239,9 +3239,6 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * @see libvlc_media_get_tracklist
-     * @see libvlc_media_player_get_tracklist
-     *
      * @param list valid tracklist
      */
     public static native void libvlc_media_tracklist_delete(libvlc_media_tracklist_t list);
