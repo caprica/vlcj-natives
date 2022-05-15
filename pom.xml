@@ -77,7 +77,7 @@
     </distributionManagement>
 
     <properties>
-        <jna.version>5.5.0</jna.version>
+        <jna.version>5.11.0</jna.version>
     </properties>
 
     <dependencies>
