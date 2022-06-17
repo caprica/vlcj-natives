@@ -698,6 +698,7 @@ public final class LibVlc {
      *
      * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
      *
+     * @param inst the instance to use to generate the thumbnail
      * @param md media descriptor object
      * @param time The time at which the thumbnail should be generated
      * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
@@ -713,7 +714,7 @@ public final class LibVlc {
      *
      * @see libvlc_picture_t
      */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_media_t md, long time, int speed, int width, int height, int crop, int picture_type, long timeout);
+    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_instance_t inst, libvlc_media_t md, long time, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
      * Start an asynchronous thumbnail generation
@@ -725,6 +726,7 @@ public final class LibVlc {
      *
      * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
      *
+     * @param inst the instance to use to generate the thumbnail
      * @param md media descriptor object
      * @param pos The position at which the thumbnail should be generated
      * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
@@ -740,7 +742,7 @@ public final class LibVlc {
      *
      * @see libvlc_picture_t
      */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_media_t md, float pos, int speed, int width, int height, int crop, int picture_type, long timeout);
+    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, float pos, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
      * Cancels a thumbnailing request
