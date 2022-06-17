@@ -600,6 +600,7 @@ public final class LibVlc {
      * @see libvlc_event_e#libvlc_MediaParsedChanged
      * @see #libvlc_media_get_meta(libvlc_media_t, int)
      *
+     * @param inst the instance to use to parse the media
      * @param p_md media descriptor object
      * @param parse_flag parse options
      * @param timeout maximum time allowed to preparse the media. If -1, the default
@@ -610,7 +611,7 @@ public final class LibVlc {
      *
      * @since LibVLC 3.0.0 or later
      */
-    public static native int libvlc_media_parse_with_options(libvlc_media_t p_md, int parse_flag, int timeout);
+    public static native int libvlc_media_parse_with_options(libvlc_instance_t inst, libvlc_media_t p_md, int parse_flag, int timeout);
 
     /**
      * Stop the parsing of the media
@@ -620,11 +621,12 @@ public final class LibVlc {
      *
      * @see #libvlc_media_parse_with_options(libvlc_media_t, int, int)
      *
+     * @param inst the instance used to parse the media
      * @param p_md media descriptor object
      *
      * @since version LibVLC 3.0.0 or later
      */
-    public static native void libvlc_media_parse_stop(libvlc_media_t p_md);
+    public static native void libvlc_media_parse_stop(libvlc_instance_t inst, libvlc_media_t p_md);
 
     /**
      * Get Parsed status for media descriptor object.
