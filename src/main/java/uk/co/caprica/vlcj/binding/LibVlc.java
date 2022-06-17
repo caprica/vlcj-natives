@@ -1,4 +1,4 @@
-/*
+    /*
  * This file is part of VLCJ.
  *
  * VLCJ is free software: you can redistribute it and/or modify
@@ -498,12 +498,12 @@ public final class LibVlc {
     /**
      * Read the meta of the media.
      *
-     * Note, you need to call libvlc_media_parse_with_options() or play the media at least once before
-     * calling this function.
+     * Note, you need to call {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}() or play
+     * the media at least once before calling this function.
      *
      * If the media has not yet been parsed this will return NULL.
      *
-     * @see #libvlc_media_parse_with_options(libvlc_media_t, int, int)
+     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
      * @see libvlc_event_e#libvlc_MediaMetaChanged
      * @param p_md the media descriptor
      * @param e_meta the meta to read
@@ -570,7 +570,8 @@ public final class LibVlc {
      * Get a 'stat' value of media descriptor object item.
      *
      * Note 'stat' values are currently only parsed by directory accesses. This means that only sub medias of a
-     * directory media, parsed with #libvlc_media_parse_with_options() can have valid 'stat' properties.
+     * directory media, parsed with {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}()
+     * can have valid 'stat' properties.
      *
      * @param p_md media descriptor object
      * @param type a valid libvlc_media_stat_ define
@@ -584,8 +585,6 @@ public final class LibVlc {
      * Parse the media asynchronously with options.
      *
      * This fetches (local or network) art, meta data and/or tracks information.
-     *
-     * This method is the extended version of libvlc_media_parse_with_options().
      *
      * To track when this is over you can listen to libvlc_MediaParsedChanged
      * event. However if this functions returns an error, you will not receive any
@@ -611,7 +610,7 @@ public final class LibVlc {
      *
      * @since LibVLC 3.0.0 or later
      */
-    public static native int libvlc_media_parse_with_options(libvlc_instance_t inst, libvlc_media_t p_md, int parse_flag, int timeout);
+    public static native int libvlc_media_parse_request(libvlc_instance_t inst, libvlc_media_t p_md, int parse_flag, int timeout);
 
     /**
      * Stop the parsing of the media
@@ -619,7 +618,7 @@ public final class LibVlc {
      * When the media parsing is stopped, the libvlc_MediaParsedChanged event will
      * be sent with the libvlc_media_parsed_status_timeout status.
      *
-     * @see #libvlc_media_parse_with_options(libvlc_media_t, int, int)
+     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
      *
      * @param inst the instance used to parse the media
      * @param p_md media descriptor object
@@ -663,11 +662,11 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note you need to call libvlc_media_parse_with_options() or play the media
+     * Note you need to call libvlc_media_parse_request or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
      *
-     * @see #libvlc_media_parse_with_options
+     * @see #libvlc_media_parse_request
      * @see #libvlc_media_tracklist_count
      * @see #libvlc_media_tracklist_at
      *
@@ -791,7 +790,7 @@ public final class LibVlc {
      * track (like a .srt) or an additional audio track (like a .ac3).
      * <p>
      * This function must be called before the media is parsed (via
-     * libvlc_media_parse_with_options()) or before the media is played (via
+     * libvlc_media_parse_request()) or before the media is played (via
      * libvlc_media_player_play())
      *
      * @param p_md media descriptor object
@@ -1382,7 +1381,7 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note: You need to call libvlc_media_parse_with_options() or play the media
+     * Note: You need to call libvlc_media_parse_request() or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
      *
