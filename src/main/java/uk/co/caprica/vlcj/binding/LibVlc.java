@@ -524,10 +524,11 @@ public final class LibVlc {
     /**
      * Save the meta previously set
      *
+     * @param inst LibVLC instance
      * @param p_md the media desriptor
      * @return true if the write operation was successfull
      */
-    public static native int libvlc_media_save_meta(libvlc_media_t p_md);
+    public static native int libvlc_media_save_meta(libvlc_instance_t inst, libvlc_media_t p_md);
 
     /**
      * get the current statistics about the media
