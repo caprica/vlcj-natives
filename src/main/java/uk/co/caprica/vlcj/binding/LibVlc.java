@@ -386,21 +386,19 @@ public final class LibVlc {
      * Create a media with a certain given media resource location.
      *
      * @see #libvlc_media_release(libvlc_media_t)
-     * @param p_instance the instance
      * @param psz_mrl the MRL to read
      * @return the newly created media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_location(libvlc_instance_t p_instance, String psz_mrl);
+    public static native libvlc_media_t libvlc_media_new_location(String psz_mrl);
 
     /**
      * Create a media with a certain file path.
      *
      * @see #libvlc_media_release(libvlc_media_t)
-     * @param p_instance the instance
      * @param path local filesystem path
      * @return the newly created media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_path(libvlc_instance_t p_instance, String path);
+    public static native libvlc_media_t libvlc_media_new_path(String path);
 
     /**
      * Create a media with custom callbacks to read the data from.
@@ -419,7 +417,6 @@ public final class LibVlc {
      *
      * @since LibVLC 3.0.0 and later.
      *
-     * @param instance LibVLC instance
      * @param open_cb callback to open the custom bitstream input media
      * @param read_cb callback to read data (must not be NULL)
      * @param seek_cb callback to seek, or NULL if seeking is not supported
@@ -427,17 +424,16 @@ public final class LibVlc {
      * @param opaque data pointer for the open callback
      * @return the newly created media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_instance_t instance, libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
+    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
 
     /**
      * Create a media as an empty node with a given name.
      *
      * @see #libvlc_media_release(libvlc_media_t)
-     * @param p_instance the instance
      * @param psz_name the name of the node
      * @return the new empty media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_as_node(libvlc_instance_t p_instance, String psz_name);
+    public static native libvlc_media_t libvlc_media_new_as_node(String psz_name);
 
     /**
      * Add an option to the media. This option will be used to determine how the media_player will
@@ -524,6 +520,7 @@ public final class LibVlc {
     /**
      * Save the meta previously set
      *
+     * @param inst LibVLC instance
      * @param inst LibVLC instance
      * @param p_md the media desriptor
      * @return true if the write operation was successfull
