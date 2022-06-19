@@ -851,10 +851,11 @@ public final class LibVlc {
     /**
      * Create a Media Player object from a Media
      *
+     * @param p_libvlc_instance libvlc instance
      * @param p_md the media. Afterwards the p_md can be safely destroyed.
      * @return a new media player object, or NULL on error.
      */
-    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_media_t p_md);
+    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_instance_t p_libvlc_instance, libvlc_media_t p_md);
 
     /**
      * Release a media_player after use Decrement the reference count of a media player object. If
