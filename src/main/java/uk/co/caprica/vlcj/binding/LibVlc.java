@@ -1388,18 +1388,18 @@ public final class LibVlc {
      * is called. If a track is updated after this call, the user will need to call
      * this function again to get the updated track.
      *
-     *
      * The track list can be used to get track informations and to select specific
      * tracks.
      *
      * @param p_mi the media player
      * @param type type of the track list to request
+     * @param selected filter only selected tracks if true (return all tracks, even selected ones if false)
      *
      * @return a valid libvlc_media_tracklist_t or NULL in case of error, if there
      * is no track for a category, the returned list will have a size of 0, delete
      * with libvlc_media_tracklist_delete()
      */
-    public static native libvlc_media_tracklist_t libvlc_media_player_get_tracklist(libvlc_media_player_t p_mi, int type);
+    public static native libvlc_media_tracklist_t libvlc_media_player_get_tracklist(libvlc_media_player_t p_mi, int type, int selected);
 
     /**
      * Get the selected track for one type
