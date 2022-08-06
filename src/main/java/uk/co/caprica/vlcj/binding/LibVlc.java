@@ -521,7 +521,6 @@ public final class LibVlc {
      * Save the meta previously set
      *
      * @param inst LibVLC instance
-     * @param inst LibVLC instance
      * @param p_md the media desriptor
      * @return true if the write operation was successfull
      */
