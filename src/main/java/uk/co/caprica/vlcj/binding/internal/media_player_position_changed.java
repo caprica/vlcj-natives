@@ -38,7 +38,7 @@ public class media_player_position_changed extends Structure {
     /**
      *
      */
-    public float new_position;
+    public double new_position;
 
     @Override
     protected List<String> getFieldOrder() {

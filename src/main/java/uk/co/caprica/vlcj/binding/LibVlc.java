@@ -741,7 +741,7 @@ public final class LibVlc {
      *
      * @see libvlc_picture_t
      */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, float pos, int speed, int width, int height, int crop, int picture_type, long timeout);
+    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, double pos, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
      * Cancels a thumbnailing request
@@ -1201,7 +1201,7 @@ public final class LibVlc {
      * @param p_mi the Media Player
      * @return movie position, or -1. in case of error
      */
-    public static native float libvlc_media_player_get_position(libvlc_media_player_t p_mi);
+    public static native double libvlc_media_player_get_position(libvlc_media_player_t p_mi);
 
     /**
      * Set movie position as percentage between 0.0 and 1.0.
