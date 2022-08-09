@@ -1214,7 +1214,7 @@ public final class LibVlc {
      * @param b_fast prefer fast seeking or precise seeking
      * @return 0 on success, -1 on error
      */
-    public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, float f_pos, int b_fast);
+    public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, double f_pos, int b_fast);
 
     /**
      * Set movie chapter (if applicable).
