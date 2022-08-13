@@ -33,7 +33,12 @@ public class media_player_record_changed extends Structure {
     /**
      *
      */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("recorded_file_path"));
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("recording", "recorded_file_path"));
+
+    /**
+     *
+     */
+    public int recording;
 
     /**
      *
