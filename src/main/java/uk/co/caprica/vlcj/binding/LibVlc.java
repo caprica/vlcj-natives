@@ -2440,6 +2440,19 @@ public final class LibVlc {
     public static native int libvlc_media_player_set_role(libvlc_media_player_t p_mi, int role);
 
     /**
+     * Start/stop recording.
+     * <p>
+     * Listen to the libvlc_MediaPlayerRecordChanged event to monitor the recording state.
+     *
+     * @param p_mi media player
+     * @param enable true to start recording, false to stop
+     * @param dir_path path of the recording directory or NULL (use default path), only has an effect when first enabling recording.
+     *
+     * @since LibVLC 4.0.0 and later.
+    */
+    public static native void libvlc_media_player_record(libvlc_media_player_t p_mi, int enable, String dir_path);
+
+    /**
      * Watch for time updates.
      * <p>
      * Warning: only one watcher can be registered at a time. Calling this function

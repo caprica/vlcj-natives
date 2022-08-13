@@ -75,6 +75,8 @@ public enum libvlc_event_e {
     libvlc_MediaPlayerTitleSelectionChanged(0x123),
     libvlc_MediaPlayerChapterChanged       (0x124),
 
+    libvlc_MediaPlayerRecordChanged        (0x125),
+
     libvlc_MediaListItemAdded              (0x200),
     libvlc_MediaListWillAddItem            (0x201),
     libvlc_MediaListItemDeleted            (0x202),
