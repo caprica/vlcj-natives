@@ -40,6 +40,7 @@ package uk.co.caprica.vlcj.binding;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
+import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -72,6 +73,9 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_time_point_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_discontinuity;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_update;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
@@ -2434,6 +2438,64 @@ public final class LibVlc {
      * @since LibVLC 3.0.0 or later
      */
     public static native int libvlc_media_player_set_role(libvlc_media_player_t p_mi, int role);
+
+    /**
+     * Watch for time updates.
+     * <p>
+     * Warning: only one watcher can be registered at a time. Calling this function
+     * a second time (if libvlc_media_player_unwatch_time() was not called
+     * in-between) will fail.
+     *
+     * @param p_mi the media player
+     * @param min_period_us corresponds to the minimum period, in us, between each update, use it to avoid flood from too many source updates, set it to 0 to receive all updates.
+     * @param on_update callback to listen to update events (must not be NULL)
+     * @param on_discontinuity callback to listen to discontinuity events (can be NULL)
+     * @param cbs_data opaque pointer used by the callbacks
+     * @return 0 on success, -1 on error (allocation error, or if already watching)
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_discontinuity on_discontinuity, Pointer cbs_data);
+
+    /**
+     * Unwatch time updates.
+     *
+     * @param p_mi the media player
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_unwatch_time(libvlc_media_player_t p_mi);
+
+    /**
+     * Interpolate a timer value to now.
+
+     * @param point time update obtained via the
+     * libvlc_media_player_watch_time_on_update() callback
+     * @param system_now_us current system date, in us, returned by libvlc_clock()
+     * @param out_ts_us pointer where to set the interpolated ts, in_us
+     * @param out_pos pointer where to set the interpolated position
+     * @return 0 in case of success, -1 if the interpolated ts is negative (could
+     * happen during the buffering step)
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_media_player_time_point_interpolate(libvlc_media_player_time_point_t point, long system_now_us, LongByReference out_ts_us, DoubleByReference out_pos);
+
+    /**
+     * Get the date of the next interval
+     *
+     * Can be used to setup an UI timer in order to update some widgets at specific
+     * interval. A next_interval_us of VLC_TICK_FROM_SEC(1) can be used to update a
+     * time widget when the media reaches a new second.
+     *
+     * Note: The media time doesn't necessarily correspond to the system time, that
+     * is why this function is needed and uses the rate of the current point.
+     *
+     * @param point time update obtained via the libvlc_media_player_watch_time_on_update()
+     * @param system_now_us same system date used by libvlc_media_player_time_point_interpolate()
+     * @param interpolated_ts_us ts returned by libvlc_media_player_time_point_interpolate()
+     * @param next_interval_us next interval
+     * @return the absolute system date, in us, of the next interval, use libvlc_delay() to get a relative delay.
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native long libvlc_media_player_time_point_get_next_date(libvlc_media_player_time_point_t point, long system_now_us, long interpolated_ts_us, long next_interval_us);
 
     // === libvlc_media_player.h ================================================
 
