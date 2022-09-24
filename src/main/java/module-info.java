@@ -39,8 +39,6 @@ module uk.co.caprica.vlcj.natives {
         uk.co.caprica.vlcj,
         uk.co.caprica.vlcj.test;
 
-    exports uk.co.caprica.vlcj.binding.support.init to uk.co.caprica.vlcj;
-
     exports uk.co.caprica.vlcj.binding.support.runtime to
         uk.co.caprica.vlcj,
         uk.co.caprica.vlcj.test;
@@ -50,6 +48,4 @@ module uk.co.caprica.vlcj.natives {
     exports uk.co.caprica.vlcj.binding.support.types to
         com.sun.jna,
         uk.co.caprica.vlcj;
-
-    exports uk.co.caprica.vlcj.binding.support.component to uk.co.caprica.vlcj;
 }
