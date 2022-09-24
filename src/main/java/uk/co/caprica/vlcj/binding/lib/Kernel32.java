@@ -17,21 +17,20 @@
  * Copyright 2009-2019 Caprica Software Limited.
  */
 
-package uk.co.caprica.vlcj.binding.support;
+package uk.co.caprica.vlcj.binding.lib;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.ByReference;
+import com.sun.jna.win32.StdCallLibrary;
+import com.sun.jna.win32.W32APIOptions;
+import uk.co.caprica.vlcj.binding.support.types.size_t;
 
-public class size_tByReference extends ByReference {
+public interface Kernel32 extends StdCallLibrary {
 
-    public size_tByReference() {
-        super(Native.SIZE_T_SIZE);
-    }
+    Kernel32 INSTANCE = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
 
-    public size_t getValue() {
-        Pointer pointer = getPointer();
-        return new size_t(Native.SIZE_T_SIZE == 8 ? pointer.getLong(0) : pointer.getInt(0));
-    }
+    int VirtualLock(Pointer lpAddress, size_t dwSize);
+
+    int VirtualUnlock(Pointer lpAddress, size_t dwSize);
 
 }

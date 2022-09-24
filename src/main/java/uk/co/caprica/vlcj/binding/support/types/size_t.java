@@ -17,20 +17,22 @@
  * Copyright 2009-2019 Caprica Software Limited.
  */
 
-package uk.co.caprica.vlcj.binding;
+package uk.co.caprica.vlcj.binding.support.types;
 
+import com.sun.jna.IntegerType;
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.win32.StdCallLibrary;
-import com.sun.jna.win32.W32APIOptions;
-import uk.co.caprica.vlcj.binding.support.size_t;
 
-public interface Kernel32 extends StdCallLibrary {
+/**
+ * Native size_t type.
+ */
+@SuppressWarnings("serial")
+public class size_t extends IntegerType {
 
-    Kernel32 INSTANCE = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
+    public size_t() {
+        this(0);
+    }
 
-    int VirtualLock(Pointer lpAddress, size_t dwSize);
-
-    int VirtualUnlock(Pointer lpAddress, size_t dwSize);
-
+    public size_t(long value) {
+        super(Native.SIZE_T_SIZE, value);
+    }
 }
