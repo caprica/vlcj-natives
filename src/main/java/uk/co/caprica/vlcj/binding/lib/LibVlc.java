@@ -14,28 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2021 Caprica Software Limited.
- */
-/*
- * This file is part of VLCJ.
- *
- * VLCJ is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * VLCJ is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Copyright 2009-2021 Caprica Software Limited.
+ * Copyright 2009-2019 Caprica Software Limited.
  */
 
-package uk.co.caprica.vlcj.binding;
+package uk.co.caprica.vlcj.binding.lib;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -44,6 +26,7 @@ import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
+import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_flush_cb;
@@ -102,8 +85,8 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
-import uk.co.caprica.vlcj.binding.support.size_t;
-import uk.co.caprica.vlcj.binding.support.size_tByReference;
+import uk.co.caprica.vlcj.binding.support.types.size_tByReference;
+import uk.co.caprica.vlcj.binding.support.types.size_t;
 
 /**
  * JNA interface to the libvlc native library.

@@ -17,7 +17,7 @@
  * Copyright 2009-2021 Caprica Software Limited.
  */
 
-package uk.co.caprica.vlcj.binding.support;
+package uk.co.caprica.vlcj.binding.support.types;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

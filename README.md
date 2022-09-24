@@ -1,6 +1,8 @@
 # vlcj-natives
 Native bindings to LibVlc used by the vlcj project
 
+Requires at least JDK 11.
+
 ## Build Status
 
 [![Continuous Integration](https://github.com/caprica/vlcj-natives/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/caprica/vlcj-natives/actions?query=workflow%3A%22Java+CI+with+Maven%22)
