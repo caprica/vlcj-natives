@@ -27,8 +27,9 @@
  */
 module uk.co.caprica.vlcj.natives {
     requires com.sun.jna;
-    requires com.sun.jna.platform;
     requires java.desktop;
+
+    requires transitive com.sun.jna.platform;
 
     exports uk.co.caprica.vlcj.binding.internal to
         com.sun.jna,
