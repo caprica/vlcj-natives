@@ -78,6 +78,7 @@
 
     <properties>
         <doclint>none</doclint>
+        <gpg.skip>true</gpg.skip>
         <jna.version>5.12.1</jna.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
