@@ -1,7 +1,9 @@
 # vlcj-natives
 Native bindings to LibVlc used by the vlcj project
 
-Requires at least JDK 11.
+Requires at least JDK 1.8.
+
+This is a version of the master branch (5.0.0) vlcj-natives, but retaining compatibility with Java 1.8.
 
 ## Build Status
 
