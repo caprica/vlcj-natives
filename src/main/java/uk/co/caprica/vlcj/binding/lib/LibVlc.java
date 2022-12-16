@@ -26,6 +26,8 @@ import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
+import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_mixmode_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_stereomode_t;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -153,6 +155,23 @@ public final class LibVlc {
      * @param p_instance the instance to destroy
      */
     public static native void libvlc_release(libvlc_instance_t p_instance);
+
+    /**
+     * Get the ABI version of the libvlc library.
+     * <p>
+     * This is different than the VLC version, which is the version of the whole
+     * VLC package. The value is the same as LIBVLC_ABI_VERSION_INT used when
+     * compiling.
+     * <p>
+     * Note: This the same value as the .so version but cross platform.
+     *
+     * @return a value with the following mask in hexadecimal
+     *  0xFF000000: major VLC version, similar to VLC major version,
+     *  0x00FF0000: major ABI version, incremented incompatible changes are added,
+     *  0x0000FF00: minor ABI version, incremented when new functions are added
+     *  0x000000FF: micro ABI version, incremented with new release/builds
+     */
+    public static native int libvlc_abi_version();
 
     /**
      * Increments the reference count of a libvlc instance. The initial reference count is 1 after
@@ -2207,21 +2226,61 @@ public final class LibVlc {
     public static native int libvlc_audio_set_volume(libvlc_media_player_t p_mi, int i_volume);
 
     /**
-     * Get current audio channel.
+     * Get current audio stereo-mode.
      *
      * @param p_mi media player
-     * @return the audio channel @see AudioChannel
+     * @return the audio stereo-mode, \see libvlc_audio_output_stereomode_t
+     * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_audio_get_channel(libvlc_media_player_t p_mi);
+    public static native int libvlc_audio_get_stereomode(libvlc_media_player_t p_mi);
 
     /**
-     * Set current audio channel.
+     * Set current audio stereo-mode.
      *
      * @param p_mi media player
-     * @param channel the audio channel, @see AudioChannel
+     * @param mode the audio stereo-mode
      * @return 0 on success, -1 on error
+     * @see libvlc_audio_output_stereomode_t
+     * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_audio_set_channel(libvlc_media_player_t p_mi, int channel);
+    public static native int libvlc_audio_set_stereomode( libvlc_media_player_t p_mi, int mode);
+
+    /**
+     * Get current audio mix-mode.
+     *
+     * @param p_mi media player
+     * @return the audio mix-mode
+     * @see libvlc_audio_output_mixmode_t
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_audio_get_mixmode(libvlc_media_player_t p_mi);
+
+    /**
+     * Set current audio mix-mode.
+     * <p>
+     * By default, (libvlc_AudioMixMode_Unset), the audio output will keep its
+     * original channel configuration (play stereo as stereo, or 5.1 as 5.1). Yet,
+     * the OS and Audio API might refuse a channel configuration and asks VLC to
+     * adapt (Stereo played as 5.1 or vice-versa).
+     * <p>
+     * This function allows to force a channel configuration, it will only work if
+     * the OS and Audio API accept this configuration (otherwise, it won't have any
+     * effects). Here are some examples:
+     * <ul>
+     *   <li>Play multi-channels (5.1, 7.1...) as stereo (libvlc_AudioMixMode_Stereo)</li>
+     *   <li>Play Stereo or 5.1 as 7.1 (libvlc_AudioMixMode_7_1)</li>
+     *   <li>Play multi-channels as stereo with a binaural effect
+     *     (libvlc_AudioMixMode_Binaural). It might be selected automatically if the
+     *     OS and Audio API can detect if a headphone is plugged.</li>
+     * </ul>
+     *
+     * @param p_mi media player
+     * @param mode the audio mix-mode, @
+     * @return 0 on success, -1 on error
+     * @see libvlc_audio_output_mixmode_t
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_audio_set_mixmode( libvlc_media_player_t p_mi, int mode);
 
     /**
      * Get current audio delay.
