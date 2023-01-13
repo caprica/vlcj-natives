@@ -2280,7 +2280,7 @@ public final class LibVlc {
      * @see libvlc_audio_output_mixmode_t
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_audio_set_mixmode( libvlc_media_player_t p_mi, int mode);
+    public static native int libvlc_audio_set_mixmode(libvlc_media_player_t p_mi, int mode);
 
     /**
      * Get current audio delay.
