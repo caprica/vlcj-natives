@@ -31,7 +31,7 @@ import java.util.List;
  */
 public enum libvlc_audio_output_stereomode_t {
 
-    libvlc_AudioStereoMode_Error(-1),
+    libvlc_AudioStereoMode_Unset(0),
     libvlc_AudioStereoMode_Stereo(1),
     libvlc_AudioStereoMode_RStereo(2),
     libvlc_AudioStereoMode_Left(3),
