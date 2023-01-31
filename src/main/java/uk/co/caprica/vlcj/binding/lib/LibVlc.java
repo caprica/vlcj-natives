@@ -698,8 +698,6 @@ public final class LibVlc {
      * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
      * is guaranteed to be emited.
      *
-     * The returned request object may be cancelled via {@link #libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t)}.
-     *
      * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
      *
      * @param inst the instance to use to generate the thumbnail
@@ -726,8 +724,6 @@ public final class LibVlc {
      * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
      * is guaranteed to be emited.
      *
-     * The returned request object may be cancelled via {@link #libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t)}.
-     *
      * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
      *
      * @param inst the instance to use to generate the thumbnail
@@ -749,24 +745,13 @@ public final class LibVlc {
     public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, double pos, int speed, int width, int height, int crop, int picture_type, long timeout);
 
     /**
-     * Cancels a thumbnailing request
-     * <p>
-     * Cancelling the request will still cause libvlc_MediaThumbnailGenerated event
-     * to be emitted, with a NULL libvlc_picture_t.
-     * <p>
-     * If the request is cancelled after its completion, the behavior is undefined.
-     *
-     * @param p_req An opaque thumbnail request object.
-     *
-     * @since libvlc 4.0 or later
-     */
-    public static native void libvlc_media_thumbnail_request_cancel(libvlc_media_thumbnail_request_t p_req);
-
-    /**
      * Destroy a thumbnail request.
      *
      * If the request has not completed or hasn't been cancelled yet, the behavior
      * is undefined.
+     *
+     * This will also cancel the thumbnail request, no events will be emitted after
+     * this call.
      *
      * @param p_req An opaque thumbnail request object.
      *
