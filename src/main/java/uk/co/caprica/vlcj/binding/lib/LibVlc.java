@@ -179,7 +179,7 @@ public final class LibVlc {
      *
      * @param p_instance the instance to reference
      */
-    public static native void libvlc_retain(libvlc_instance_t p_instance);
+    public static native libvlc_instance_t libvlc_retain(libvlc_instance_t p_instance);
 
     /**
      * Try to start a user interface for the libvlc instance.
@@ -469,7 +469,7 @@ public final class LibVlc {
      *
      * @param p_md the media descriptor
      */
-    public static native void libvlc_media_retain(libvlc_media_t p_md);
+    public static native libvlc_media_t libvlc_media_retain(libvlc_media_t p_md);
 
     /**
      * Decrement the reference count of a media descriptor object. If the reference count is 0, then
@@ -862,7 +862,7 @@ public final class LibVlc {
      *
      * @param p_mi media player object
      */
-    public static native void libvlc_media_player_retain(libvlc_media_player_t p_mi);
+    public static native libvlc_media_player_t libvlc_media_player_retain(libvlc_media_player_t p_mi);
 
     /**
      * Set the media that will be used by the media_player. If any, previous md will be released.
@@ -2561,7 +2561,7 @@ public final class LibVlc {
      *
      * @param p_ml a media list created with libvlc_media_list_new()
      */
-    public static native void libvlc_media_list_retain(libvlc_media_list_t p_ml);
+    public static native libvlc_media_list_t libvlc_media_list_retain(libvlc_media_list_t p_ml);
 
     /**
      * Associate media instance with this media list instance. If another media instance was present
@@ -2709,7 +2709,7 @@ public final class LibVlc {
      *
      * @param p_mlp media player list object
      */
-    public static native void libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
+    public static native libvlc_media_list_player_t libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
 
     /**
      * Return the event manager of this media_list_player.
@@ -3197,7 +3197,7 @@ public final class LibVlc {
      *
      * @since libvlc 4.0 or later
      */
-    public static native void libvlc_picture_retain(libvlc_picture_t pic);
+    public static native libvlc_picture_t libvlc_picture_retain(libvlc_picture_t pic);
 
     /**
      * Decrement the reference count of this picture.
