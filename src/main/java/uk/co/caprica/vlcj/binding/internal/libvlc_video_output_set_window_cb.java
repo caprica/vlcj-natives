@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2021 Caprica Software Limited.
+ * Copyright 2009-2024 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -25,7 +25,7 @@ import com.sun.jna.Pointer;
 /**
  *
  */
-public interface libvlc_video_output_set_resize_cb extends Callback {
+public interface libvlc_video_output_set_window_cb extends Callback {
 
-    void setResizeCallback(Pointer opaque, ReportSizeChanged report_size_change, Pointer report_opaque);
+    void setWindowCallback(Pointer opaque, libvlc_video_output_resize_cb report_size_change, libvlc_video_output_mouse_move_cb report_mouse_move, libvlc_video_output_mouse_press_cb report_mouse_pressed, libvlc_video_output_mouse_release_cb report_mouse_released, Pointer report_opaque);
 }

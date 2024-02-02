@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2019 Caprica Software Limited.
+ * Copyright 2009-2024 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.lib;
@@ -82,7 +82,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_getProcAddress_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_makeCurrent_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_select_plane_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_set_resize_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_set_window_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
@@ -993,7 +993,7 @@ public final class LibVlc {
     public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_output_cleanup_cb cleanup);
 
     /**
-     * Set callbacks and data to render decoded video to a custom texture
+     * Set callbacks and data to render decoded video to a custom texture.
      *
      * Warning: VLC will perform video rendering in its own thread and at its own rate,
      * You need to provide your own synchronisation mechanism.
@@ -1004,7 +1004,7 @@ public final class LibVlc {
      * @param engine the GPU engine to use
      * @param setup_cb callback called to initialize user data
      * @param cleanup_cb callback called to clean up user data
-     * @param resize_cb callback to set the resize callback
+     * @param window_cb callback to set the window (resize and mouse) callback
      * @param update_output_cb callback called to get the size of the video
      * @param swap_cb callback called after rendering a video frame (cannot be NULL)
      * @param makeCurrent_cb callback called to enter/leave the opengl context (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
@@ -1021,7 +1021,7 @@ public final class LibVlc {
         int engine,
         libvlc_video_output_setup_cb setup_cb,
         libvlc_video_output_cleanup_cb cleanup_cb,
-        libvlc_video_output_set_resize_cb resize_cb,
+        libvlc_video_output_set_window_cb window_cb,
         libvlc_video_update_output_cb update_output_cb,
         libvlc_video_swap_cb swap_cb,
         libvlc_video_makeCurrent_cb makeCurrent_cb,
