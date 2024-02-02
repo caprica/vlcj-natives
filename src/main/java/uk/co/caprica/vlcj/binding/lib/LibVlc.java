@@ -499,10 +499,10 @@ public final class LibVlc {
 
     /**
      * Read the meta of the media.
-     *
+     * <p>
      * Note, you need to call {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}() or play
      * the media at least once before calling this function.
-     *
+     * <p>
      * If the media has not yet been parsed this will return NULL.
      *
      * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
@@ -522,6 +522,45 @@ public final class LibVlc {
      * @param psz_value the media's meta
      */
     public static native void libvlc_media_set_meta(libvlc_media_t p_md, int e_meta, String psz_value);
+
+    /**
+     * Read the meta extra of the media.
+     * <p>
+     * If the media has not yet been parsed this will return NULL.
+     *
+     * @param p_md the media descriptor
+     * @param psz_name the meta extra to read (nonnullable)
+     * @return the media's meta extra or NULL
+     */
+    public static native Pointer libvlc_media_get_meta_extra(libvlc_media_t p_md, String psz_name);
+
+    /**
+     * Set the meta of the media (this function will not save the meta, call
+     * libvlc_media_save_meta in order to save the meta).
+     *
+     * @param p_md the media descriptor
+     * @param psz_name the meta extra to write (non-nullable)
+     * @param psz_value the media's meta extra (nullable), removed from meta extra if set to NULL
+     */
+    public static native void libvlc_media_set_meta_extra( libvlc_media_t p_md, String psz_name, String psz_value);
+
+    /**
+     * Read the meta extra names of the media.
+     *
+     * @param p_md the media descriptor
+     * @param pppsz_names the media's meta extra name array you can access the elements using the return value (count),
+     * must be released with libvlc_media_meta_extra_names_release()
+     * @return the meta extra count
+     */
+    public static native int libvlc_media_get_meta_extra_names(libvlc_media_t p_md, PointerByReference pppsz_names);
+
+    /**
+     * Release a media meta extra names.
+     * <p>
+     * @param ppsz_names meta extra names array to release
+     * @param i_count number of elements in the array
+     */
+    public static native void libvlc_media_meta_extra_names_release(Pointer ppsz_names, int i_count);
 
     /**
      * Save the meta previously set
