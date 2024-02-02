@@ -182,15 +182,6 @@ public final class LibVlc {
     public static native libvlc_instance_t libvlc_retain(libvlc_instance_t p_instance);
 
     /**
-     * Try to start a user interface for the libvlc instance.
-     *
-     * @param p_instance the instance
-     * @param name interface name, or NULL for default
-     * @return 0 on success, -1 on error.
-     */
-    public static native int libvlc_add_intf(libvlc_instance_t p_instance, String name);
-
-    /**
      * Sets the application name. LibVLC passes this as the user agent string when a protocol
      * requires it.
      *
