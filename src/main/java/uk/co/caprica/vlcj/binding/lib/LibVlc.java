@@ -1758,13 +1758,31 @@ public final class LibVlc {
 
     /**
      * Set new video aspect ratio.
-     *
+     * <p>
      * Note: invalid aspect ratios are ignored.
      *
      * @param p_mi the media player
      * @param psz_aspect new video aspect-ratio or NULL to reset to default
      */
     public static native void libvlc_video_set_aspect_ratio(libvlc_media_player_t p_mi, String psz_aspect);
+
+    /**
+     * Get current video display fit mode.
+     *
+     * @param p_mi the media player
+     * @return the video display fit mode
+     */
+    public static native int libvlc_video_get_display_fit( libvlc_media_player_t p_mi );
+
+    /**
+     * Set new video display fit.
+     * <p>
+     * Note: invalid fit modes are ignored.
+     *
+     * @param p_mi the media player
+     * @param fit new display fit mode
+     */
+    public static native void libvlc_video_set_display_fit(libvlc_media_player_t p_mi, int fit);
 
     /**
      * Create a video viewpoint structure.
