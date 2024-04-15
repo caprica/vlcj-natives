@@ -20,7 +20,7 @@
 package uk.co.caprica.vlcj.binding.internal;
 
 /**
- * Enumeration of video fit mode options..
+ * Enumeration of video fit mode options.
  */
 public enum libvlc_video_fit_mode_t {
 
