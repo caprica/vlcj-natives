@@ -32,6 +32,7 @@ public enum libvlc_audio_output_mixmode_t {
     libvlc_AudioMixMode_7_1(5);
 
     private final int intValue;
+
     libvlc_audio_output_mixmode_t(int intValue) {
         this.intValue = intValue;
     }
