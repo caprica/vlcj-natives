@@ -2000,6 +2000,24 @@ public final class LibVlc {
     public static native void libvlc_video_set_teletext(libvlc_media_player_t p_mi, int i_page);
 
     /**
+     * Set teletext background transparency.
+     *
+     * @param p_mi the media player
+     * @param transparent whether background should be transparent.
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_video_set_teletext_transparency(libvlc_media_player_t p_mi, int transparent);
+
+    /**
+     * Get teletext background transparency.
+     *
+     * @param p_mi the media player
+     * @return true if the teletext has transparent background, otherwise false
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_video_get_teletext_transparency(libvlc_media_player_t p_mi);
+
+    /**
      * Take a snapshot of the current video window. If i_width AND i_height is 0, original size is
      * used. If i_width XOR i_height is 0, original aspect-ratio is preserved.
      *
