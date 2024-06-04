@@ -1204,8 +1204,6 @@ public final class LibVlc {
     /**
      * Set the movie time (in ms).
      * <p>
-     * This has no effect if no media is being played.
-     * <p>
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
@@ -1214,6 +1212,21 @@ public final class LibVlc {
      * @return 0 on success, -1 on error
      */
     public static native int libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time, int b_fast);
+
+    /**
+     * Jump the movie time (in ms).
+     * <p>
+     * This will trigger a precise and relative seek (from the current time). This has no effect if no media is being
+     * played.
+     * <p>
+     * Not all formats and protocols support this.
+     *
+     * @param p_mi the Media Player
+     * @param i_time the movie time (in ms).
+     * @return 0 on success, -1 on error
+     * @since libVLC 4.0.0
+     */
+    public static native int libvlc_media_player_jump_time( libvlc_media_player_t p_mi, long i_time );
 
     /**
      * Get movie position.
