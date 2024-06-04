@@ -18,7 +18,7 @@
 
     <groupId>uk.co.caprica</groupId>
     <artifactId>vlcj-natives</artifactId>
-    <version>4.8.3</version>
+    <version>4.8.4-SNAPSHOT</version>
 
     <name>vlcj-natives</name>
     <description>Native bindings to LibVLC used by the vlcj project.</description>
@@ -66,7 +66,7 @@
         <connection>scm:git:git@github.com:caprica/vlcj-natives.git</connection>
         <developerConnection>scm:git:git@github.com:caprica/vlcj-natives.git</developerConnection>
         <url>git@github.com:caprica/vlcj-natives.git</url>
-        <tag>vlcj-natives-4.8.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
