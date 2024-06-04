@@ -19,29 +19,9 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.Structure;
+import com.sun.jna.Callback;
+import com.sun.jna.Pointer;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-/**
- *
- */
-public class media_list_player_next_item_set extends Structure {
-
-    /**
-     *
-     */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("item"));
-
-    /**
-     *
-     */
-    public libvlc_media_t item;
-
-    @Override
-    protected List<String> getFieldOrder() {
-        return FIELD_ORDER;
-    }
+public interface libvlc_video_output_resize_cb extends Callback {
+    void reportSizeChanged(Pointer opaque, int width, int height);
 }

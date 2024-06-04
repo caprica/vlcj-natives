@@ -19,29 +19,24 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.Structure;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
- *
+ * Enumeration of video fit mode options.
  */
-public class media_list_player_next_item_set extends Structure {
+public enum libvlc_video_fit_mode_t {
 
-    /**
-     *
-     */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("item"));
+    libvlc_video_fit_none(0),    /**< Explicit zoom set by \ref libvlc_video_set_scale */
+    libvlc_video_fit_smaller(1), /**< Fit inside / to smallest display dimension */
+    libvlc_video_fit_larger(2),  /**< Fit outside / to largest display dimension */
+    libvlc_video_fit_width(3),   /**< Fit to display width */
+    libvlc_video_fit_height(4);
 
-    /**
-     *
-     */
-    public libvlc_media_t item;
+    private final int intValue;
 
-    @Override
-    protected List<String> getFieldOrder() {
-        return FIELD_ORDER;
+    libvlc_video_fit_mode_t(int intValue) {
+        this.intValue = intValue;
+    }
+
+    public int intValue() {
+        return intValue;
     }
 }

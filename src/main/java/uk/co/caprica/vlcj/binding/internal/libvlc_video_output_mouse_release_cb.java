@@ -19,29 +19,13 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.Structure;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.sun.jna.Callback;
+import com.sun.jna.Pointer;
 
 /**
  *
  */
-public class media_list_player_next_item_set extends Structure {
+public interface libvlc_video_output_mouse_release_cb extends Callback {
 
-    /**
-     *
-     */
-    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("item"));
-
-    /**
-     *
-     */
-    public libvlc_media_t item;
-
-    @Override
-    protected List<String> getFieldOrder() {
-        return FIELD_ORDER;
-    }
+    void mouseRelease(Pointer opaque, int button);
 }

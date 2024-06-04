@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2019 Caprica Software Limited.
+ * Copyright 2009-2024 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.lib;
@@ -82,7 +82,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_getProcAddress_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_makeCurrent_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_select_plane_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_set_resize_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_set_window_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
@@ -180,15 +180,6 @@ public final class LibVlc {
      * @param p_instance the instance to reference
      */
     public static native libvlc_instance_t libvlc_retain(libvlc_instance_t p_instance);
-
-    /**
-     * Try to start a user interface for the libvlc instance.
-     *
-     * @param p_instance the instance
-     * @param name interface name, or NULL for default
-     * @return 0 on success, -1 on error.
-     */
-    public static native int libvlc_add_intf(libvlc_instance_t p_instance, String name);
 
     /**
      * Sets the application name. LibVLC passes this as the user agent string when a protocol
@@ -499,10 +490,10 @@ public final class LibVlc {
 
     /**
      * Read the meta of the media.
-     *
+     * <p>
      * Note, you need to call {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}() or play
      * the media at least once before calling this function.
-     *
+     * <p>
      * If the media has not yet been parsed this will return NULL.
      *
      * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
@@ -522,6 +513,45 @@ public final class LibVlc {
      * @param psz_value the media's meta
      */
     public static native void libvlc_media_set_meta(libvlc_media_t p_md, int e_meta, String psz_value);
+
+    /**
+     * Read the meta extra of the media.
+     * <p>
+     * If the media has not yet been parsed this will return NULL.
+     *
+     * @param p_md the media descriptor
+     * @param psz_name the meta extra to read (nonnullable)
+     * @return the media's meta extra or NULL
+     */
+    public static native Pointer libvlc_media_get_meta_extra(libvlc_media_t p_md, String psz_name);
+
+    /**
+     * Set the meta of the media (this function will not save the meta, call
+     * libvlc_media_save_meta in order to save the meta).
+     *
+     * @param p_md the media descriptor
+     * @param psz_name the meta extra to write (non-nullable)
+     * @param psz_value the media's meta extra (nullable), removed from meta extra if set to NULL
+     */
+    public static native void libvlc_media_set_meta_extra( libvlc_media_t p_md, String psz_name, String psz_value);
+
+    /**
+     * Read the meta extra names of the media.
+     *
+     * @param p_md the media descriptor
+     * @param pppsz_names the media's meta extra name array you can access the elements using the return value (count),
+     * must be released with libvlc_media_meta_extra_names_release()
+     * @return the meta extra count
+     */
+    public static native int libvlc_media_get_meta_extra_names(libvlc_media_t p_md, PointerByReference pppsz_names);
+
+    /**
+     * Release a media meta extra names.
+     * <p>
+     * @param ppsz_names meta extra names array to release
+     * @param i_count number of elements in the array
+     */
+    public static native void libvlc_media_meta_extra_names_release(Pointer ppsz_names, int i_count);
 
     /**
      * Save the meta previously set
@@ -993,7 +1023,7 @@ public final class LibVlc {
     public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_output_cleanup_cb cleanup);
 
     /**
-     * Set callbacks and data to render decoded video to a custom texture
+     * Set callbacks and data to render decoded video to a custom texture.
      *
      * Warning: VLC will perform video rendering in its own thread and at its own rate,
      * You need to provide your own synchronisation mechanism.
@@ -1004,7 +1034,7 @@ public final class LibVlc {
      * @param engine the GPU engine to use
      * @param setup_cb callback called to initialize user data
      * @param cleanup_cb callback called to clean up user data
-     * @param resize_cb callback to set the resize callback
+     * @param window_cb callback to set the window (resize and mouse) callback
      * @param update_output_cb callback called to get the size of the video
      * @param swap_cb callback called after rendering a video frame (cannot be NULL)
      * @param makeCurrent_cb callback called to enter/leave the opengl context (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
@@ -1021,7 +1051,7 @@ public final class LibVlc {
         int engine,
         libvlc_video_output_setup_cb setup_cb,
         libvlc_video_output_cleanup_cb cleanup_cb,
-        libvlc_video_output_set_resize_cb resize_cb,
+        libvlc_video_output_set_window_cb window_cb,
         libvlc_video_update_output_cb update_output_cb,
         libvlc_video_swap_cb swap_cb,
         libvlc_video_makeCurrent_cb makeCurrent_cb,
@@ -1174,8 +1204,6 @@ public final class LibVlc {
     /**
      * Set the movie time (in ms).
      * <p>
-     * This has no effect if no media is being played.
-     * <p>
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
@@ -1184,6 +1212,21 @@ public final class LibVlc {
      * @return 0 on success, -1 on error
      */
     public static native int libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time, int b_fast);
+
+    /**
+     * Jump the movie time (in ms).
+     * <p>
+     * This will trigger a precise and relative seek (from the current time). This has no effect if no media is being
+     * played.
+     * <p>
+     * Not all formats and protocols support this.
+     *
+     * @param p_mi the Media Player
+     * @param i_time the movie time (in ms).
+     * @return 0 on success, -1 on error
+     * @since libVLC 4.0.0
+     */
+    public static native int libvlc_media_player_jump_time( libvlc_media_player_t p_mi, long i_time );
 
     /**
      * Get movie position.
@@ -1728,13 +1771,31 @@ public final class LibVlc {
 
     /**
      * Set new video aspect ratio.
-     *
+     * <p>
      * Note: invalid aspect ratios are ignored.
      *
      * @param p_mi the media player
      * @param psz_aspect new video aspect-ratio or NULL to reset to default
      */
     public static native void libvlc_video_set_aspect_ratio(libvlc_media_player_t p_mi, String psz_aspect);
+
+    /**
+     * Get current video display fit mode.
+     *
+     * @param p_mi the media player
+     * @return the video display fit mode
+     */
+    public static native int libvlc_video_get_display_fit( libvlc_media_player_t p_mi );
+
+    /**
+     * Set new video display fit.
+     * <p>
+     * Note: invalid fit modes are ignored.
+     *
+     * @param p_mi the media player
+     * @param fit new display fit mode
+     */
+    public static native void libvlc_video_set_display_fit(libvlc_media_player_t p_mi, int fit);
 
     /**
      * Create a video viewpoint structure.
@@ -1950,6 +2011,24 @@ public final class LibVlc {
      *               page or a TeletextKey. 100 is the default teletext page.
      */
     public static native void libvlc_video_set_teletext(libvlc_media_player_t p_mi, int i_page);
+
+    /**
+     * Set teletext background transparency.
+     *
+     * @param p_mi the media player
+     * @param transparent whether background should be transparent.
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_video_set_teletext_transparency(libvlc_media_player_t p_mi, int transparent);
+
+    /**
+     * Get teletext background transparency.
+     *
+     * @param p_mi the media player
+     * @return true if the teletext has transparent background, otherwise false
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_video_get_teletext_transparency(libvlc_media_player_t p_mi);
 
     /**
      * Take a snapshot of the current video window. If i_width AND i_height is 0, original size is

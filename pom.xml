@@ -106,7 +106,7 @@
     <properties>
         <doclint>none</doclint>
         <gpg.skip>true</gpg.skip>
-        <jna.version>5.12.1</jna.version>
+        <jna.version>5.14.0</jna.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -194,7 +194,7 @@
                     <doctitle>${project.name} ${project.version} API Documentation</doctitle>
                     <docfilessubdirs>true</docfilessubdirs>
                     <encoding>UTF-8</encoding>
-                    <bottom>(C)2022 Caprica Software Limited</bottom>
+                    <bottom>(C)2024 Caprica Software Limited</bottom>
                     <show>public</show>
                     <quiet>true</quiet>
                     <failOnError>false</failOnError>
