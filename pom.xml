@@ -7,7 +7,7 @@
         <dependency>
             <groupId>uk.co.caprica</groupId>
             <artifactId>vlcj-natives</artifactId>
-            <version>4.8.0</version>
+            <version>4.8.3</version>
         </dependency>
     </dependencies> 
 -->
@@ -18,7 +18,7 @@
 
     <groupId>uk.co.caprica</groupId>
     <artifactId>vlcj-natives</artifactId>
-    <version>4.8.2-SNAPSHOT</version>
+    <version>4.8.3-SNAPSHOT</version>
 
     <name>vlcj-natives</name>
     <description>Native bindings to LibVLC used by the vlcj project.</description>
@@ -78,7 +78,7 @@
 
     <properties>
         <doclint>none</doclint>
-        <jna.version>5.12.1</jna.version>
+        <jna.version>5.14.0</jna.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
