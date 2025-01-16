@@ -2650,6 +2650,61 @@ public final class LibVlc {
      */
     public static native long libvlc_media_player_time_point_get_next_date(libvlc_media_player_time_point_t point, long system_now_us, long interpolated_ts_us, long next_interval_us);
 
+    /**
+     * Lock the media_player internal lock
+     *
+     * The lock is recursive, so it's safe to use it multiple times from the same
+     * thread. You must call libvlc_media_player_unlock() the same number of times
+     * you called libvlc_media_player_lock().
+     *
+     * Locking is not mandatory before calling a libvlc_media_player_t function
+     * since they will automatically hold the lock internally.
+     *
+     * This lock can be used to synchronise user variables that interact with the
+     * libvlc_media_player_t or can be used to call several functions together.
+     *
+     * @param mp media player object
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_lock(libvlc_media_player_t mp);
+
+    /**
+     * Unlock the media_player internal lock
+     *
+     * @see #libvlc_media_player_lock
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_unlock(libvlc_media_player_t mp);
+
+    /**
+     * Wait for an event to be signalled
+     *
+     * Note this is equivalent to pthread_cond_wait() with the
+     * libvlc_media_player_t internal mutex and condition variable. This function
+     * may spuriously wake up even without libvlc_media_player_signal() being
+     * called.
+     *
+     * Warning this function must not be called from any libvlc callbacks and
+     * events. The lock should be held only one time before waiting.
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_wait(libvlc_media_player_t mp);
+
+    /**
+     * Signal all threads waiting for a signalling event
+     *
+     * \note this is equivalent to pthread_cond_broadcast() with the
+     * libvlc_media_player_t internal condition variable.
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_signal(libvlc_media_player_t mp);
+
     // === libvlc_media_player.h ================================================
 
     // === libvlc_media_list.h ==================================================
