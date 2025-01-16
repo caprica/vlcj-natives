@@ -28,6 +28,7 @@ import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_mixmode_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_stereomode_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_seek;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -59,7 +60,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_time_point_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_discontinuity;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_paused;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_update;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
@@ -1249,6 +1250,39 @@ public final class LibVlc {
      * @return 0 on success, -1 on error
      */
     public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, double f_pos, int b_fast);
+
+    /**
+     * Enable A to B loop for the current media.
+     * <p>
+     * This function need to be called 2 times with libvlc_abloop_a and
+     * libvlc_abloop_b to setup an A to B loop. It uses and stores the
+     * current time/position when called. The B time must be higher than the
+     * A time.
+     *
+     * @param p_mi the Media Player
+     * @param abloop select which A/B cursor to set
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_set_abloop(libvlc_media_player_t p_mi, int abloop);
+
+    /**
+     * Get the A to B loop status.
+     * <p>
+     * If the returned status is VLC_PLAYER_ABLOOP_A, then a_time and a_pos
+     * will be valid. If the returned status is VLC_PLAYER_ABLOOP_B, then all
+     * output parameters are valid. If the returned status is
+     * VLC_PLAYER_ABLOOP_NONE, then all output parameters are invalid.
+     *
+     * @param p_mi the Media Player
+     * @param a_time A time (in ms) or -1 (if the media doesn't have valid times)
+     * @param a_pos A position
+     * @param b_time B time (in ms) or -1 (if the media doesn't have valid times)
+     * @param b_pos B position
+     * @return A to B loop status
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_get_abloop(libvlc_media_player_t p_mi, LongByReference a_time, DoubleByReference a_pos, LongByReference b_time, DoubleByReference b_pos);
 
     /**
      * Set movie chapter (if applicable).
@@ -2573,7 +2607,7 @@ public final class LibVlc {
      * @return 0 on success, -1 on error (allocation error, or if already watching)
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_discontinuity on_discontinuity, Pointer cbs_data);
+    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_paused on_discontinuity, libvlc_media_player_watch_time_on_seek on_seek, Pointer cbs_data);
 
     /**
      * Unwatch time updates.
