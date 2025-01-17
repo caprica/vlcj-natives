@@ -2186,6 +2186,27 @@ public final class LibVlc {
     public static native void libvlc_video_set_adjust_float(libvlc_media_player_t p_mi, int option, float value);
 
     /**
+     * Change the projection mode used for rendering the source.
+     * <p>
+     * This changes how the source is mapped to the output w.r.t. 360 playback.
+     *
+     * @param p_mi libvlc media player instance
+     * @param projection_mode the considered projection mode for the source
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native void libvlc_video_set_projection_mode(libvlc_media_player_t p_mi, int projection_mode);
+
+    /**
+     * Remove previously set projection mode.
+     * <p>
+     * Remove the effects from previous call to libvlc_video_set_projection_mode.
+     *
+     * @param p_mi libvlc media player instance
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native void libvlc_video_unset_projection_mode(libvlc_media_player_t p_mi);
+
+    /**
      * Gets the list of available audio outputs
      *
      * @param p_instance libvlc instance
