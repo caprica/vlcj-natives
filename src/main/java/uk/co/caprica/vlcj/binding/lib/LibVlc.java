@@ -1856,6 +1856,24 @@ public final class LibVlc {
     public static native int libvlc_video_update_viewpoint(libvlc_media_player_t p_mi, libvlc_video_viewpoint_t p_viewpoint, int b_absolute);
 
     /**
+     * Get current video stereo mode.
+     *
+     * @param p_mi the media player
+     * @return the video stereo mode.
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_video_get_video_stereo_mode(libvlc_media_player_t p_mi);
+
+    /**
+     * Set new video stereo mode.
+     *
+     * @param p_mi the media player
+     * @param i_mode new video stereo mode
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_video_set_video_stereo_mode(libvlc_media_player_t p_mi, int i_mode);
+
+    /**
      * Get the current subtitle delay. Positive values means subtitles are being displayed later,
      * negative values earlier.
      *
