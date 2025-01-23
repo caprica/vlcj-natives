@@ -38,8 +38,8 @@ public interface libvlc_video_format_cb extends Callback {
      *
      * @param opaque pointer to the private pointer passed to libvlc_video_set_callbacks() [IN/OUT]
      * @param chroma pointer to the 4 bytes video format identifier [IN/OUT]
-     * @param width pointer to the pixel width [IN/OUT]
-     * @param height pointer to the pixel height [IN/OUT]
+     * @param width pointer to the pixel width [IN/OUT] and display width [IN]
+     * @param height pointer to the pixel height [IN/OUT] and display height [IN]
      * @param pitches table of scanline pitches in bytes for each pixel plane (the table is
      *            allocated by LibVLC) [OUT]
      * @param lines table of scanlines count for each plane [OUT]
@@ -52,5 +52,5 @@ public interface libvlc_video_format_cb extends Callback {
      *         by various optimizations in the video decoders, video filters and/or video
      *         converters.
      */
-    int format(PointerByReference opaque, PointerByReference chroma, IntByReference width, IntByReference height, PointerByReference pitches, PointerByReference lines);
+    int format(PointerByReference opaque, PointerByReference chroma, int[] width, int[] height, PointerByReference pitches, PointerByReference lines);
 }
