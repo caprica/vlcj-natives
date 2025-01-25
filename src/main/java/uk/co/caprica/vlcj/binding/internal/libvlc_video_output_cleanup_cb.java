@@ -32,5 +32,5 @@ public interface libvlc_video_output_cleanup_cb extends Callback {
      *
      * @param opaque application-specific pointer
      */
-    void cleanup(Pointer opaque);
+    void cleanup(Long opaque);
 }

@@ -39,5 +39,5 @@ public interface libvlc_lock_callback_t extends Callback {
      * @param planes start address of the pixel planes (LibVLC allocates the array of void pointers, this callback must initialize the array) [OUT]
      * @return a private pointer for the display and unlock callbacks to identify the picture buffers
      */
-    Pointer lock(Pointer opaque, PointerByReference planes);
+    Pointer lock(Long opaque, PointerByReference planes);
 }

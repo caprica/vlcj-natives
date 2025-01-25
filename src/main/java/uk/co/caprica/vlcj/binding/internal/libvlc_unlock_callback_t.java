@@ -34,5 +34,5 @@ public interface libvlc_unlock_callback_t extends Callback {
      * @param picture picture pointer
      * @param plane plane pointer
      */
-    void unlock(Pointer opaque, Pointer picture, Pointer plane);
+    void unlock(Long opaque, Pointer picture, Pointer plane);
 }

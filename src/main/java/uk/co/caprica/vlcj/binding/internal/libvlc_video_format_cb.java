@@ -20,6 +20,7 @@
 package uk.co.caprica.vlcj.binding.internal;
 
 import com.sun.jna.Callback;
+import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -52,5 +53,5 @@ public interface libvlc_video_format_cb extends Callback {
      *         by various optimizations in the video decoders, video filters and/or video
      *         converters.
      */
-    int format(PointerByReference opaque, PointerByReference chroma, int[] width, int[] height, PointerByReference pitches, PointerByReference lines);
+    int format(PointerByReference opaque, PointerByReference chroma, Pointer width, Pointer height, PointerByReference pitches, PointerByReference lines);
 }

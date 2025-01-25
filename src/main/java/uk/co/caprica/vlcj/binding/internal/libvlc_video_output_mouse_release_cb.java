@@ -27,5 +27,5 @@ import com.sun.jna.Pointer;
  */
 public interface libvlc_video_output_mouse_release_cb extends Callback {
 
-    void mouseRelease(Pointer opaque, int button);
+    void mouseRelease(Long opaque, int button);
 }

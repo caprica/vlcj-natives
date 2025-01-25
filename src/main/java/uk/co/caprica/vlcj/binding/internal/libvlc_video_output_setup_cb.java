@@ -41,5 +41,5 @@ public interface libvlc_video_output_setup_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    int setup(Pointer opaque, libvlc_video_setup_device_cfg_t cfg, libvlc_video_setup_device_info_t out);
+    int setup(Long opaque, libvlc_video_setup_device_cfg_t cfg, libvlc_video_setup_device_info_t out);
 }

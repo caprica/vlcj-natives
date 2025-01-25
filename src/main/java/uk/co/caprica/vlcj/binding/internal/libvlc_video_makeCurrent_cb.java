@@ -37,6 +37,6 @@ public interface libvlc_video_makeCurrent_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    int makeCurrent(Pointer opaque, int enter);
+    int makeCurrent(Long opaque, int enter);
 
 }

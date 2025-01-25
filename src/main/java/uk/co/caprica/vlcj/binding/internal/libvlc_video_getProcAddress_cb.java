@@ -36,6 +36,6 @@ public interface libvlc_video_getProcAddress_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    Pointer getProcAddress(Pointer opaque, String fct_name);
+    Pointer getProcAddress(Long opaque, String fct_name);
 
 }

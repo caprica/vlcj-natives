@@ -23,5 +23,5 @@ import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
 
 public interface libvlc_video_output_resize_cb extends Callback {
-    void reportSizeChanged(Pointer opaque, int width, int height);
+    void reportSizeChanged(Long opaque, int width, int height);
 }

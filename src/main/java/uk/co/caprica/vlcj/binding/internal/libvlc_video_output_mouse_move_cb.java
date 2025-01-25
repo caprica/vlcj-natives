@@ -27,5 +27,5 @@ import com.sun.jna.Pointer;
  */
 public interface libvlc_video_output_mouse_move_cb extends Callback {
 
-    void mouseMove(Pointer opaque, int x, int y);
+    void mouseMove(Long opaque, int x, int y);
 }

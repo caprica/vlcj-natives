@@ -34,6 +34,6 @@ public interface libvlc_video_swap_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    void swap(Pointer opaque);
+    void swap(Long opaque);
 
 }

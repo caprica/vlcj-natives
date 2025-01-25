@@ -41,5 +41,5 @@ public interface libvlc_video_update_output_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    int updateOutput(Pointer opaque, libvlc_video_render_cfg_t cfg, libvlc_video_output_cfg_t output);
+    int updateOutput(Long opaque, libvlc_video_render_cfg_t cfg, libvlc_video_output_cfg_t output);
 }
