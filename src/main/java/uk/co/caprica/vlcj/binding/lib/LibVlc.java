@@ -1252,19 +1252,41 @@ public final class LibVlc {
     public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, double f_pos, int b_fast);
 
     /**
-     * Enable A to B loop for the current media.
+     * Enable A to B loop for the current media by setting the start time and end
+     * time.
      * <p>
-     * This function need to be called 2 times with libvlc_abloop_a and
-     * libvlc_abloop_b to setup an A to B loop. It uses and stores the
-     * current time/position when called. The B time must be higher than the
-     * A time.
+     * The B time must be higher than the A time.
      *
      * @param p_mi the Media Player
-     * @param abloop select which A/B cursor to set
+     * @param a_time start time for the loop (in ms)
+     * @param b_time end time for the loop (in ms)
      * @return 0 on success, -1 on error
      * @since LibVLC 4.0.0 and later
      */
-    public static native int libvlc_media_player_set_abloop(libvlc_media_player_t p_mi, int abloop);
+    public static native int libvlc_media_player_set_abloop_time(libvlc_media_player_t p_mi, long a_time, long b_time);
+
+    /**
+     * Enable A to B loop for the current media by setting the start position and
+     * end position.
+     * <p>
+     * The B position must be higher than the A position.
+     *
+     * @param p_mi the Media Player
+     * @param a_pos start position for the loop
+     * @param b_pos end position for the loop
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_set_abloop_position(libvlc_media_player_t p_mi, double a_pos, double b_pos);
+
+    /**
+     * Reset/remove the A to B loop for the current media.
+     *
+     * @param p_mi the Media Player
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_reset_abloop(libvlc_media_player_t p_mi);
 
     /**
      * Get the A to B loop status.
