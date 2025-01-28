@@ -19,7 +19,9 @@
 
 package uk.co.caprica.vlcj.binding.lib;
 
+import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.DoubleByReference;
@@ -91,7 +93,9 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
 import uk.co.caprica.vlcj.binding.support.types.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.types.size_t;
 
-/**
+import java.util.Collections;
+
+    /**
  * JNA interface to the libvlc native library.
  * <p>
  * This is <strong>not a complete</strong> interface to libvlc, although most functions are present.
@@ -116,7 +120,12 @@ import uk.co.caprica.vlcj.binding.support.types.size_t;
 public final class LibVlc {
 
     static {
-        Native.register(RuntimeUtil.getLibVlcLibraryName());
+        Native.register(
+            NativeLibrary.getInstance(
+                RuntimeUtil.getLibVlcLibraryName(),
+                Collections.singletonMap(Library.OPTION_STRING_ENCODING, "UTF-8")
+            )
+        );
     }
 
     private LibVlc() {
