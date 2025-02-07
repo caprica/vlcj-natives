@@ -33,16 +33,13 @@ module uk.co.caprica.vlcj.natives {
 
     exports uk.co.caprica.vlcj.binding.internal to
         com.sun.jna,
-        uk.co.caprica.vlcj,
-        uk.co.caprica.vlcj.test;
+        uk.co.caprica.vlcj;
 
     exports uk.co.caprica.vlcj.binding.lib to
-        uk.co.caprica.vlcj,
-        uk.co.caprica.vlcj.test;
+        uk.co.caprica.vlcj;
 
     exports uk.co.caprica.vlcj.binding.support.runtime to
-        uk.co.caprica.vlcj,
-        uk.co.caprica.vlcj.test;
+        uk.co.caprica.vlcj;
 
     exports uk.co.caprica.vlcj.binding.support.strings to uk.co.caprica.vlcj;
 
