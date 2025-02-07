@@ -139,9 +139,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
-                <configuration>
-                    <compilerArgument>-Xlint:serial</compilerArgument>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -160,7 +157,6 @@
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
-                            <useDefaultManifestFile>false</useDefaultManifestFile>
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                                 <manifestEntries>
