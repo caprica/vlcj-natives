@@ -19,11 +19,37 @@
 
 package uk.co.caprica.vlcj.binding.internal;
 
-import com.sun.jna.PointerType;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  */
-public class libvlc_instance_t extends PointerType {
+public enum libvlc_abloop_t {
 
+    libvlc_abloop_none(0),
+    libvlc_abloop_a(1),
+    libvlc_abloop_b(2);
+
+    private static final Map<Integer, libvlc_abloop_t> INT_MAP = new HashMap<Integer, libvlc_abloop_t>();
+
+    static {
+        for (libvlc_abloop_t value : libvlc_abloop_t.values()) {
+            INT_MAP.put(value.intValue, value);
+        }
+    }
+
+    public static libvlc_abloop_t abloop(int intValue) {
+        return INT_MAP.get(intValue);
+    }
+
+    private final int intValue;
+
+    libvlc_abloop_t(int intValue) {
+        this.intValue = intValue;
+    }
+
+    public int intValue() {
+        return intValue;
+    }
 }

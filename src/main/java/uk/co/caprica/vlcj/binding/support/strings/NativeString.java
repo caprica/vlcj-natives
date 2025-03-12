@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.support.strings;
@@ -57,7 +57,7 @@ public final class NativeString {
      * @param pointer pointer to native string, may be <code>null</code>
      * @return string, or <code>null</code> if the pointer was <code>null</code>
      */
-    public static final String copyAndFreeNativeString(Pointer pointer) {
+    public static String copyAndFreeNativeString(Pointer pointer) {
         if(pointer != null) {
             // Pointer.getString copies native memory to a Java String
             String result = pointer.getString(0);
@@ -77,7 +77,7 @@ public final class NativeString {
      * @param pointer pointer to native string, may be <code>null</code>
      * @return string, or <code>null</code> if the pointer was <code>null</code>
      */
-    public static final String copyNativeString(Pointer pointer) {
+    public static String copyNativeString(Pointer pointer) {
         if(pointer != null) {
             // Pointer.getString copies native memory to a Java String
             return pointer.getString(0);

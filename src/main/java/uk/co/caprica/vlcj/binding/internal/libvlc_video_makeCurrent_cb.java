@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -37,6 +37,6 @@ public interface libvlc_video_makeCurrent_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    int makeCurrent(Pointer opaque, int enter);
+    int makeCurrent(Long opaque, int enter);
 
 }

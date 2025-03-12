@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -32,5 +32,5 @@ public interface libvlc_video_output_cleanup_cb extends Callback {
      *
      * @param opaque application-specific pointer
      */
-    void cleanup(Pointer opaque);
+    void cleanup(Long opaque);
 }

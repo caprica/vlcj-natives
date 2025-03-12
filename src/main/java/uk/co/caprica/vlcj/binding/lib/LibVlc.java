@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.lib;
 
+import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.DoubleByReference;
@@ -28,6 +30,7 @@ import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_mixmode_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_stereomode_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_seek;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -59,7 +62,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_time_point_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_discontinuity;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_paused;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_update;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
@@ -90,7 +93,9 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
 import uk.co.caprica.vlcj.binding.support.types.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.types.size_t;
 
-/**
+import java.util.Collections;
+
+    /**
  * JNA interface to the libvlc native library.
  * <p>
  * This is <strong>not a complete</strong> interface to libvlc, although most functions are present.
@@ -115,7 +120,12 @@ import uk.co.caprica.vlcj.binding.support.types.size_t;
 public final class LibVlc {
 
     static {
-        Native.register(RuntimeUtil.getLibVlcLibraryName());
+        Native.register(
+            NativeLibrary.getInstance(
+                RuntimeUtil.getLibVlcLibraryName(),
+                Collections.singletonMap(Library.OPTION_STRING_ENCODING, "UTF-8")
+            )
+        );
     }
 
     private LibVlc() {
@@ -1251,6 +1261,61 @@ public final class LibVlc {
     public static native int libvlc_media_player_set_position(libvlc_media_player_t p_mi, double f_pos, int b_fast);
 
     /**
+     * Enable A to B loop for the current media by setting the start time and end
+     * time.
+     * <p>
+     * The B time must be higher than the A time.
+     *
+     * @param p_mi the Media Player
+     * @param a_time start time for the loop (in ms)
+     * @param b_time end time for the loop (in ms)
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_set_abloop_time(libvlc_media_player_t p_mi, long a_time, long b_time);
+
+    /**
+     * Enable A to B loop for the current media by setting the start position and
+     * end position.
+     * <p>
+     * The B position must be higher than the A position.
+     *
+     * @param p_mi the Media Player
+     * @param a_pos start position for the loop
+     * @param b_pos end position for the loop
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_set_abloop_position(libvlc_media_player_t p_mi, double a_pos, double b_pos);
+
+    /**
+     * Reset/remove the A to B loop for the current media.
+     *
+     * @param p_mi the Media Player
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_reset_abloop(libvlc_media_player_t p_mi);
+
+    /**
+     * Get the A to B loop status.
+     * <p>
+     * If the returned status is VLC_PLAYER_ABLOOP_A, then a_time and a_pos
+     * will be valid. If the returned status is VLC_PLAYER_ABLOOP_B, then all
+     * output parameters are valid. If the returned status is
+     * VLC_PLAYER_ABLOOP_NONE, then all output parameters are invalid.
+     *
+     * @param p_mi the Media Player
+     * @param a_time A time (in ms) or -1 (if the media doesn't have valid times)
+     * @param a_pos A position
+     * @param b_time B time (in ms) or -1 (if the media doesn't have valid times)
+     * @param b_pos B position
+     * @return A to B loop status
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_media_player_get_abloop(libvlc_media_player_t p_mi, LongByReference a_time, DoubleByReference a_pos, LongByReference b_time, DoubleByReference b_pos);
+
+    /**
      * Set movie chapter (if applicable).
      *
      * @param p_mi the Media Player
@@ -1822,6 +1887,24 @@ public final class LibVlc {
     public static native int libvlc_video_update_viewpoint(libvlc_media_player_t p_mi, libvlc_video_viewpoint_t p_viewpoint, int b_absolute);
 
     /**
+     * Get current video stereo mode.
+     *
+     * @param p_mi the media player
+     * @return the video stereo mode.
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native int libvlc_video_get_video_stereo_mode(libvlc_media_player_t p_mi);
+
+    /**
+     * Set new video stereo mode.
+     *
+     * @param p_mi the media player
+     * @param i_mode new video stereo mode
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_video_set_video_stereo_mode(libvlc_media_player_t p_mi, int i_mode);
+
+    /**
      * Get the current subtitle delay. Positive values means subtitles are being displayed later,
      * negative values earlier.
      *
@@ -2150,6 +2233,27 @@ public final class LibVlc {
      * @since LibVLC 1.1.1
      */
     public static native void libvlc_video_set_adjust_float(libvlc_media_player_t p_mi, int option, float value);
+
+    /**
+     * Change the projection mode used for rendering the source.
+     * <p>
+     * This changes how the source is mapped to the output w.r.t. 360 playback.
+     *
+     * @param p_mi libvlc media player instance
+     * @param projection_mode the considered projection mode for the source
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native void libvlc_video_set_projection_mode(libvlc_media_player_t p_mi, int projection_mode);
+
+    /**
+     * Remove previously set projection mode.
+     * <p>
+     * Remove the effects from previous call to libvlc_video_set_projection_mode.
+     *
+     * @param p_mi libvlc media player instance
+     * @since LibVLC 4.0.0 and later.
+     */
+    public static native void libvlc_video_unset_projection_mode(libvlc_media_player_t p_mi);
 
     /**
      * Gets the list of available audio outputs
@@ -2573,7 +2677,7 @@ public final class LibVlc {
      * @return 0 on success, -1 on error (allocation error, or if already watching)
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_discontinuity on_discontinuity, Pointer cbs_data);
+    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_paused on_discontinuity, libvlc_media_player_watch_time_on_seek on_seek, Pointer cbs_data);
 
     /**
      * Unwatch time updates.
@@ -2615,6 +2719,61 @@ public final class LibVlc {
      * @since LibVLC 4.0.0 or later
      */
     public static native long libvlc_media_player_time_point_get_next_date(libvlc_media_player_time_point_t point, long system_now_us, long interpolated_ts_us, long next_interval_us);
+
+    /**
+     * Lock the media_player internal lock
+     *
+     * The lock is recursive, so it's safe to use it multiple times from the same
+     * thread. You must call libvlc_media_player_unlock() the same number of times
+     * you called libvlc_media_player_lock().
+     *
+     * Locking is not mandatory before calling a libvlc_media_player_t function
+     * since they will automatically hold the lock internally.
+     *
+     * This lock can be used to synchronise user variables that interact with the
+     * libvlc_media_player_t or can be used to call several functions together.
+     *
+     * @param mp media player object
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_lock(libvlc_media_player_t mp);
+
+    /**
+     * Unlock the media_player internal lock
+     *
+     * @see #libvlc_media_player_lock
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_unlock(libvlc_media_player_t mp);
+
+    /**
+     * Wait for an event to be signalled
+     *
+     * Note this is equivalent to pthread_cond_wait() with the
+     * libvlc_media_player_t internal mutex and condition variable. This function
+     * may spuriously wake up even without libvlc_media_player_signal() being
+     * called.
+     *
+     * Warning this function must not be called from any libvlc callbacks and
+     * events. The lock should be held only one time before waiting.
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_wait(libvlc_media_player_t mp);
+
+    /**
+     * Signal all threads waiting for a signalling event
+     *
+     * \note this is equivalent to pthread_cond_broadcast() with the
+     * libvlc_media_player_t internal condition variable.
+     *
+     * @param mp media player object locked using /ref libvlc_media_player_lock
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native void libvlc_media_player_signal(libvlc_media_player_t mp);
 
     // === libvlc_media_player.h ================================================
 

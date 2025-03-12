@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -24,10 +24,10 @@ package uk.co.caprica.vlcj.binding.internal;
  */
 public enum libvlc_video_fit_mode_t {
 
-    libvlc_video_fit_none(0),    /**< Explicit zoom set by \ref libvlc_video_set_scale */
-    libvlc_video_fit_smaller(1), /**< Fit inside / to smallest display dimension */
-    libvlc_video_fit_larger(2),  /**< Fit outside / to largest display dimension */
-    libvlc_video_fit_width(3),   /**< Fit to display width */
+    libvlc_video_fit_none(0),    /** Explicit zoom set by \ref libvlc_video_set_scale */
+    libvlc_video_fit_smaller(1), /** Fit inside / to smallest display dimension */
+    libvlc_video_fit_larger(2),  /** Fit outside / to largest display dimension */
+    libvlc_video_fit_width(3),   /** Fit to display width */
     libvlc_video_fit_height(4);
 
     private final int intValue;

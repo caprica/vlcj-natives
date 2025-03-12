@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -27,5 +27,5 @@ import com.sun.jna.Pointer;
  */
 public interface libvlc_video_output_mouse_press_cb extends Callback {
 
-    void mousePress(Pointer opaque, int button);
+    void mousePress(Long opaque, int button);
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with VLCJ.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2009-2024 Caprica Software Limited.
+ * Copyright 2009-2025 Caprica Software Limited.
  */
 
 package uk.co.caprica.vlcj.binding.internal;
@@ -36,6 +36,6 @@ public interface libvlc_video_getProcAddress_cb extends Callback {
      *
      * @since LibVLC 4.0.0 or later
      */
-    Pointer getProcAddress(Pointer opaque, String fct_name);
+    Pointer getProcAddress(Long opaque, String fct_name);
 
 }
