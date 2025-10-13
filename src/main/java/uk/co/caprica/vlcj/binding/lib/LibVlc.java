@@ -2127,6 +2127,22 @@ public final class LibVlc {
     public static native int libvlc_video_take_snapshot(libvlc_media_player_t p_mi, int num, String psz_filepath, int i_width, int i_height);
 
     /**
+     * Gets the deinterlacing parameters.
+     * <p>
+     * If modep is not NULL, it will be set to a heap-allocated nul-terminated character string indicating the current
+     * deinterlacing algorithm name.
+     * <p>
+     * If no algorithm is selected or if allocation fails, it will be set to NULL.
+     * <p>
+     * The value should be freed with {@link #libvlc_free(Pointer)} to avoid leaking.
+     *
+     * @param mp media player instance
+     * @param modep storage space to hold the mode name (or NULL) [OUT]
+     * @return -1 deinterlacing is selected automatically, 0 deinterlacing is forcefully disabled, 1 deinterlacing is forcefully enabled
+     */
+    public static native int libvlc_video_get_deinterlace(libvlc_media_player_t mp, Pointer modep);
+
+    /**
      * Enable or disable deinterlace filter
      *
      * @param p_mi libvlc media player
