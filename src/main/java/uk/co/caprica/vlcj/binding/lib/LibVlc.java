@@ -1,4 +1,4 @@
-    /*
+/*
  * This file is part of VLCJ.
  *
  * VLCJ is free software: you can redistribute it and/or modify
@@ -95,7 +95,7 @@ import uk.co.caprica.vlcj.binding.support.types.size_t;
 
 import java.util.Collections;
 
-    /**
+/**
  * JNA interface to the libvlc native library.
  * <p>
  * This is <strong>not a complete</strong> interface to libvlc, although most functions are present.
@@ -2132,8 +2132,9 @@ public final class LibVlc {
      * @param p_mi libvlc media player
      * @param deinterlace state -1: auto (default), 0: disabled, 1: enabled
      * @param psz_mode type of deinterlace filter, NULL to disable
+     * @return 0 on success, -1 if the mode was not recognised
      */
-    public static native void libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, int deinterlace, String psz_mode);
+    public static native int libvlc_video_set_deinterlace(libvlc_media_player_t p_mi, int deinterlace, String psz_mode);
 
     /**
      * Get an integer marquee option value
