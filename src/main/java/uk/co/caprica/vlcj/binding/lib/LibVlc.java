@@ -2140,7 +2140,7 @@ public final class LibVlc {
      * @param modep storage space to hold the mode name (or NULL) [OUT]
      * @return -1 deinterlacing is selected automatically, 0 deinterlacing is forcefully disabled, 1 deinterlacing is forcefully enabled
      */
-    public static native int libvlc_video_get_deinterlace(libvlc_media_player_t mp, Pointer modep);
+    public static native int libvlc_video_get_deinterlace(libvlc_media_player_t mp, PointerByReference modep);
 
     /**
      * Enable or disable deinterlace filter
