@@ -229,6 +229,7 @@
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
+                    <arguments>-Dgpg.skip=false</arguments>
                 </configuration>
             </plugin>
         </plugins>
