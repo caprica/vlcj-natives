@@ -7,7 +7,7 @@
         <dependency>
             <groupId>uk.co.caprica</groupId>
             <artifactId>vlcj-natives</artifactId>
-            <version>4.8.3</version>
+            <version>4.12.0</version>
         </dependency>
     </dependencies> 
 -->
@@ -18,7 +18,7 @@
 
     <groupId>uk.co.caprica</groupId>
     <artifactId>vlcj-natives</artifactId>
-    <version>4.8.4-SNAPSHOT</version>
+    <version>4.12.0-SNAPSHOT</version>
 
     <name>vlcj-natives</name>
     <description>Native bindings to LibVLC used by the vlcj project.</description>
@@ -69,6 +69,21 @@
         <tag>HEAD</tag>
     </scm>
 
+    <profiles>
+        <profile>
+            <id>github</id>
+            <properties>
+                <gpg.skip>false</gpg.skip>
+            </properties>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/caprica/vlcj-natives</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -78,9 +93,10 @@
 
     <properties>
         <doclint>none</doclint>
-        <jna.version>5.14.0</jna.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <gpg.skip>true</gpg.skip>
+        <java.version>11</java.version>
+        <jna.version>5.16.0</jna.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -102,7 +118,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -110,15 +126,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <configuration>
-                    <compilerArgument>-Xlint:serial</compilerArgument>
-                </configuration>
+                <version>3.13.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -132,7 +145,6 @@
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
-                            <useDefaultManifestFile>false</useDefaultManifestFile>
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                                 <manifestEntries>
@@ -146,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -167,12 +179,12 @@
                     <doctitle>${project.name} ${project.version} API Documentation</doctitle>
                     <docfilessubdirs>true</docfilessubdirs>
                     <encoding>UTF-8</encoding>
-                    <bottom>(C)2022 Caprica Software Limited</bottom>
+                    <bottom>(C)2025 Caprica Software Limited</bottom>
                     <show>public</show>
                     <quiet>true</quiet>
                     <failOnError>true</failOnError>
                     <additionalOptions>-html5</additionalOptions>
-                    <source>11</source>
+                    <source>${java.version}</source>
                     <sourcepath>src/main/java</sourcepath>
                 </configuration>
                 <executions>
@@ -199,14 +211,13 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.13</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.5.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
             <plugin>
