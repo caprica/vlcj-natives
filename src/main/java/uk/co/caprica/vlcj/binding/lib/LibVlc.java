@@ -64,7 +64,6 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_tracklist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
@@ -481,12 +480,12 @@ public final class LibVlc {
     /**
      * Read the meta of the media.
      * <p>
-     * Note, you need to call {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}() or play
-     * the media at least once before calling this function.
+     * Note, you need to parse the media or play the media at least once before
+     * calling this function.
      * <p>
      * If the media has not yet been parsed this will return NULL.
      *
-     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
+     * @see #libvlc_media_is_parsed(libvlc_media_t)
      * @param p_md the media descriptor
      * @param e_meta the meta to read
      * @return the media's meta
@@ -583,8 +582,7 @@ public final class LibVlc {
      * Get a 'stat' value of media descriptor object item.
      *
      * Note 'stat' values are currently only parsed by directory accesses. This means that only sub medias of a
-     * directory media, parsed with {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}()
-     * can have valid 'stat' properties.
+     * directory media can have valid 'stat' properties.
      *
      * @param p_md media descriptor object
      * @param type a valid libvlc_media_stat_ define
@@ -595,59 +593,14 @@ public final class LibVlc {
     public static native int libvlc_media_get_filestat(libvlc_media_t p_md, int type, LongByReference out);
 
     /**
-     * Parse the media asynchronously with options.
-     *
-     * This fetches (local or network) art, meta data and/or tracks information.
-     *
-     * To track when this is over you can listen to libvlc_MediaParsedChanged
-     * event. However if this functions returns an error, you will not receive any
-     * events.
-     *
-     * It uses a flag to specify parse options. All
-     * these flags can be combined. By default, media is parsed if it's a local
-     * file.
-     *
-     * Parsing can be aborted with libvlc_media_parse_stop().
-     *
-     * @see #libvlc_media_get_meta(libvlc_media_t, int)
-     *
-     * @param inst the instance to use to parse the media
-     * @param p_md media descriptor object
-     * @param parse_flag parse options
-     * @param timeout maximum time allowed to preparse the media. If -1, the default
-     *                "preparse-timeout" option will be used as a timeout. If 0, it
-     *                will wait indefinitely. If &gt; 0, the timeout will be used (in
-     *                milliseconds).
-     * @return -1 in case of error, 0 otherwise
-     *
-     * @since LibVLC 3.0.0 or later
-     */
-    public static native int libvlc_media_parse_request(libvlc_instance_t inst, libvlc_media_t p_md, int parse_flag, int timeout);
-
-    /**
-     * Stop the parsing of the media
-     *
-     * When the media parsing is stopped, the libvlc_MediaParsedChanged event will
-     * be sent with the libvlc_media_parsed_status_timeout status.
-     *
-     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
-     *
-     * @param inst the instance used to parse the media
-     * @param p_md media descriptor object
-     *
-     * @since version LibVLC 3.0.0 or later
-     */
-    public static native void libvlc_media_parse_stop(libvlc_instance_t inst, libvlc_media_t p_md);
-
-    /**
-     * Get Parsed status for media descriptor object.
+     * Check if a media has been parsed.
      *
      * @param p_md media descriptor object
-     * @return a value of the libvlc_media_parsed_status_t enum
+     * @return 1 if the media has been parsed, 0 otherwise
      *
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_get_parsed_status(libvlc_media_t p_md);
+    public static native int libvlc_media_is_parsed(libvlc_media_t p_md);
 
     /**
      * Sets media descriptor's user_data. user_data is specialized data accessed by the host
@@ -674,11 +627,9 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note you need to call libvlc_media_parse_request or play the media
+     * Note you need to parse the media or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
-     *
-     * @see #libvlc_media_parse_request
      * @see #libvlc_media_tracklist_count
      * @see #libvlc_media_tracklist_at
      *
@@ -702,73 +653,6 @@ public final class LibVlc {
     public static native int libvlc_media_get_type(libvlc_media_t p_md);
 
     /**
-     * Start an asynchronous thumbnail generation
-     *
-     * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
-     * is guaranteed to be emited.
-     *
-     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
-     *
-     * @param inst the instance to use to generate the thumbnail
-     * @param md media descriptor object
-     * @param time The time at which the thumbnail should be generated
-     * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
-     * @param width The thumbnail width
-     * @param height the thumbnail height
-     * @param crop non-zero if the thumbnail should be cropped
-     * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
-     * @param timeout A timeout value in ms, or 0 to disable timeout
-     *
-     * @return A valid opaque request object, or NULL in case of failure.
-     *
-     * @since libvlc 4.0 or later
-     *
-     * @see libvlc_picture_t
-     */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_instance_t inst, libvlc_media_t md, long time, int speed, int width, int height, int crop, int picture_type, long timeout);
-
-    /**
-     * Start an asynchronous thumbnail generation
-     *
-     * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
-     * is guaranteed to be emited.
-     *
-     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
-     *
-     * @param inst the instance to use to generate the thumbnail
-     * @param md media descriptor object
-     * @param pos The position at which the thumbnail should be generated
-     * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
-     * @param width The thumbnail width
-     * @param height the thumbnail height
-     * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
-     * @param crop non-zero if the thumbnail should be cropped
-     * @param timeout A timeout value in ms, or 0 to disable timeout
-     *
-     * @return A valid opaque request object, or NULL in case of failure.
-     *
-     * @since libvlc 4.0 or later
-     *
-     * @see libvlc_picture_t
-     */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, double pos, int speed, int width, int height, int crop, int picture_type, long timeout);
-
-    /**
-     * Destroy a thumbnail request.
-     *
-     * If the request has not completed or hasn't been cancelled yet, the behavior
-     * is undefined.
-     *
-     * This will also cancel the thumbnail request, no events will be emitted after
-     * this call.
-     *
-     * @param p_req An opaque thumbnail request object.
-     *
-     * @since libvlc 4.0 or later
-     */
-    public static native void libvlc_media_thumbnail_request_destroy( libvlc_media_thumbnail_request_t p_req);
-
-    /**
      * Get codec description from media elementary stream.
      *
      * @param i_type i_type from libvlc_media_track_t
@@ -786,9 +670,8 @@ public final class LibVlc {
      * A slave is an external input source that may contains an additional subtitle
      * track (like a .srt) or an additional audio track (like a .ac3).
      * <p>
-     * This function must be called before the media is parsed (via
-     * libvlc_media_parse_request()) or before the media is played (via
-     * libvlc_media_player_play())
+     * This function must be called before the media is parsed or before
+     * the media is played (via libvlc_media_player_play())
      *
      * @param p_md media descriptor object
      * @param i_type subtitle or audio
@@ -1439,7 +1322,7 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note: You need to call libvlc_media_parse_request() or play the media
+     * Note: You need to parse the media or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
      *
@@ -2919,14 +2802,6 @@ public final class LibVlc {
     public static native libvlc_media_list_player_t libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
 
     /**
-     * Replace media player in media_list_player with this instance.
-     *
-     * @param p_mlp media list player instance
-     * @param p_mi media player instance
-     */
-    public static native void libvlc_media_list_player_set_media_player(libvlc_media_list_player_t p_mlp, libvlc_media_player_t p_mi);
-
-    /**
      * Get media player of the media_list_player instance.
      * <p>
      * Note: the caller is responsible for releasing the returned instance.
@@ -3141,7 +3016,6 @@ public final class LibVlc {
      * You need to call {@link #libvlc_media_discoverer_start(libvlc_media_discoverer_t)}
      * in order to start the discovery.
      *
-     * @see #libvlc_media_discoverer_media_list(libvlc_media_discoverer_t)
      * @see #libvlc_media_discoverer_start(libvlc_media_discoverer_t)
      *
      * @param p_inst libvlc instance
@@ -3156,7 +3030,7 @@ public final class LibVlc {
      * Start media discovery.
      *
      * To stop it, call libvlc_media_discoverer_stop() or
-     * libvlc_media_discoverer_release() directly.
+     * libvlc_media_discoverer_destroy() directly.
      *
      * @see #libvlc_media_discoverer_stop(libvlc_media_discoverer_t)
      *
@@ -3179,20 +3053,13 @@ public final class LibVlc {
     public static native void libvlc_media_discoverer_stop(libvlc_media_discoverer_t p_mdis);
 
     /**
-     * Release media discover object. If the reference count reaches 0, then the object will be
-     * released.
+     * Destroy a media discover object.
+     * <p>
+     * Unlike release(), this is not reference-counted — the object has a single owner.
      *
      * @param p_mdis media service discover object
      */
-    public static native void libvlc_media_discoverer_release(libvlc_media_discoverer_t p_mdis);
-
-    /**
-     * Get media service discover media list.
-     *
-     * @param p_mdis media service discover object
-     * @return list of media items
-     */
-    public static native libvlc_media_list_t libvlc_media_discoverer_media_list(libvlc_media_discoverer_t p_mdis);
+    public static native void libvlc_media_discoverer_destroy(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Query if media service discover object is running.
@@ -3231,7 +3098,7 @@ public final class LibVlc {
     // === libvlc_renderer_discoverer.h =========================================
 
     /**
-     * Hold a renderer item, i.e. creates a new reference
+     * Retain a renderer item, i.e. creates a new reference
      *
      * This functions need to called from the libvlc_RendererDiscovererItemAdded
      * callback if the libvlc user wants to use this item after. (for display or
@@ -3241,7 +3108,7 @@ public final class LibVlc {
      * @return the current item
      * @since LibVLC 3.0.0 or later
      */
-    public static native libvlc_renderer_item_t libvlc_renderer_item_hold(libvlc_renderer_item_t p_item);
+    public static native libvlc_renderer_item_t libvlc_renderer_item_retain(libvlc_renderer_item_t p_item);
 
     /**
      * Releases a renderer item, i.e. decrements its reference counter
@@ -3308,18 +3175,20 @@ public final class LibVlc {
     public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
 
     /**
-     * Release a renderer discoverer object
+     * Destroy a renderer discoverer object.
+     * <p>
+     * Unlike release(), this is not reference-counted — the object has a single owner.
      *
      * @param p_rd renderer discoverer object
      * @since LibVLC 3.0.0 or later
      */
-    public static native void libvlc_renderer_discoverer_release(libvlc_renderer_discoverer_t p_rd);
+    public static native void libvlc_renderer_discoverer_destroy(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Start renderer discovery
      *
      * To stop it, call libvlc_renderer_discoverer_stop() or
-     * libvlc_renderer_discoverer_release() directly.
+     * libvlc_renderer_discoverer_destroy() directly.
      *
      * @see #libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t)
      *
@@ -3536,7 +3405,7 @@ public final class LibVlc {
      * @param track valid track
      * @return the same track, need to be released with libvlc_media_track_release()
      */
-    public static native libvlc_media_track_t libvlc_media_track_hold(libvlc_media_track_t track);
+    public static native libvlc_media_track_t libvlc_media_track_retain(libvlc_media_track_t track);
 
     /**
      * Release a single track
@@ -3547,7 +3416,7 @@ public final class LibVlc {
      * libvlc_media_tracklist_delete().
      *
      * \note You only need to release tracks previously held with
-     * libvlc_media_track_hold() or returned by
+     * libvlc_media_track_retain() or returned by
      * libvlc_media_player_get_selected_track() and
      * libvlc_media_player_get_track_from_id()
      *
