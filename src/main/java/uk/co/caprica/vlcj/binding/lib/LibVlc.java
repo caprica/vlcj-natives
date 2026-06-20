@@ -86,6 +86,13 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_cfg;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_request;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_task_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_thumbnailer_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_thumbnailer_request;
 import uk.co.caprica.vlcj.binding.support.types.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.types.size_t;
 
@@ -3549,4 +3556,83 @@ public final class LibVlc {
     public static native void libvlc_media_track_release(libvlc_media_track_t track);
 
     // === libvlc_media_track.h =================================================
+
+    // === libvlc_parser.h ======================================================
+
+    /**
+     * Create a parser object.
+     *
+     * @param inst libvlc instance
+     * @param cfg parser configuration
+     * @return parser object, or NULL on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_t libvlc_parser_new(libvlc_instance_t inst, libvlc_parser_cfg cfg);
+
+    /**
+     * Destroy a parser object.
+     * <p>
+     * This cancels all pending and running tasks, reports it via their
+     * corresponding on_parsed/on_ended callback and blocks until all worker
+     * threads are joined.
+     *
+     * @param p parser object
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_parser_destroy(libvlc_parser_t p);
+
+    /**
+     * Queue a media for parsing.
+     *
+     * @param p parser object
+     * @param req parse request
+     * @param cbs parser callbacks
+     * @param opaque opaque pointer for the callbacks
+     * @return a task handle, or NULL on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_task_t libvlc_parser_queue(libvlc_parser_t p, libvlc_parser_request req, libvlc_parser_cbs cbs, Pointer opaque);
+
+    /**
+     * Queue a media for thumbnail generation.
+     *
+     * @param p parser object
+     * @param req thumbnailer request
+     * @param cbs thumbnailer callbacks
+     * @param opaque opaque pointer for the callbacks
+     * @return a task handle, or NULL on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_task_t libvlc_parser_queue_thumbnailing(libvlc_parser_t p, libvlc_thumbnailer_request req, libvlc_thumbnailer_cbs cbs, Pointer opaque);
+
+    /**
+     * Cancel a parser request.
+     *
+     * @param p parser object
+     * @param task task to cancel, or NULL to cancel all requests
+     * @return the number of requests cancelled
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native size_t libvlc_parser_cancel_request(libvlc_parser_t p, libvlc_parser_task_t task);
+
+    /**
+     * Get the media associated with a task.
+     *
+     * @param task task handle
+     * @return media object (borrowed reference)
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_media_t libvlc_parser_task_get_media(libvlc_parser_task_t task);
+
+    /**
+     * Release a task handle.
+     * <p>
+     * Safe to call from inside on_parsed / on_ended. Does not cancel an in-flight request.
+     *
+     * @param task task handle
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_parser_task_release(libvlc_parser_task_t task);
+
+    // === libvlc_parser.h ======================================================
 }
