@@ -10,7 +10,7 @@ public class libvlc_media_player_watch_time_cbs extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "on_update", "on_paused", "on_seek"));
 
-    public int version;
+    public int version = 0;
 
     public libvlc_media_player_watch_time_on_update on_update;
 

@@ -10,7 +10,7 @@ public class libvlc_media_open_cbs extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "open", "read", "seek", "close"));
 
-    public int version;
+    public int version = 0;
 
     public libvlc_media_open_cb open;
 

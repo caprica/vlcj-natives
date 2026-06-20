@@ -10,7 +10,7 @@ public class libvlc_thumbnailer_request extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "media", "width", "height", "crop", "type", "seek", "hw_dec"));
 
-    public int version;
+    public int version = 0;
     public libvlc_media_t media;
     public int width;
     public int height;

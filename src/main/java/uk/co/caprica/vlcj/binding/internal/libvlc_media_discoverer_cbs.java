@@ -10,7 +10,7 @@ public class libvlc_media_discoverer_cbs extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "on_media_added", "on_media_removed"));
 
-    public int version;
+    public int version = 0;
 
     public libvlc_media_discoverer_on_media_added_cb on_media_added;
 

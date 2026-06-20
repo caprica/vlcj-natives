@@ -37,7 +37,7 @@ public class libvlc_media_player_cbs extends Structure {
         "on_audio_device_changed"
     ));
 
-    public int version;
+    public int version = 0;
 
     public libvlc_media_player_cbs_on_media_changed on_media_changed;
     public libvlc_media_player_cbs_on_media_stopping on_media_stopping;

@@ -10,7 +10,7 @@ public class libvlc_renderer_discoverer_cbs extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "on_item_added", "on_item_removed"));
 
-    public int version;
+    public int version = 0;
 
     public libvlc_renderer_discoverer_on_item_added_cb on_item_added;
 

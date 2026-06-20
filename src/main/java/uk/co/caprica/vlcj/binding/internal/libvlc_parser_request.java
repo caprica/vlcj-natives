@@ -10,7 +10,7 @@ public class libvlc_parser_request extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "media", "parse_flags", "thumbnail"));
 
-    public int version;
+    public int version = 0;
     public libvlc_media_t media;
     public int parse_flags;
     public int thumbnail;
