@@ -50,6 +50,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_instance_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_lock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_discoverer_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
@@ -67,6 +68,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_picture_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_program_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_programlist_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_item_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
@@ -718,19 +720,23 @@ public final class LibVlc {
     /**
      * Create an empty Media Player object
      *
-     * @param p_libvlc_instance the libvlc instance in which the Media Player should be created.
-     * @return a new media player object, or NULL on error.
+     * @param p_libvlc_instance the libvlc instance in which the Media Player should be created
+     * @param p_cbs media player callbacks to receive events
+     * @param p_cbs_opaque opaque pointer for the callbacks
+     * @return a new media player object, or NULL on error
      */
-    public static native libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance);
+    public static native libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Create a Media Player object from a Media
      *
      * @param p_libvlc_instance libvlc instance
      * @param p_md the media. Afterwards the p_md can be safely destroyed.
-     * @return a new media player object, or NULL on error.
+     * @param p_cbs media player callbacks to receive events
+     * @param p_cbs_opaque opaque pointer for the callbacks
+     * @return a new media player object, or NULL on error
      */
-    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_instance_t p_libvlc_instance, libvlc_media_t p_md);
+    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_instance_t p_libvlc_instance, libvlc_media_t p_md, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Release a media_player after use Decrement the reference count of a media player object. If
@@ -815,7 +821,7 @@ public final class LibVlc {
      * Must be called before the first call of libvlc_media_player_play() to
      * take effect.
      *
-     * @see #libvlc_renderer_discoverer_new(libvlc_instance_t, String)
+     * @see #libvlc_renderer_discoverer_new(libvlc_instance_t, String, libvlc_renderer_discoverer_cbs, Pointer) 
      *
      * @param p_mi the Media Player
      * @param p_item an item discovered by libvlc_renderer_discoverer_start()
@@ -3001,11 +3007,7 @@ public final class LibVlc {
     /**
      * Create a media discoverer object by name.
      *
-     * After this object is created, you should attach to events in order to be
-     * notified of the discoverer state.
-     *
-     * You should also attach to media_list events in order to be notified of new
-     * items discovered.
+     * After this object is created, the callbacks will be used to receive events.
      *
      * You need to call {@link #libvlc_media_discoverer_start(libvlc_media_discoverer_t)}
      * in order to start the discovery.
@@ -3014,11 +3016,13 @@ public final class LibVlc {
      *
      * @param p_inst libvlc instance
      * @param psz_name service name
+     * @param p_cbs media discoverer callbacks
+     * @param p_cbs_opaque opaque pointer for the callbacks
      * @return media discover object or NULL in case of error
      *
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name, libvlc_media_discoverer_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Start media discovery.
@@ -3150,10 +3154,9 @@ public final class LibVlc {
     public static native int libvlc_renderer_item_flags(libvlc_renderer_item_t p_item);
 
     /**
-     * Create a renderer discoverer object by name
+     * Create a renderer discoverer object by name.
      *
-     * After this object is created, you should attach to events in order to be
-     * notified of the discoverer events.
+     * After this object is created, the callbacks will be used to receive events.
      *
      * You need to call libvlc_renderer_discoverer_start() in order to start the
      * discovery.
@@ -3163,10 +3166,12 @@ public final class LibVlc {
      * @param p_inst libvlc instance
      * @param psz_name service name; use libvlc_renderer_discoverer_list_get() to
      * get a list of the discoverer names available in this libVLC instance
+     * @param p_cbs renderer discoverer callbacks
+     * @param p_cbs_opaque opaque pointer for the callbacks
      * @return media discover object or NULL in case of error
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name, libvlc_renderer_discoverer_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Destroy a renderer discoverer object.
