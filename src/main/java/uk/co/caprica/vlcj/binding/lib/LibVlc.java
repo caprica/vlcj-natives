@@ -30,7 +30,6 @@ import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_mixmode_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_stereomode_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_seek;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -51,17 +50,14 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_instance_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_lock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_close_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_time_point_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_paused;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_update;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
@@ -401,16 +397,13 @@ public final class LibVlc {
      * <p>
      * @see #libvlc_media_release(libvlc_media_t)
      *
-     * @since LibVLC 3.0.0 and later.
+     * @since LibVLC 4.0.0 and later.
      *
-     * @param open_cb callback to open the custom bitstream input media
-     * @param read_cb callback to read data (must not be NULL)
-     * @param seek_cb callback to seek, or NULL if seeking is not supported
-     * @param close_cb callback to close the media, or NULL if unnecessary
-     * @param opaque data pointer for the open callback
+     * @param p_cbs a pointer to the media open callbacks struct
+     * @param p_opaque data pointer for the open callback
      * @return the newly created media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
+    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_media_open_cbs p_cbs, Pointer p_opaque);
 
     /**
      * Create a media as an empty node with a given name.
@@ -2532,13 +2525,11 @@ public final class LibVlc {
      *
      * @param p_mi the media player
      * @param min_period_us corresponds to the minimum period, in us, between each update, use it to avoid flood from too many source updates, set it to 0 to receive all updates.
-     * @param on_update callback to listen to update events (must not be NULL)
-     * @param on_discontinuity callback to listen to discontinuity events (can be NULL)
-     * @param cbs_data opaque pointer used by the callbacks
+     * @param cbs watch time callbacks struct
      * @return 0 on success, -1 on error (allocation error, or if already watching)
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_paused on_discontinuity, libvlc_media_player_watch_time_on_seek on_seek, Pointer cbs_data);
+    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_cbs cbs);
 
     /**
      * Unwatch time updates.
@@ -2777,9 +2768,12 @@ public final class LibVlc {
      * Create new media_list_player.
      *
      * @param p_instance libvlc instance
+     * @param p_cbs media player callbacks to receive events
+     * @param p_cbs_opaque opaque pointer for the callbacks
      * @return media list player instance or NULL on error
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance);
+    public static native libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Release a media_list_player after use.
