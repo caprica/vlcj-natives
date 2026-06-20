@@ -42,15 +42,11 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_audio_play_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_resume_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_set_volume_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_setup_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_display_error_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_id;
 import uk.co.caprica.vlcj.binding.internal.libvlc_display_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_equalizer_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_e;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_manager_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_u;
 import uk.co.caprica.vlcj.binding.internal.libvlc_instance_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_lock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_cb;
@@ -244,29 +240,6 @@ public final class LibVlc {
      * @param ptr the pointer
      */
     public static native void libvlc_free(Pointer ptr);
-
-    /**
-     * Register for an event notification.
-     *
-     * @param p_event_manager the event manager to which you want to attach to. Generally it is
-     *            obtained by vlc_my_object_event_manager() where my_object is the object you want
-     *            to listen to.
-     * @param i_event_type the desired event to which we want to listen
-     * @param f_callback the function to call when i_event_type occurs
-     * @param user_data user provided data to carry with the event
-     * @return 0 on success, ENOMEM on error
-     */
-    public static native int libvlc_event_attach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer user_data);
-
-    /**
-     * Unregister an event notification.
-     *
-     * @param p_event_manager the event manager
-     * @param i_event_type the desired event to which we want to unregister
-     * @param f_callback the function to call when i_event_type occurs
-     * @param p_user_data user provided data to carry with the event
-     */
-    public static native void libvlc_event_detach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer p_user_data);
 
     /**
      * Gets debugging informations about a log message: the name of the VLC module
@@ -507,7 +480,6 @@ public final class LibVlc {
      * If the media has not yet been parsed this will return NULL.
      *
      * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
-     * @see libvlc_event_e#libvlc_MediaMetaChanged
      * @param p_md the media descriptor
      * @param e_meta the meta to read
      * @return the media's meta
@@ -593,15 +565,6 @@ public final class LibVlc {
     public static native libvlc_media_list_t libvlc_media_subitems(libvlc_media_t p_md);
 
     /**
-     * Get event manager from media descriptor object. NOTE: this function doesn't increment
-     * reference counting.
-     *
-     * @param p_md a media descriptor object
-     * @return event manager object
-     */
-    public static native libvlc_event_manager_t libvlc_media_event_manager(libvlc_media_t p_md);
-
-    /**
      * Get duration (in ms) of media descriptor object item.
      *
      * @param p_md media descriptor object
@@ -639,7 +602,6 @@ public final class LibVlc {
      *
      * Parsing can be aborted with libvlc_media_parse_stop().
      *
-     * @see libvlc_event_e#libvlc_MediaParsedChanged
      * @see #libvlc_media_get_meta(libvlc_media_t, int)
      *
      * @param inst the instance to use to parse the media
@@ -921,14 +883,6 @@ public final class LibVlc {
      * @return the media associated with p_mi, or NULL if no media is associated
      */
     public static native libvlc_media_t libvlc_media_player_get_media(libvlc_media_player_t p_mi);
-
-    /**
-     * Get the Event Manager from which the media player send event.
-     *
-     * @param p_mi the Media Player
-     * @return the event manager associated with p_mi
-     */
-    public static native libvlc_event_manager_t libvlc_media_player_event_manager(libvlc_media_player_t p_mi);
 
     /**
      * is_playing
@@ -2925,15 +2879,6 @@ public final class LibVlc {
      */
     public static native void libvlc_media_list_unlock(libvlc_media_list_t p_ml);
 
-    /**
-     * Get libvlc_event_manager from this media list instance. The p_event_manager is immutable, so
-     * you don't have to hold the lock
-     *
-     * @param p_ml a media list instance
-     * @return libvlc_event_manager
-     */
-    public static native libvlc_event_manager_t libvlc_media_list_event_manager(libvlc_media_list_t p_ml);
-
     // === libvlc_media_list.h ==================================================
 
     // === libvlc_media_list_player.h ===========================================
@@ -2965,14 +2910,6 @@ public final class LibVlc {
      * @param p_mlp media player list object
      */
     public static native libvlc_media_list_player_t libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
-
-    /**
-     * Return the event manager of this media_list_player.
-     *
-     * @param p_mlp media list player instance
-     * @return the event manager
-     */
-    public static native libvlc_event_manager_t libvlc_media_list_player_event_manager(libvlc_media_list_player_t p_mlp);
 
     /**
      * Replace media player in media_list_player with this instance.
@@ -3353,7 +3290,6 @@ public final class LibVlc {
      * You need to call libvlc_renderer_discoverer_start() in order to start the
      * discovery.
      *
-     * @see #libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t)
      * @see #libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t)
      *
      * @param p_inst libvlc instance
@@ -3395,25 +3331,6 @@ public final class LibVlc {
      * @since LibVLC 3.0.0 or later
      */
     public static native void libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t p_rd);
-
-    /**
-     * Get the event manager of the renderer discoverer
-     *
-     * The possible events to attach are @ref libvlc_RendererDiscovererItemAdded
-     * and @ref libvlc_RendererDiscovererItemDeleted.
-     *
-     * The @ref libvlc_renderer_item_t struct passed to event callbacks is owned by
-     * VLC, users should take care of holding/releasing this struct for their
-     * internal usage.
-     *
-     * @see libvlc_event_u#renderer_discoverer_item_added
-     * @see libvlc_event_u#renderer_discoverer_item_deleted
-     *
-     * @param p_rd renderer discoverer handle
-     * @return a valid event manager (can't fail)
-     * @since LibVLC 3.0.0 or later
-     */
-    public static native libvlc_event_manager_t libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Get media discoverer services
