@@ -564,7 +564,7 @@ public final class LibVlc {
     public static native libvlc_media_list_t libvlc_media_subitems(libvlc_media_t p_md);
 
     /**
-     * Get duration (in ms) of media descriptor object item.
+     * Get duration (in µs) of media descriptor object item.
      *
      * @param p_md media descriptor object
      * @return duration of media item or -1 on error
@@ -1033,35 +1033,35 @@ public final class LibVlc {
     /** bug This might go away ... to be replaced by a broader system */
 
     /**
-     * Get the current movie length (in ms).
+     * Get the current movie length (in µs).
      *
      * @param p_mi the Media Player
-     * @return the movie length (in ms), or -1 if there is no media.
+     * @return the movie length (in µs), or -1 if there is no media.
      */
     public static native long libvlc_media_player_get_length(libvlc_media_player_t p_mi);
 
     /**
-     * Get the current movie time (in ms).
+     * Get the current movie time (in µs).
      *
      * @param p_mi the Media Player
-     * @return the movie time (in ms), or -1 if there is no media.
+     * @return the movie time (in µs), or -1 if there is no media.
      */
     public static native long libvlc_media_player_get_time(libvlc_media_player_t p_mi);
 
     /**
-     * Set the movie time (in ms).
+     * Set the movie time (in µs).
      * <p>
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
-     * @param i_time the movie time (in ms).
+     * @param i_time the movie time (in µs).
      * @param b_fast prefer fast seeking or precise seeking
      * @return 0 on success, -1 on error
      */
     public static native int libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time, int b_fast);
 
     /**
-     * Jump the movie time (in ms).
+     * Jump the movie time (in µs).
      * <p>
      * This will trigger a precise and relative seek (from the current time). This has no effect if no media is being
      * played.
@@ -1069,7 +1069,7 @@ public final class LibVlc {
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
-     * @param i_time the movie time (in ms).
+     * @param i_time the movie time (in µs).
      * @return 0 on success, -1 on error
      * @since libVLC 4.0.0
      */
@@ -1104,8 +1104,8 @@ public final class LibVlc {
      * The B time must be higher than the A time.
      *
      * @param p_mi the Media Player
-     * @param a_time start time for the loop (in ms)
-     * @param b_time end time for the loop (in ms)
+     * @param a_time start time for the loop (in µs)
+     * @param b_time end time for the loop (in µs)
      * @return 0 on success, -1 on error
      * @since LibVLC 4.0.0 and later
      */
@@ -1143,9 +1143,9 @@ public final class LibVlc {
      * VLC_PLAYER_ABLOOP_NONE, then all output parameters are invalid.
      *
      * @param p_mi the Media Player
-     * @param a_time A time (in ms) or -1 (if the media doesn't have valid times)
+     * @param a_time A time (in µs) or -1 (if the media doesn't have valid times)
      * @param a_pos A position
-     * @param b_time B time (in ms) or -1 (if the media doesn't have valid times)
+     * @param b_time B time (in µs) or -1 (if the media doesn't have valid times)
      * @param b_pos B position
      * @return A to B loop status
      * @since LibVLC 4.0.0 and later
@@ -3316,7 +3316,7 @@ public final class LibVlc {
     public static native int libvlc_picture_get_height(libvlc_picture_t pic);
 
     /**
-     * Returns the time at which this picture was generated, in milliseconds
+     * Returns the time at which this picture was generated, in microseconds
      * @param pic A picture object
      * @return timestamp
      * @since libvlc 4.0 or later
