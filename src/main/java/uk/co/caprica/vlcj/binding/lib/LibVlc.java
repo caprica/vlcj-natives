@@ -1291,11 +1291,20 @@ public final class LibVlc {
     public static native int libvlc_media_player_program_scrambled(libvlc_media_player_t p_mi);
 
     /**
-     * Display the next frame (if supported)
+     * Pause and display the next video frame.
      *
      * @param p_mi the media player
      */
     public static native void libvlc_media_player_next_frame(libvlc_media_player_t p_mi);
+
+    /**
+     * Pause and display the previous video frame.
+     *
+     * Works only on streams that support pause, seek, and pace control.
+     *
+     * @param p_mi the media player
+     */
+    public static native void libvlc_media_player_previous_frame(libvlc_media_player_t p_mi);
 
     /**
      * Navigate through DVD Menu
