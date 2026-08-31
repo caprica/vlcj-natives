@@ -4,5 +4,5 @@ import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
 
 public interface libvlc_media_player_cbs_on_vout_changed extends Callback {
-    void callback(Pointer opaque, int new_vout_count);
+    void callback(Pointer opaque, int voutCount);
 }

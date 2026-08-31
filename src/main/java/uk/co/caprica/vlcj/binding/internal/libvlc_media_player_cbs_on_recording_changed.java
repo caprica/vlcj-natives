@@ -4,5 +4,5 @@ import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
 
 public interface libvlc_media_player_cbs_on_recording_changed extends Callback {
-    void callback(Pointer opaque, int recording);
+    void callback(Pointer opaque, int recording, Pointer filePath);
 }

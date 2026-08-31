@@ -43,6 +43,7 @@ public class libvlc_media_player_cbs extends Structure {
     public libvlc_media_player_cbs_on_media_stopping on_media_stopping;
     public libvlc_media_player_cbs_on_state_changed on_state_changed;
     public libvlc_media_player_cbs_on_buffering_changed on_buffering_changed;
+    public libvlc_media_player_cbs_on_rate_changed on_rate_changed;
     public libvlc_media_player_cbs_on_capabilities_changed on_capabilities_changed;
     public libvlc_media_player_cbs_on_position_changed on_position_changed;
     public libvlc_media_player_cbs_on_length_changed on_length_changed;
@@ -59,6 +60,8 @@ public class libvlc_media_player_cbs extends Structure {
     public libvlc_media_player_cbs_on_media_meta_changed on_media_meta_changed;
     public libvlc_media_player_cbs_on_media_subitems_changed on_media_subitems_changed;
     public libvlc_media_player_cbs_on_media_attachments_added on_media_attachments_added;
+    public libvlc_media_player_cbs_on_next_frame_status on_next_frame_status;
+    public libvlc_media_player_cbs_on_prev_frame_status on_prev_frame_status;
     public libvlc_media_player_cbs_on_vout_changed on_vout_changed;
     public libvlc_media_player_cbs_on_cork_changed on_cork_changed;
     public libvlc_media_player_cbs_on_audio_volume_changed on_audio_volume_changed;
