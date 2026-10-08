@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class libvlc_thumbnailer_request_seek extends Structure {
+public class libvlc_thumbnailer_request_seek_t extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("type", "value", "speed"));
 
@@ -26,6 +26,5 @@ public class libvlc_thumbnailer_request_seek extends Structure {
 
         public long time;
         public double position;
-
     }
 }

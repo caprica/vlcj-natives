@@ -4,5 +4,5 @@ import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
 
 public interface libvlc_media_player_cbs_on_rate_changed extends Callback {
-    void callback(Pointer opaque, float rate);
+    void callback(Pointer opaque, float newRate);
 }

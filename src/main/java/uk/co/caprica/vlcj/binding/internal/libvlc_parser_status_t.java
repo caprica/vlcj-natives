@@ -8,10 +8,10 @@ import java.util.Map;
  */
 public enum libvlc_parser_status_t {
 
-    libvlc_parser_status_success  (0),
-    libvlc_parser_status_cancelled(1),
-    libvlc_parser_status_timeout  (2),
-    libvlc_parser_status_failed   (3);
+    libvlc_parser_status_failed   (0),
+    libvlc_parser_status_timeout  (1),
+    libvlc_parser_status_cancelled(2),
+    libvlc_parser_status_done     (3);
 
     private static final Map<Integer, libvlc_parser_status_t> INT_MAP = new HashMap<Integer, libvlc_parser_status_t>();
 

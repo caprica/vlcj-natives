@@ -22,29 +22,27 @@ package uk.co.caprica.vlcj.binding.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Enumeration of thumbnailer seeking speeds.
- */
-public enum libvlc_thumbnailer_seek_speed_t {
+public enum libvlc_thumbnailer_seek_type_t {
 
-    libvlc_thumbnailer_seek_fast   (0),
-    libvlc_thumbnailer_seek_precise(1);
+    libvlc_thumbnailer_seek_none(0),
+    libvlc_thumbnailer_seek_time(1),
+    libvlc_thumbnailer_seek_pos(2);
 
-    private static final Map<Integer, libvlc_thumbnailer_seek_speed_t> INT_MAP = new HashMap<Integer, libvlc_thumbnailer_seek_speed_t>();
+    private static final Map<Integer, libvlc_thumbnailer_seek_type_t> INT_MAP = new HashMap<Integer, libvlc_thumbnailer_seek_type_t>();
 
     static {
-        for(libvlc_thumbnailer_seek_speed_t value : libvlc_thumbnailer_seek_speed_t.values()) {
+        for(libvlc_thumbnailer_seek_type_t value : libvlc_thumbnailer_seek_type_t.values()) {
             INT_MAP.put(value.intValue, value);
         }
     }
 
-    public static libvlc_thumbnailer_seek_speed_t seekSpeed(int intValue) {
+    public static libvlc_thumbnailer_seek_type_t thumbnailerSeekType(int intValue) {
         return INT_MAP.get(intValue);
     }
 
     private final int intValue;
 
-    libvlc_thumbnailer_seek_speed_t(int intValue) {
+    libvlc_thumbnailer_seek_type_t(int intValue) {
         this.intValue = intValue;
     }
 

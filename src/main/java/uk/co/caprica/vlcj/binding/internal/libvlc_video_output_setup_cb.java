@@ -33,7 +33,7 @@ public interface libvlc_video_output_setup_cb extends Callback {
      *
      * @param opaque private pointer passed to the @a libvlc_video_set_output_callbacks()
      *               on input. The callback can change this value on output to be
-     *               passed to all the other callbacks set on @a libvlc_video_set_output_callbacks().
+     *               passed to all the other callback set on @a libvlc_video_set_output_callbacks().
      *               [IN/OUT]
      * @param cfg requested configuration of the video device [IN]
      * @param out libvlc_video_setup_device_info_t* to fill [OUT]

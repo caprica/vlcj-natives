@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class libvlc_thumbnailer_request extends Structure {
+public class libvlc_thumbnailer_request_t extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("version", "media", "width", "height", "crop", "type", "seek", "hw_dec"));
 
@@ -16,7 +16,7 @@ public class libvlc_thumbnailer_request extends Structure {
     public int height;
     public int crop;
     public int type;
-    public libvlc_thumbnailer_request_seek seek;
+    public libvlc_thumbnailer_request_seek_t seek;
     public int hw_dec;
 
     @Override

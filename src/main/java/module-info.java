@@ -25,6 +25,7 @@
  * <p>
  * Exports to "uk.co.caprica.vlcj.test" are temporary pending reorganisation of the test/examples project.
  */
+@SuppressWarnings("module")
 module uk.co.caprica.vlcj.natives {
     requires com.sun.jna;
     requires java.desktop;

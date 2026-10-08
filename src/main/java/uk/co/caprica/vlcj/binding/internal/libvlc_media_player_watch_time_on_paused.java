@@ -5,5 +5,5 @@ import com.sun.jna.Pointer;
 
 public interface libvlc_media_player_watch_time_on_paused extends Callback {
 
-    void callback(long system_date_us, Pointer data);
+    void callback(Pointer data, long system_date_us);
 }
