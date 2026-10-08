@@ -30,7 +30,6 @@ import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_mixmode_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_output_stereomode_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_seek;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_cleanup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_drain_cb;
@@ -42,33 +41,26 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_audio_play_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_resume_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_set_volume_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_audio_setup_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_display_error_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_dialog_id;
 import uk.co.caprica.vlcj.binding.internal.libvlc_display_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_equalizer_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_e;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_manager_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_event_u;
 import uk.co.caprica.vlcj.binding.internal.libvlc_instance_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_lock_callback_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_log_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_close_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_discoverer_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_list_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_open_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_time_point_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_paused;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_on_update;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_read_cb;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_seek_cb;
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_player_watch_time_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_stats_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_thumbnail_request_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_track_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_tracklist_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_module_description_t;
@@ -76,6 +68,7 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_picture_list_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_picture_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_program_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_player_programlist_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_cbs;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_discoverer_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_renderer_item_t;
 import uk.co.caprica.vlcj.binding.internal.libvlc_unlock_callback_t;
@@ -90,6 +83,13 @@ import uk.co.caprica.vlcj.binding.internal.libvlc_video_output_setup_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_swap_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_update_output_cb;
 import uk.co.caprica.vlcj.binding.internal.libvlc_video_viewpoint_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_cfg;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_request_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_parser_task_t;
+import uk.co.caprica.vlcj.binding.internal.libvlc_thumbnailer_cbs;
+import uk.co.caprica.vlcj.binding.internal.libvlc_thumbnailer_request_t;
 import uk.co.caprica.vlcj.binding.support.types.size_tByReference;
 import uk.co.caprica.vlcj.binding.support.types.size_t;
 
@@ -246,29 +246,6 @@ public final class LibVlc {
     public static native void libvlc_free(Pointer ptr);
 
     /**
-     * Register for an event notification.
-     *
-     * @param p_event_manager the event manager to which you want to attach to. Generally it is
-     *            obtained by vlc_my_object_event_manager() where my_object is the object you want
-     *            to listen to.
-     * @param i_event_type the desired event to which we want to listen
-     * @param f_callback the function to call when i_event_type occurs
-     * @param user_data user provided data to carry with the event
-     * @return 0 on success, ENOMEM on error
-     */
-    public static native int libvlc_event_attach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer user_data);
-
-    /**
-     * Unregister an event notification.
-     *
-     * @param p_event_manager the event manager
-     * @param i_event_type the desired event to which we want to unregister
-     * @param f_callback the function to call when i_event_type occurs
-     * @param p_user_data user provided data to carry with the event
-     */
-    public static native void libvlc_event_detach(libvlc_event_manager_t p_event_manager, int i_event_type, libvlc_callback_t f_callback, Pointer p_user_data);
-
-    /**
      * Gets debugging informations about a log message: the name of the VLC module
      * emitting the message and the message location within the source code.
      * <p>
@@ -318,7 +295,7 @@ public final class LibVlc {
      * Unsets the logging callback for a LibVLC instance. This is rarely needed:
      * the callback is implicitly unset when the instance is destroyed.
      * <p>
-     * This function will wait for any pending callbacks invocation to complete
+     * This function will wait for any pending callback invocation to complete
      * (causing a deadlock if called from within the callback).
      *
      * @param p_instance the instance
@@ -330,7 +307,7 @@ public final class LibVlc {
     /**
      * Sets the logging callback for a LibVLC instance.
      * <p>
-     * This function is thread-safe: it will wait for any pending callbacks
+     * This function is thread-safe: it will wait for any pending callback
      * invocation to complete.
      * <p>
      * <em>Some log messages (especially debug) are emitted by LibVLC while
@@ -408,30 +385,27 @@ public final class LibVlc {
     public static native libvlc_media_t libvlc_media_new_path(String path);
 
     /**
-     * Create a media with custom callbacks to read the data from.
+     * Create a media with custom callback to read the data from.
      * <p>
      * If open_cb is NULL, the opaque pointer will be passed to read_cb,
      * seek_cb and close_cb, and the stream size will be treated as unknown.
      * <p>
-     * The callbacks may be called asynchronously (from another thread).
+     * The callback may be called asynchronously (from another thread).
      * A single stream instance need not be reentrant. However the open_cb needs to
      * be reentrant if the media is used by multiple player instances.
      * <p>
-     * <strong>The callbacks may be used until all or any player instances
+     * <strong>The callback may be used until all or any player instances
      * that were supplied the media item are stopped.</strong>
      * <p>
      * @see #libvlc_media_release(libvlc_media_t)
      *
-     * @since LibVLC 3.0.0 and later.
+     * @since LibVLC 4.0.0 and later.
      *
-     * @param open_cb callback to open the custom bitstream input media
-     * @param read_cb callback to read data (must not be NULL)
-     * @param seek_cb callback to seek, or NULL if seeking is not supported
-     * @param close_cb callback to close the media, or NULL if unnecessary
-     * @param opaque data pointer for the open callback
+     * @param p_cbs a pointer to the media open callback struct
+     * @param p_opaque data pointer for the open callback
      * @return the newly created media or NULL on error
      */
-    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_media_open_cb open_cb, libvlc_media_read_cb read_cb, libvlc_media_seek_cb seek_cb, libvlc_media_close_cb close_cb, Pointer opaque);
+    public static native libvlc_media_t libvlc_media_new_callbacks(libvlc_media_open_cbs p_cbs, Pointer p_opaque);
 
     /**
      * Create a media as an empty node with a given name.
@@ -501,13 +475,12 @@ public final class LibVlc {
     /**
      * Read the meta of the media.
      * <p>
-     * Note, you need to call {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}() or play
-     * the media at least once before calling this function.
+     * Note, you need to parse the media or play the media at least once before
+     * calling this function.
      * <p>
      * If the media has not yet been parsed this will return NULL.
      *
-     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
-     * @see libvlc_event_e#libvlc_MediaMetaChanged
+     * @see #libvlc_media_is_parsed(libvlc_media_t)
      * @param p_md the media descriptor
      * @param e_meta the meta to read
      * @return the media's meta
@@ -593,16 +566,7 @@ public final class LibVlc {
     public static native libvlc_media_list_t libvlc_media_subitems(libvlc_media_t p_md);
 
     /**
-     * Get event manager from media descriptor object. NOTE: this function doesn't increment
-     * reference counting.
-     *
-     * @param p_md a media descriptor object
-     * @return event manager object
-     */
-    public static native libvlc_event_manager_t libvlc_media_event_manager(libvlc_media_t p_md);
-
-    /**
-     * Get duration (in ms) of media descriptor object item.
+     * Get duration (in µs) of media descriptor object item.
      *
      * @param p_md media descriptor object
      * @return duration of media item or -1 on error
@@ -613,8 +577,7 @@ public final class LibVlc {
      * Get a 'stat' value of media descriptor object item.
      *
      * Note 'stat' values are currently only parsed by directory accesses. This means that only sub medias of a
-     * directory media, parsed with {@link #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)}()
-     * can have valid 'stat' properties.
+     * directory media can have valid 'stat' properties.
      *
      * @param p_md media descriptor object
      * @param type a valid libvlc_media_stat_ define
@@ -625,60 +588,14 @@ public final class LibVlc {
     public static native int libvlc_media_get_filestat(libvlc_media_t p_md, int type, LongByReference out);
 
     /**
-     * Parse the media asynchronously with options.
-     *
-     * This fetches (local or network) art, meta data and/or tracks information.
-     *
-     * To track when this is over you can listen to libvlc_MediaParsedChanged
-     * event. However if this functions returns an error, you will not receive any
-     * events.
-     *
-     * It uses a flag to specify parse options. All
-     * these flags can be combined. By default, media is parsed if it's a local
-     * file.
-     *
-     * Parsing can be aborted with libvlc_media_parse_stop().
-     *
-     * @see libvlc_event_e#libvlc_MediaParsedChanged
-     * @see #libvlc_media_get_meta(libvlc_media_t, int)
-     *
-     * @param inst the instance to use to parse the media
-     * @param p_md media descriptor object
-     * @param parse_flag parse options
-     * @param timeout maximum time allowed to preparse the media. If -1, the default
-     *                "preparse-timeout" option will be used as a timeout. If 0, it
-     *                will wait indefinitely. If &gt; 0, the timeout will be used (in
-     *                milliseconds).
-     * @return -1 in case of error, 0 otherwise
-     *
-     * @since LibVLC 3.0.0 or later
-     */
-    public static native int libvlc_media_parse_request(libvlc_instance_t inst, libvlc_media_t p_md, int parse_flag, int timeout);
-
-    /**
-     * Stop the parsing of the media
-     *
-     * When the media parsing is stopped, the libvlc_MediaParsedChanged event will
-     * be sent with the libvlc_media_parsed_status_timeout status.
-     *
-     * @see #libvlc_media_parse_request(libvlc_instance_t, libvlc_media_t, int, int)
-     *
-     * @param inst the instance used to parse the media
-     * @param p_md media descriptor object
-     *
-     * @since version LibVLC 3.0.0 or later
-     */
-    public static native void libvlc_media_parse_stop(libvlc_instance_t inst, libvlc_media_t p_md);
-
-    /**
-     * Get Parsed status for media descriptor object.
+     * Check if a media has been parsed.
      *
      * @param p_md media descriptor object
-     * @return a value of the libvlc_media_parsed_status_t enum
+     * @return 1 if the media has been parsed, 0 otherwise
      *
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_get_parsed_status(libvlc_media_t p_md);
+    public static native int libvlc_media_is_parsed(libvlc_media_t p_md);
 
     /**
      * Sets media descriptor's user_data. user_data is specialized data accessed by the host
@@ -705,11 +622,9 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note you need to call libvlc_media_parse_request or play the media
+     * Note you need to parse the media or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
-     *
-     * @see #libvlc_media_parse_request
      * @see #libvlc_media_tracklist_count
      * @see #libvlc_media_tracklist_at
      *
@@ -733,73 +648,6 @@ public final class LibVlc {
     public static native int libvlc_media_get_type(libvlc_media_t p_md);
 
     /**
-     * Start an asynchronous thumbnail generation
-     *
-     * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
-     * is guaranteed to be emited.
-     *
-     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
-     *
-     * @param inst the instance to use to generate the thumbnail
-     * @param md media descriptor object
-     * @param time The time at which the thumbnail should be generated
-     * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
-     * @param width The thumbnail width
-     * @param height the thumbnail height
-     * @param crop non-zero if the thumbnail should be cropped
-     * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
-     * @param timeout A timeout value in ms, or 0 to disable timeout
-     *
-     * @return A valid opaque request object, or NULL in case of failure.
-     *
-     * @since libvlc 4.0 or later
-     *
-     * @see libvlc_picture_t
-     */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_time(libvlc_instance_t inst, libvlc_media_t md, long time, int speed, int width, int height, int crop, int picture_type, long timeout);
-
-    /**
-     * Start an asynchronous thumbnail generation
-     *
-     * If the request is successfuly queued, the libvlc_MediaThumbnailGenerated
-     * is guaranteed to be emited.
-     *
-     * The returned request object must be released via {@link #libvlc_media_thumbnail_request_destroy(libvlc_media_thumbnail_request_t)}.
-     *
-     * @param inst the instance to use to generate the thumbnail
-     * @param md media descriptor object
-     * @param pos The position at which the thumbnail should be generated
-     * @param speed The seeking speed \sa{libvlc_thumbnailer_seek_speed_t}
-     * @param width The thumbnail width
-     * @param height the thumbnail height
-     * @param picture_type The thumbnail picture type \sa{libvlc_picture_type_t}
-     * @param crop non-zero if the thumbnail should be cropped
-     * @param timeout A timeout value in ms, or 0 to disable timeout
-     *
-     * @return A valid opaque request object, or NULL in case of failure.
-     *
-     * @since libvlc 4.0 or later
-     *
-     * @see libvlc_picture_t
-     */
-    public static native libvlc_media_thumbnail_request_t libvlc_media_thumbnail_request_by_pos(libvlc_instance_t inst, libvlc_media_t md, double pos, int speed, int width, int height, int crop, int picture_type, long timeout);
-
-    /**
-     * Destroy a thumbnail request.
-     *
-     * If the request has not completed or hasn't been cancelled yet, the behavior
-     * is undefined.
-     *
-     * This will also cancel the thumbnail request, no events will be emitted after
-     * this call.
-     *
-     * @param p_req An opaque thumbnail request object.
-     *
-     * @since libvlc 4.0 or later
-     */
-    public static native void libvlc_media_thumbnail_request_destroy( libvlc_media_thumbnail_request_t p_req);
-
-    /**
      * Get codec description from media elementary stream.
      *
      * @param i_type i_type from libvlc_media_track_t
@@ -817,9 +665,8 @@ public final class LibVlc {
      * A slave is an external input source that may contains an additional subtitle
      * track (like a .srt) or an additional audio track (like a .ac3).
      * <p>
-     * This function must be called before the media is parsed (via
-     * libvlc_media_parse_request()) or before the media is played (via
-     * libvlc_media_player_play())
+     * This function must be called before the media is parsed or before
+     * the media is played (via libvlc_media_player_play())
      *
      * @param p_md media descriptor object
      * @param i_type subtitle or audio
@@ -873,19 +720,23 @@ public final class LibVlc {
     /**
      * Create an empty Media Player object
      *
-     * @param p_libvlc_instance the libvlc instance in which the Media Player should be created.
-     * @return a new media player object, or NULL on error.
+     * @param p_libvlc_instance the libvlc instance in which the Media Player should be created
+     * @param p_cbs media player callback to receive events
+     * @param p_cbs_opaque opaque pointer for the callback
+     * @return a new media player object, or NULL on error
      */
-    public static native libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance);
+    public static native libvlc_media_player_t libvlc_media_player_new(libvlc_instance_t p_libvlc_instance, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Create a Media Player object from a Media
      *
      * @param p_libvlc_instance libvlc instance
      * @param p_md the media. Afterwards the p_md can be safely destroyed.
-     * @return a new media player object, or NULL on error.
+     * @param p_cbs media player callback to receive events
+     * @param p_cbs_opaque opaque pointer for the callback
+     * @return a new media player object, or NULL on error
      */
-    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_instance_t p_libvlc_instance, libvlc_media_t p_md);
+    public static native libvlc_media_player_t libvlc_media_player_new_from_media(libvlc_instance_t p_libvlc_instance, libvlc_media_t p_md, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Release a media_player after use Decrement the reference count of a media player object. If
@@ -907,8 +758,8 @@ public final class LibVlc {
     /**
      * Set the media that will be used by the media_player. If any, previous md will be released.
      *
-     * @param p_mi the Media Player
-     * @param p_md the Media. Afterwards the p_md can be safely destroyed.
+     * @param p_mi the media player
+     * @param p_md the media, afterwards the p_md can be safely destroyed
      */
     public static native void libvlc_media_player_set_media(libvlc_media_player_t p_mi, libvlc_media_t p_md);
 
@@ -917,18 +768,34 @@ public final class LibVlc {
      * <p>
      * You do <strong>not</strong> need to invoke libvlc_media_player_release().
      *
-     * @param p_mi the Media Player
+     * @param p_mi the media player
      * @return the media associated with p_mi, or NULL if no media is associated
      */
     public static native libvlc_media_t libvlc_media_player_get_media(libvlc_media_player_t p_mi);
 
     /**
-     * Get the Event Manager from which the media player send event.
+     * Set the next media
+     * <p>
+     * This function replaces the next media to be played.
+     * <p>
+     * The media won't be opened directly by this function. If there is no current media, the next
+     * media will be opened from libvlc_media_player_play(). If there is a current playing media,
+     * the next media will be opened and played automatically.
      *
-     * @param p_mi the Media Player
-     * @return the event manager associated with p_mi
+     * @param p_mi the media player
+     * @param p_md the next media, afterwards the p_md can be safely destroyed
      */
-    public static native libvlc_event_manager_t libvlc_media_player_event_manager(libvlc_media_player_t p_mi);
+    public static native void libvlc_media_player_set_next_media(libvlc_media_player_t p_mi, libvlc_media_t p_md);
+
+    /**
+     * Get the next media to be played
+     * <p>
+     * This function return the media set by {@link #libvlc_media_player_set_next_media(libvlc_media_player_t, libvlc_media_t)}.
+     *
+     * @param p_mi the media player
+     * @return the next media, or NULL if there is no next media
+     */
+    public static native libvlc_media_t libvlc_media_player_get_next_media(libvlc_media_player_t p_mi);
 
     /**
      * is_playing
@@ -978,7 +845,7 @@ public final class LibVlc {
      * Must be called before the first call of libvlc_media_player_play() to
      * take effect.
      *
-     * @see #libvlc_renderer_discoverer_new(libvlc_instance_t, String)
+     * @see #libvlc_renderer_discoverer_new(libvlc_instance_t, String, libvlc_renderer_discoverer_cbs, Pointer) 
      *
      * @param p_mi the Media Player
      * @param p_item an item discovered by libvlc_renderer_discoverer_start()
@@ -989,7 +856,7 @@ public final class LibVlc {
     public static native int libvlc_media_player_set_renderer(libvlc_media_player_t p_mi, libvlc_renderer_item_t p_item);
 
     /**
-     * Set callbacks and private data to render decoded video to a custom area in memory.
+     * Set callback and private data to render decoded video to a custom area in memory.
      * <p>
      * Use libvlc_video_set_format() or libvlc_video_set_format_callbacks() to configure the decoded
      * format.
@@ -998,7 +865,7 @@ public final class LibVlc {
      * @param lock callback to allocate video memory
      * @param unlock callback to release video memory
      * @param display callback when ready to display a video frame
-     * @param opaque private pointer for the three callbacks (as first parameter)
+     * @param opaque private pointer for the three callback (as first parameter)
      * @since LibVLC 1.1.1
      */
     public static native void libvlc_video_set_callbacks(libvlc_media_player_t mp, libvlc_lock_callback_t lock, libvlc_unlock_callback_t unlock, libvlc_display_callback_t display, Pointer opaque);
@@ -1033,7 +900,7 @@ public final class LibVlc {
     public static native void libvlc_video_set_format_callbacks(libvlc_media_player_t mp, libvlc_video_format_cb setup, libvlc_video_output_cleanup_cb cleanup);
 
     /**
-     * Set callbacks and data to render decoded video to a custom texture.
+     * Set callback and data to render decoded video to a custom texture.
      *
      * Warning: VLC will perform video rendering in its own thread and at its own rate,
      * You need to provide your own synchronisation mechanism.
@@ -1051,7 +918,7 @@ public final class LibVlc {
      * @param getProcAddress_cb opengl function loading callback (cannot be NULL for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2)
      * @param metadata_cb callback to provide frame metadata (D3D11 only)
      * @param select_plane_cb callback to select different D3D11 rendering targets
-     * @param opaque private pointer passed to callbacks
+     * @param opaque private pointer passed to callback
      * @return 0 on success; -1 on error
      *
      * @since LibVLC 4.0.0 or later
@@ -1093,7 +960,6 @@ public final class LibVlc {
      * @param drawable the drawable that is either an NSView or an object following the
      *            VLCOpenGLVideoViewEmbedding protocol.
      */
-    // FIXME should be a pointer not a long (makes no difference really)
     public static native void libvlc_media_player_set_nsobject(libvlc_media_player_t p_mi, long drawable);
 
     /**
@@ -1145,7 +1011,7 @@ public final class LibVlc {
     public static native Pointer libvlc_media_player_get_hwnd(libvlc_media_player_t p_mi);
 
     /**
-     * Set callbacks and private data for decoded audio.
+     * Set callback and private data for decoded audio.
      * <p>
      * Use libvlc_audio_set_format() or libvlc_audio_set_format_callbacks() to configure the decoded
      * audio format.
@@ -1156,13 +1022,13 @@ public final class LibVlc {
      * @param resume callback to resume playback (or NULL to ignore)
      * @param flush callback to flush audio buffers (or NULL to ignore)
      * @param drain callback to drain audio buffers (or NULL to ignore)
-     * @param opaque private pointer for the audio callbacks (as first parameter)
+     * @param opaque private pointer for the audio callback (as first parameter)
      * @since LibVLC 2.0.0 or later
      */
     public static native void libvlc_audio_set_callbacks(libvlc_media_player_t mp, libvlc_audio_play_cb play, libvlc_audio_pause_cb pause, libvlc_audio_resume_cb resume, libvlc_audio_flush_cb flush, libvlc_audio_drain_cb drain, Pointer opaque);
 
     /**
-     * Set callbacks and private data for decoded audio. Use libvlc_audio_set_format() or
+     * Set callback and private data for decoded audio. Use libvlc_audio_set_format() or
      * libvlc_audio_set_format_callbacks() to configure the decoded audio format.
      *
      * @param mp the media player
@@ -1196,35 +1062,35 @@ public final class LibVlc {
     /** bug This might go away ... to be replaced by a broader system */
 
     /**
-     * Get the current movie length (in ms).
+     * Get the current movie length (in µs).
      *
      * @param p_mi the Media Player
-     * @return the movie length (in ms), or -1 if there is no media.
+     * @return the movie length (in µs), or -1 if there is no media.
      */
     public static native long libvlc_media_player_get_length(libvlc_media_player_t p_mi);
 
     /**
-     * Get the current movie time (in ms).
+     * Get the current movie time (in µs).
      *
      * @param p_mi the Media Player
-     * @return the movie time (in ms), or -1 if there is no media.
+     * @return the movie time (in µs), or -1 if there is no media.
      */
     public static native long libvlc_media_player_get_time(libvlc_media_player_t p_mi);
 
     /**
-     * Set the movie time (in ms).
+     * Set the movie time (in µs).
      * <p>
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
-     * @param i_time the movie time (in ms).
+     * @param i_time the movie time (in µs).
      * @param b_fast prefer fast seeking or precise seeking
      * @return 0 on success, -1 on error
      */
     public static native int libvlc_media_player_set_time(libvlc_media_player_t p_mi, long i_time, int b_fast);
 
     /**
-     * Jump the movie time (in ms).
+     * Jump the movie time (in µs).
      * <p>
      * This will trigger a precise and relative seek (from the current time). This has no effect if no media is being
      * played.
@@ -1232,7 +1098,7 @@ public final class LibVlc {
      * Not all formats and protocols support this.
      *
      * @param p_mi the Media Player
-     * @param i_time the movie time (in ms).
+     * @param i_time the movie time (in µs).
      * @return 0 on success, -1 on error
      * @since libVLC 4.0.0
      */
@@ -1267,8 +1133,8 @@ public final class LibVlc {
      * The B time must be higher than the A time.
      *
      * @param p_mi the Media Player
-     * @param a_time start time for the loop (in ms)
-     * @param b_time end time for the loop (in ms)
+     * @param a_time start time for the loop (in µs)
+     * @param b_time end time for the loop (in µs)
      * @return 0 on success, -1 on error
      * @since LibVLC 4.0.0 and later
      */
@@ -1306,9 +1172,9 @@ public final class LibVlc {
      * VLC_PLAYER_ABLOOP_NONE, then all output parameters are invalid.
      *
      * @param p_mi the Media Player
-     * @param a_time A time (in ms) or -1 (if the media doesn't have valid times)
+     * @param a_time A time (in µs) or -1 (if the media doesn't have valid times)
      * @param a_pos A position
-     * @param b_time B time (in ms) or -1 (if the media doesn't have valid times)
+     * @param b_time B time (in µs) or -1 (if the media doesn't have valid times)
      * @param b_pos B position
      * @return A to B loop status
      * @since LibVLC 4.0.0 and later
@@ -1448,11 +1314,20 @@ public final class LibVlc {
     public static native int libvlc_media_player_program_scrambled(libvlc_media_player_t p_mi);
 
     /**
-     * Display the next frame (if supported)
+     * Pause and display the next video frame.
      *
      * @param p_mi the media player
      */
     public static native void libvlc_media_player_next_frame(libvlc_media_player_t p_mi);
+
+    /**
+     * Pause and display the previous video frame.
+     *
+     * Works only on streams that support pause, seek, and pace control.
+     *
+     * @param p_mi the media player
+     */
+    public static native void libvlc_media_player_previous_frame(libvlc_media_player_t p_mi);
 
     /**
      * Navigate through DVD Menu
@@ -1478,7 +1353,7 @@ public final class LibVlc {
      *
      * @since LibVLC 4.0.0 and later.
      *
-     * Note: You need to call libvlc_media_parse_request() or play the media
+     * Note: You need to parse the media or play the media
      * at least once before calling this function.  Not doing this will result in
      * an empty list.
      *
@@ -2688,13 +2563,11 @@ public final class LibVlc {
      *
      * @param p_mi the media player
      * @param min_period_us corresponds to the minimum period, in us, between each update, use it to avoid flood from too many source updates, set it to 0 to receive all updates.
-     * @param on_update callback to listen to update events (must not be NULL)
-     * @param on_discontinuity callback to listen to discontinuity events (can be NULL)
-     * @param cbs_data opaque pointer used by the callbacks
+     * @param cbs watch time callback struct
      * @return 0 on success, -1 on error (allocation error, or if already watching)
      * @since LibVLC 4.0.0 or later
      */
-    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_on_update on_update, libvlc_media_player_watch_time_on_paused on_discontinuity, libvlc_media_player_watch_time_on_seek on_seek, Pointer cbs_data);
+    public static native int libvlc_media_player_watch_time(libvlc_media_player_t p_mi, long min_period_us, libvlc_media_player_watch_time_cbs cbs, Pointer opaque);
 
     /**
      * Unwatch time updates.
@@ -2773,7 +2646,7 @@ public final class LibVlc {
      * may spuriously wake up even without libvlc_media_player_signal() being
      * called.
      *
-     * Warning this function must not be called from any libvlc callbacks and
+     * Warning this function must not be called from any libvlc callback and
      * events. The lock should be held only one time before waiting.
      *
      * @param mp media player object locked using /ref libvlc_media_player_lock
@@ -2799,10 +2672,9 @@ public final class LibVlc {
     /**
      * Create an empty media list.
      *
-     * @param p_instance libvlc instance
      * @return empty media list, or NULL on error
      */
-    public static native libvlc_media_list_t libvlc_media_list_new(libvlc_instance_t p_instance);
+    public static native libvlc_media_list_t libvlc_media_list_new();
 
     /**
      * Release media list created with libvlc_media_list_new().
@@ -2904,9 +2776,7 @@ public final class LibVlc {
      * This indicates if this media list is read-only from a user point of view
      *
      * @param p_ml media list instance
-     * @return 0 on readonly, 1 on readwrite
-     *
-     * FIXME I am pretty sure the documented return values are the wrong way around
+     * @return 1 read-only, 0 read-write
      */
     public static native int libvlc_media_list_is_readonly(libvlc_media_list_t p_ml);
 
@@ -2925,15 +2795,6 @@ public final class LibVlc {
      */
     public static native void libvlc_media_list_unlock(libvlc_media_list_t p_ml);
 
-    /**
-     * Get libvlc_event_manager from this media list instance. The p_event_manager is immutable, so
-     * you don't have to hold the lock
-     *
-     * @param p_ml a media list instance
-     * @return libvlc_event_manager
-     */
-    public static native libvlc_event_manager_t libvlc_media_list_event_manager(libvlc_media_list_t p_ml);
-
     // === libvlc_media_list.h ==================================================
 
     // === libvlc_media_list_player.h ===========================================
@@ -2942,9 +2803,12 @@ public final class LibVlc {
      * Create new media_list_player.
      *
      * @param p_instance libvlc instance
+     * @param p_cbs media player callback to receive events
+     * @param p_cbs_opaque opaque pointer for the callback
      * @return media list player instance or NULL on error
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance);
+    public static native libvlc_media_list_player_t libvlc_media_list_player_new(libvlc_instance_t p_instance, libvlc_media_player_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Release a media_list_player after use.
@@ -2965,22 +2829,6 @@ public final class LibVlc {
      * @param p_mlp media player list object
      */
     public static native libvlc_media_list_player_t libvlc_media_list_player_retain(libvlc_media_list_player_t p_mlp);
-
-    /**
-     * Return the event manager of this media_list_player.
-     *
-     * @param p_mlp media list player instance
-     * @return the event manager
-     */
-    public static native libvlc_event_manager_t libvlc_media_list_player_event_manager(libvlc_media_list_player_t p_mlp);
-
-    /**
-     * Replace media player in media_list_player with this instance.
-     *
-     * @param p_mlp media list player instance
-     * @param p_mi media player instance
-     */
-    public static native void libvlc_media_list_player_set_media_player(libvlc_media_list_player_t p_mlp, libvlc_media_player_t p_mi);
 
     /**
      * Get media player of the media_list_player instance.
@@ -3094,12 +2942,12 @@ public final class LibVlc {
     // === libvlc_dialog.h ======================================================
 
     /**
-     * Register callbacks in order to handle VLC dialogs.
+     * Register callback in order to handle VLC dialogs.
      *
      * @since LibVLC 3.0.0 and later.
      *
      * @param p_instance the instance
-     * @param p_cbs a pointer to callbacks, or NULL to unregister callbacks.
+     * @param p_cbs a pointer to callback, or NULL to unregister callback.
      * @param p_data opaque pointer for the callback
      */
     public static native void libvlc_dialog_set_callbacks(libvlc_instance_t p_instance, libvlc_dialog_cbs p_cbs, Pointer p_data);
@@ -3188,31 +3036,28 @@ public final class LibVlc {
     /**
      * Create a media discoverer object by name.
      *
-     * After this object is created, you should attach to events in order to be
-     * notified of the discoverer state.
-     *
-     * You should also attach to media_list events in order to be notified of new
-     * items discovered.
+     * After this object is created, the callback will be used to receive events.
      *
      * You need to call {@link #libvlc_media_discoverer_start(libvlc_media_discoverer_t)}
      * in order to start the discovery.
      *
-     * @see #libvlc_media_discoverer_media_list(libvlc_media_discoverer_t)
      * @see #libvlc_media_discoverer_start(libvlc_media_discoverer_t)
      *
      * @param p_inst libvlc instance
      * @param psz_name service name
+     * @param p_cbs media discoverer callback
+     * @param p_cbs_opaque opaque pointer for the callback
      * @return media discover object or NULL in case of error
      *
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_media_discoverer_t libvlc_media_discoverer_new(libvlc_instance_t p_inst, String psz_name, libvlc_media_discoverer_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
      * Start media discovery.
      *
      * To stop it, call libvlc_media_discoverer_stop() or
-     * libvlc_media_discoverer_release() directly.
+     * libvlc_media_discoverer_destroy() directly.
      *
      * @see #libvlc_media_discoverer_stop(libvlc_media_discoverer_t)
      *
@@ -3235,20 +3080,13 @@ public final class LibVlc {
     public static native void libvlc_media_discoverer_stop(libvlc_media_discoverer_t p_mdis);
 
     /**
-     * Release media discover object. If the reference count reaches 0, then the object will be
-     * released.
+     * Destroy a media discover object.
+     * <p>
+     * Unlike release(), this is not reference-counted — the object has a single owner.
      *
      * @param p_mdis media service discover object
      */
-    public static native void libvlc_media_discoverer_release(libvlc_media_discoverer_t p_mdis);
-
-    /**
-     * Get media service discover media list.
-     *
-     * @param p_mdis media service discover object
-     * @return list of media items
-     */
-    public static native libvlc_media_list_t libvlc_media_discoverer_media_list(libvlc_media_discoverer_t p_mdis);
+    public static native void libvlc_media_discoverer_destroy(libvlc_media_discoverer_t p_mdis);
 
     /**
      * Query if media service discover object is running.
@@ -3287,7 +3125,7 @@ public final class LibVlc {
     // === libvlc_renderer_discoverer.h =========================================
 
     /**
-     * Hold a renderer item, i.e. creates a new reference
+     * Retain a renderer item, i.e. creates a new reference
      *
      * This functions need to called from the libvlc_RendererDiscovererItemAdded
      * callback if the libvlc user wants to use this item after. (for display or
@@ -3297,7 +3135,7 @@ public final class LibVlc {
      * @return the current item
      * @since LibVLC 3.0.0 or later
      */
-    public static native libvlc_renderer_item_t libvlc_renderer_item_hold(libvlc_renderer_item_t p_item);
+    public static native libvlc_renderer_item_t libvlc_renderer_item_retain(libvlc_renderer_item_t p_item);
 
     /**
      * Releases a renderer item, i.e. decrements its reference counter
@@ -3345,38 +3183,40 @@ public final class LibVlc {
     public static native int libvlc_renderer_item_flags(libvlc_renderer_item_t p_item);
 
     /**
-     * Create a renderer discoverer object by name
+     * Create a renderer discoverer object by name.
      *
-     * After this object is created, you should attach to events in order to be
-     * notified of the discoverer events.
+     * After this object is created, the callback will be used to receive events.
      *
      * You need to call libvlc_renderer_discoverer_start() in order to start the
      * discovery.
      *
-     * @see #libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t)
      * @see #libvlc_renderer_discoverer_start(libvlc_renderer_discoverer_t)
      *
      * @param p_inst libvlc instance
      * @param psz_name service name; use libvlc_renderer_discoverer_list_get() to
      * get a list of the discoverer names available in this libVLC instance
+     * @param p_cbs renderer discoverer callback
+     * @param p_cbs_opaque opaque pointer for the callback
      * @return media discover object or NULL in case of error
-     * @since LibVLC 3.0.0 or later
+     * @since LibVLC 4.0.0 or later
      */
-    public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name);
+    public static native libvlc_renderer_discoverer_t libvlc_renderer_discoverer_new(libvlc_instance_t p_inst, String psz_name, libvlc_renderer_discoverer_cbs p_cbs, Pointer p_cbs_opaque);
 
     /**
-     * Release a renderer discoverer object
+     * Destroy a renderer discoverer object.
+     * <p>
+     * Unlike release(), this is not reference-counted — the object has a single owner.
      *
      * @param p_rd renderer discoverer object
      * @since LibVLC 3.0.0 or later
      */
-    public static native void libvlc_renderer_discoverer_release(libvlc_renderer_discoverer_t p_rd);
+    public static native void libvlc_renderer_discoverer_destroy(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Start renderer discovery
      *
      * To stop it, call libvlc_renderer_discoverer_stop() or
-     * libvlc_renderer_discoverer_release() directly.
+     * libvlc_renderer_discoverer_destroy() directly.
      *
      * @see #libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t)
      *
@@ -3395,25 +3235,6 @@ public final class LibVlc {
      * @since LibVLC 3.0.0 or later
      */
     public static native void libvlc_renderer_discoverer_stop(libvlc_renderer_discoverer_t p_rd);
-
-    /**
-     * Get the event manager of the renderer discoverer
-     *
-     * The possible events to attach are @ref libvlc_RendererDiscovererItemAdded
-     * and @ref libvlc_RendererDiscovererItemDeleted.
-     *
-     * The @ref libvlc_renderer_item_t struct passed to event callbacks is owned by
-     * VLC, users should take care of holding/releasing this struct for their
-     * internal usage.
-     *
-     * @see libvlc_event_u#renderer_discoverer_item_added
-     * @see libvlc_event_u#renderer_discoverer_item_deleted
-     *
-     * @param p_rd renderer discoverer handle
-     * @return a valid event manager (can't fail)
-     * @since LibVLC 3.0.0 or later
-     */
-    public static native libvlc_event_manager_t libvlc_renderer_discoverer_event_manager(libvlc_renderer_discoverer_t p_rd);
 
     /**
      * Get media discoverer services
@@ -3529,7 +3350,7 @@ public final class LibVlc {
     public static native int libvlc_picture_get_height(libvlc_picture_t pic);
 
     /**
-     * Returns the time at which this picture was generated, in milliseconds
+     * Returns the time at which this picture was generated, in microseconds
      * @param pic A picture object
      * @return timestamp
      * @since libvlc 4.0 or later
@@ -3612,7 +3433,7 @@ public final class LibVlc {
      * @param track valid track
      * @return the same track, need to be released with libvlc_media_track_release()
      */
-    public static native libvlc_media_track_t libvlc_media_track_hold(libvlc_media_track_t track);
+    public static native libvlc_media_track_t libvlc_media_track_retain(libvlc_media_track_t track);
 
     /**
      * Release a single track
@@ -3623,7 +3444,7 @@ public final class LibVlc {
      * libvlc_media_tracklist_delete().
      *
      * \note You only need to release tracks previously held with
-     * libvlc_media_track_hold() or returned by
+     * libvlc_media_track_retain() or returned by
      * libvlc_media_player_get_selected_track() and
      * libvlc_media_player_get_track_from_id()
      *
@@ -3632,4 +3453,102 @@ public final class LibVlc {
     public static native void libvlc_media_track_release(libvlc_media_track_t track);
 
     // === libvlc_media_track.h =================================================
+
+    // === libvlc_parser.h ======================================================
+
+    /**
+     * Create a parser object.
+     *
+     * @param inst libvlc instance
+     * @param cfg parser configuration
+     * @return parser, or NULL on error
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_t libvlc_parser_new(libvlc_instance_t inst, libvlc_parser_cfg cfg);
+
+    /**
+     * Destroy a parser object.
+     * <p>
+     * This cancels all pending and running tasks, reports it via their
+     * corresponding on_parsed/on_ended callback and blocks until all worker
+     * threads are joined.
+     *
+     * @param parser parser the parser
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_parser_destroy(libvlc_parser_t parser);
+
+    /**
+     * Create a new parser task.
+     *
+     * @param parser parser the parser
+     * @param req parse request
+     * @param cbs parser callback
+     * @param opaque opaque pointer for the callback
+     * @return a task handle, or NULL on error, the task handle must be freed by libvlc_parser_task_release
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_task_t libvlc_parser_task_new_parse(libvlc_parser_t parser, libvlc_parser_request_t req, libvlc_parser_cbs cbs, Pointer opaque);
+
+    /**
+     * Create a new thumbnailer task.
+     *
+     * @param parser parser the parser
+     * @param req thumbnailer request
+     * @param cbs thumbnailer callback
+     * @param opaque opaque pointer for the callback
+     * @return a task handle, or NULL on error, the task handle must be freed by libvlc_parser_task_release
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_parser_task_t libvlc_parser_task_new_thumbnail(libvlc_parser_t parser, libvlc_thumbnailer_request_t req, libvlc_thumbnailer_cbs cbs, Pointer opaque);
+
+    /**
+     * Start a task created by libvlc_parser_task_new_parse or libvlc_parser_task_new_thumbnail.
+     * <p>
+     * On success the task is scheduled and its completion callback is guaranteed to be called exactly once, including
+     * when the task is cancelled with libvlc_parser_cancel_request(). That callback may run even before this function
+     * returns.
+     * <p>
+     * Note, on failure no callback is invoked, the caller keeps its reference and may submit the task again.
+     * <p>
+     * Note also, a task may be submitted at most once, and may only be re-submitted if the previous attempt failed.
+     * Submitting does not transfer the caller's reference - it keeps owning the handle and must release it.
+     *
+     * @param parser the parser the task was created from
+     * @param task a task that has not been submitted yet
+     * @return 0 on success, -1 on error
+     * @since LibVLC 4.0.0 or later
+     */
+    public static native int libvlc_parser_submit(libvlc_parser_t parser, libvlc_parser_task_t task);
+
+    /**
+     * Cancel a parser request.
+     *
+     * @param p parser object
+     * @param task task to cancel, or NULL to cancel all requests
+     * @return the number of requests cancelled
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native size_t libvlc_parser_cancel_request(libvlc_parser_t p, libvlc_parser_task_t task);
+
+    /**
+     * Get the media associated with a task.
+     *
+     * @param task task handle
+     * @return media object (borrowed reference)
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native libvlc_media_t libvlc_parser_task_get_media(libvlc_parser_task_t task);
+
+    /**
+     * Release a task handle.
+     * <p>
+     * Safe to call from inside on_parsed / on_ended. Does not cancel an in-flight request.
+     *
+     * @param task task handle
+     * @since LibVLC 4.0.0 and later
+     */
+    public static native void libvlc_parser_task_release(libvlc_parser_task_t task);
+
+    // === libvlc_parser.h ======================================================
 }

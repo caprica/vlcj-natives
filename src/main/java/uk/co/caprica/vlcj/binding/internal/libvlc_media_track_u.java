@@ -31,5 +31,4 @@ public class libvlc_media_track_u extends Union {
     public libvlc_audio_track_t audio;
     public libvlc_video_track_t video;
     public libvlc_subtitle_track_t subtitle;
-
 }

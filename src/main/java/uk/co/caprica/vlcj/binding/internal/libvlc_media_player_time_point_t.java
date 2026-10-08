@@ -20,7 +20,7 @@ public class libvlc_media_player_time_point_t extends Structure {
 
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("position", "rate", "ts_us", "length_us", "system_date_us"));
 
-    public static class ByValue extends libvlc_audio_track_t implements Structure.ByValue {}
+    public static class ByValue extends libvlc_media_player_time_point_t implements Structure.ByValue {}
 
     /** Position in the range [0.0f;1.0] */
     public double position;

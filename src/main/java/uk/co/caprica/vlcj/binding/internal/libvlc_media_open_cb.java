@@ -43,7 +43,7 @@ public interface libvlc_media_open_cb extends Callback {
      * @param datap storage space for a private data pointer [OUT]
      * @param sizep byte length of the bitstream or 0 if unknown [OUT]
      * @return 0 on success, non-zero on error. In case of failure, the other
-     * callbacks will not be invoked and any value stored in datap and sizep is
+     * callback will not be invoked and any value stored in datap and sizep is
      * discarded.
      */
     int open(Pointer opaque, PointerByReference datap, LongByReference sizep);

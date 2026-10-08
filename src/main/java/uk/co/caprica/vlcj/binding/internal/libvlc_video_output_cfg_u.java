@@ -20,7 +20,11 @@
 package uk.co.caprica.vlcj.binding.internal;
 
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import com.sun.jna.Union;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -33,4 +37,14 @@ public class libvlc_video_output_cfg_u extends Union {
     public int d3d9_format;    /** the rendering D3DFORMAT for \ref libvlc_video_engine_d3d9 */
     public int opengl_format;  /** the rendering GLint GL_RGBA or GL_RGB for \ref libvlc_video_engine_opengl and for \ref libvlc_video_engine_gles2 */
     public Pointer p_surface;  /** currently unused */
-}
+    public Anw anw;
+
+    public static class Anw extends Structure {
+        public Pointer video;
+        public Pointer subtitle;
+
+        @Override
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("video", "subtitle");
+        }
+    }}
